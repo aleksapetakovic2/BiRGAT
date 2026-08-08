@@ -1,0 +1,78 @@
+data:
+  seed: 1337
+  preset: smoke
+  days: 6
+  n_hosts: 60
+  n_users: 50
+  n_incidents: 14
+  attack_events_range:
+  - 18
+  - 40
+  data_dir: data
+  regenerate: false
+graph:
+  host_seq_window_min: 10.0
+  user_seq_window_min: 15.0
+  net_trigger_window_min: 10.0
+  net_trigger_max_links: 2
+  config_trigger_min_min: 5.0
+  config_trigger_max_h: 24.0
+  config_trigger_max_links: 2
+  session_max_h: 12.0
+  max_out_degree_per_rel: 4
+  split_train_frac: 0.55
+  split_val_frac: 0.2
+  split_gap_hours: 2.0
+  leakage_auc_threshold: 0.95
+model:
+  model: rgat
+  hidden_dim: 48
+  num_layers: 3
+  num_heads: 4
+  feat_drop: 0.1
+  attn_drop: 0.1
+  use_edge_bias: true
+  residual: true
+  negative_slope: 0.2
+sampling:
+  fanouts:
+    PROCESS_CHILD:
+    - 4
+    - 2
+    SESSION_ACTION:
+    - 4
+    - 2
+    HOST_SEQUENCE:
+    - 3
+    - 2
+    USER_SEQUENCE:
+    - 3
+    - 2
+    NET_TRIGGER:
+    - 4
+    - 2
+    CONFIG_TRIGGER:
+    - 3
+    - 2
+  eval_fanout_mult: 2
+  batch_seeds: 256
+  pos_seed_frac: 0.5
+  eval_batch_seeds: 1024
+  max_frontier: 20000
+  min_steps_per_epoch: 20
+  num_workers: 0
+train:
+  epochs: 15
+  lr: 0.002
+  weight_decay: 0.0001
+  warmup_steps: 30
+  grad_clip: 1.0
+  focal_gamma: 2.0
+  focal_alpha: 0.8
+  patience: 6
+  min_delta: 0.0001
+  log_every: 3
+  amp: false
+  device: auto
+  run_name: ''
+  run_mlp_baseline: true

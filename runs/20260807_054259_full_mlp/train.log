@@ -1,0 +1,72 @@
+05:42:59 ==============================================================================
+05:42:59 EVENT-PROVENANCE RGAT  |  focal loss  |  neighbourhood sampling
+05:42:59 ==============================================================================
+05:42:59 ==============================================================================
+EVENT-PROVENANCE SCHEMA (KQL contract)
+==============================================================================
+event types (6):  SignIn, ProcessCreate, NetworkConnection, FileActivity, SystemConfig, DnsQuery
+relations   (6):  PROCESS_CHILD, SESSION_ACTION, HOST_SEQUENCE, USER_SEQUENCE, NET_TRIGGER, CONFIG_TRIGGER
+------------------------------------------------------------------------------
+feature block             offset   dim  kind
+etype_onehot                   0     6  onehot
+hour_sin_cos                   6     2  dense
+dow_sin_cos                    8     2  dense
+host_role_onehot              10     6  onehot
+os_onehot                     16     2  onehot
+user_role_onehot              18     3  onehot
+auth_flags                    21     4  dense
+integrity_onehot              25     3  onehot
+net_flags                     28     2  dense
+protocol_onehot               30     3  onehot
+port_class_onehot             33     4  onehot
+log_bytes                     37     1  dense
+process_cat_onehot            38    14  onehot
+file_cat_onehot               52     9  onehot
+file_action_onehot            61     4  onehot
+config_kind_onehot            65     5  onehot
+dns_feats                     70     2  dense
+cmdline_feats                 72     6  dense
+behaviour_feats               78     4  dense
+TOTAL node features                 82
+edge features: 8  (log_dt_min + dt bucket onehot + log_bytes)
+==============================================================================
+05:42:59 [run ] run dir: runs\20260807_054259_full_mlp
+05:42:59 [env ] CUDA device: NVIDIA GeForce RTX 5060  VRAM 8.0 GB  torch 2.11.0+cu128
+05:42:59 [data] generating synthetic Sentinel-like event stream ...
+05:43:06 [data]   events=268,550  hosts=350  users=300  days=28  positive events=1,941 (0.72%)  [7.1s]
+05:43:06 [data] building node features ...
+05:43:06 [data] building provenance edges (KQL make-graph equivalent) ...
+05:43:06 [data] temporal split ...
+05:43:06 [data] leakage audit (single-feature AUC on train split) ...
+05:43:08 [data]   top-5 single-feature AUCs (must stay < 0.95):
+05:43:08 [data]     behaviour_feats[2]               AUC=0.836
+05:43:08 [data]     hour_sin_cos[1]                  AUC=0.780
+05:43:08 [data]     user_role_onehot[2]              AUC=0.631
+05:43:08 [data]     host_role_onehot[0]              AUC=0.630
+05:43:08 [data]     dns_feats[0]                     AUC=0.626
+05:43:08 [data] assembling HeteroData ...
+05:43:08 [data]   PROCESS_CHILD    edges=   46,379
+05:43:08 [data]   SESSION_ACTION   edges=   25,234
+05:43:08 [data]   HOST_SEQUENCE    edges=  194,251
+05:43:08 [data]   USER_SEQUENCE    edges=  195,260
+05:43:08 [data]   NET_TRIGGER      edges=    8,036
+05:43:08 [data]   CONFIG_TRIGGER   edges=      415
+05:43:08 [data]   split train: nodes= 183,877  positive= 1,168  pos_rate=0.64%
+05:43:08 [data]   split val  : nodes=  41,760  positive=   386  pos_rate=0.92%
+05:43:08 [data]   split test : nodes=  42,314  positive=   387  pos_rate=0.91%
+05:43:08 [data] cached dataset -> data\graph_1f89d61c2fd9.pt  (total 9.9s)
+05:43:09 [mlp ] training feature-only baseline (no edges) ...
+05:43:11 [mlp ] ep 1 val AUPRC 0.7729  AUROC 0.9789  F1 0.7429
+05:43:17 [mlp ] ep 5 val AUPRC 0.7676  AUROC 0.9733  F1 0.7672
+05:43:25 [mlp ] ep10 val AUPRC 0.7483  AUROC 0.9664  F1 0.7542
+05:43:33 [mlp ] ep15 val AUPRC 0.7593  AUROC 0.9683  F1 0.7717
+05:43:41 [mlp ] ep20 val AUPRC 0.7617  AUROC 0.9636  F1 0.7744
+05:43:50 [mlp ] ep25 val AUPRC 0.7625  AUROC 0.9640  F1 0.7756
+05:43:50 ── TEST (MLP baseline) ───────────────────────────────────────────
+  events=42,314  positives=387  pos_rate=0.91%
+  ranking:   AUROC=0.9733   AUPRC=0.8214   (baseline AP=0.0091, lift x89.8)
+  @thr=0.901:  F1=0.8402   P=0.9281   R=0.7674   MCC=0.8427
+  @thr=0.50:  F1=0.5359
+  confusion: TN=41,904  FP=23  FN=90  TP=297
+  triage:    precision@K(=n_pos)=0.7881  (lift x86.2 over random)
+──────────────────────────────────────────────────────────────────

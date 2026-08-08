@@ -1,0 +1,9 @@
+torch>=2.7
+# HeteroData container + utils.softmax (pure-Python parts only). The
+# neighbourhood sampler in src/eprgat/sampling.py is self-contained, so the
+# optional C++ kernels (torch-sparse / pyg-lib) are NOT required.
+torch_geometric>=2.6
+numpy>=1.26
+scikit-learn>=1.4
+pyyaml>=6.0
+matplotlib>=3.8

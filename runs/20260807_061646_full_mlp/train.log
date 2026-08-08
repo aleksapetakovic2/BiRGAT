@@ -1,0 +1,60 @@
+06:16:46 ==============================================================================
+06:16:46 EVENT-PROVENANCE RGAT  |  focal loss  |  neighbourhood sampling
+06:16:46 ==============================================================================
+06:16:46 ==============================================================================
+EVENT-PROVENANCE SCHEMA (KQL contract)
+==============================================================================
+event types (6):  SignIn, ProcessCreate, NetworkConnection, FileActivity, SystemConfig, DnsQuery
+relations   (6):  PROCESS_CHILD, SESSION_ACTION, HOST_SEQUENCE, USER_SEQUENCE, NET_TRIGGER, CONFIG_TRIGGER
+------------------------------------------------------------------------------
+feature block             offset   dim  kind
+etype_onehot                   0     6  onehot
+hour_sin_cos                   6     2  dense
+dow_sin_cos                    8     2  dense
+host_role_onehot              10     6  onehot
+os_onehot                     16     2  onehot
+user_role_onehot              18     3  onehot
+auth_flags                    21     4  dense
+integrity_onehot              25     3  onehot
+net_flags                     28     2  dense
+protocol_onehot               30     3  onehot
+port_class_onehot             33     4  onehot
+log_bytes                     37     1  dense
+process_cat_onehot            38    14  onehot
+file_cat_onehot               52     9  onehot
+file_action_onehot            61     4  onehot
+config_kind_onehot            65     5  onehot
+dns_feats                     70     2  dense
+cmdline_feats                 72     6  dense
+behaviour_feats               78     4  dense
+TOTAL node features                 82
+edge features: 8  (log_dt_min + dt bucket onehot + log_bytes)
+==============================================================================
+06:16:46 [run ] run dir: runs\20260807_061646_full_mlp
+06:16:46 [env ] CUDA device: NVIDIA GeForce RTX 5060  VRAM 8.0 GB  torch 2.11.0+cu128
+06:16:46 [data] loading cached dataset from data\graph_6ba2528eced0.pt
+06:16:46 [data]   nodes=364,068
+[data]   PROCESS_CHILD    edges=   44,215
+[data]   SESSION_ACTION   edges=   24,255
+[data]   HOST_SEQUENCE    edges=  256,771
+[data]   USER_SEQUENCE    edges=  276,632
+[data]   NET_TRIGGER      edges=    6,883
+[data]   CONFIG_TRIGGER   edges=    2,491
+[data]   split train: nodes= 248,569  positive= 1,150  pos_rate=0.46%
+[data]   split val  : nodes=  49,801  positive=   373  pos_rate=0.75%
+[data]   split test : nodes=  53,919  positive=   365  pos_rate=0.68%
+06:16:47 [mlp ] training feature-only baseline (no edges) ...
+06:16:49 [mlp ] ep 1 val AUPRC 0.3079  AUROC 0.8952  F1 0.3166
+06:16:57 [mlp ] ep 5 val AUPRC 0.3757  AUROC 0.8976  F1 0.4106
+06:17:07 [mlp ] ep10 val AUPRC 0.3346  AUROC 0.9061  F1 0.3705
+06:17:17 [mlp ] ep15 val AUPRC 0.3766  AUROC 0.9166  F1 0.4111
+06:17:28 [mlp ] ep20 val AUPRC 0.3751  AUROC 0.9138  F1 0.4185
+06:17:38 [mlp ] ep25 val AUPRC 0.3419  AUROC 0.9079  F1 0.3873
+06:17:39 ── TEST (MLP baseline) ───────────────────────────────────────────
+  events=53,919  positives=365  pos_rate=0.68%
+  ranking:   AUROC=0.9346   AUPRC=0.5059   (baseline AP=0.0068, lift x74.7)
+  @thr=0.918:  F1=0.5355   P=0.7588   R=0.4137   MCC=0.5582
+  @thr=0.50:  F1=0.2515
+  confusion: TN=53,506  FP=48  FN=214  TP=151
+  triage:    precision@K(=n_pos)=0.4822  (lift x71.2 over random)
+──────────────────────────────────────────────────────────────────

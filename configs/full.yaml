@@ -1,0 +1,77 @@
+# Full preset: 28-day timeline, ~400k events, 155 incidents (~1% positives —
+# the "~99% benign" imbalance the focal loss is designed for).
+# Sized for an 8 GB VRAM card using neighbourhood sampling.
+# If you OOM: lower sampling.batch_seeds, the fanouts, or model.hidden_dim.
+data:
+  seed: 1337
+  preset: full
+  days: 28
+  n_hosts: 350
+  n_users: 300
+  n_incidents: 155
+  attack_events_range: [25, 60]
+  regenerate: false
+
+graph:
+  leakage_auc_threshold: 0.95
+
+model:
+  model: rgat
+  hidden_dim: 128
+  num_layers: 6
+  num_heads: 4
+  feat_drop: 0.25
+  attn_drop: 0.25
+  use_edge_bias: true
+  residual: true
+  # winning architecture (ablated, see README results section):
+  #   readout=jk          JumpingKnowledge head over every layer's output
+  #   deep_input_proj     2-layer feature encoder — strengthens the features-only
+  #                       pathway that isolated positives depend on
+  readout: jk
+  deep_input_proj: true
+
+sampling:
+  # 6-hop fanouts (match num_layers): deep enough to walk an incident chain
+  # (25-60 events) from a seed inside it, in both time directions.
+  fanouts:
+    PROCESS_CHILD: [10, 8, 6, 4, 3, 2]
+    SESSION_ACTION: [10, 8, 6, 4, 3, 2]
+    HOST_SEQUENCE: [8, 6, 4, 3, 2, 2]
+    USER_SEQUENCE: [8, 6, 4, 3, 2, 2]
+    NET_TRIGGER: [10, 8, 6, 4, 3, 2]
+    CONFIG_TRIGGER: [8, 6, 4, 3, 2, 2]
+  batch_seeds: 512
+  # low positive fraction => each epoch covers ~1.3x of the ~2.4k positives
+  # but plenty of distinct negative seeds; positives are rare, so let
+  # negatives dominate coverage instead of re-seeding positives into
+  # memorisation.
+  pos_seed_frac: 0.25
+  eval_batch_seeds: 1024
+  eval_fanout_mult: 2
+  # bidirectional context is the default now: detection-time provenance
+  # includes what an event LED TO as well as what produced it. Chain-start
+  # events (phishing click, initial beacon) have no malicious PAST — their
+  # evidence is downstream, and ~43% of positives have no positive ancestor
+  # within 4 hops. Reversed future edges raised test AUPRC 0.669 -> 0.703
+  # on their own; see README "What the final full run produced".
+  reverse_edges: true
+  # raised from 20000: with bidirectional 6-hop fanouts, first-hop candidate
+  # sets can exceed 20k nodes and random truncation quietly degrades both
+  # training and eval context. 60k fits 8 GB comfortably (~1 GB peak).
+  max_frontier: 60000
+  min_steps_per_epoch: 12
+  num_workers: 0
+
+train:
+  epochs: 80
+  lr: 0.0003
+  weight_decay: 0.001
+  warmup_steps: 400
+  focal_gamma: 2.0
+  focal_alpha: 0.75
+  patience: 20
+  log_every: 5
+  amp: false
+  device: auto
+  run_mlp_baseline: true

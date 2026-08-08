@@ -1,0 +1,48 @@
+# Mid-size preset: useful for iterating on hyperparameters (~100k events).
+data:
+  seed: 1337
+  preset: medium
+  days: 14
+  n_hosts: 180
+  n_users: 150
+  n_incidents: 60
+  attack_events_range: [22, 50]
+  regenerate: false
+
+graph:
+  leakage_auc_threshold: 0.95
+
+model:
+  model: rgat
+  hidden_dim: 80
+  num_layers: 3
+  num_heads: 4
+  feat_drop: 0.1
+  attn_drop: 0.1
+
+sampling:
+  fanouts:
+    PROCESS_CHILD: [6, 4, 2]
+    SESSION_ACTION: [6, 4, 2]
+    HOST_SEQUENCE: [4, 2, 2]
+    USER_SEQUENCE: [4, 2, 2]
+    NET_TRIGGER: [6, 4, 3]
+    CONFIG_TRIGGER: [4, 2, 2]
+  batch_seeds: 512
+  pos_seed_frac: 0.5
+  eval_batch_seeds: 1024
+  eval_fanout_mult: 2
+  min_steps_per_epoch: 40
+  num_workers: 0
+
+train:
+  epochs: 30
+  lr: 0.002
+  warmup_steps: 100
+  focal_gamma: 2.0
+  focal_alpha: 0.8
+  patience: 8
+  log_every: 5
+  amp: false
+  device: auto
+  run_mlp_baseline: true

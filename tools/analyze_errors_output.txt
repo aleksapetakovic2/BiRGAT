@@ -1,0 +1,32 @@
+﻿run=runs\20260807_135514_full_rgat
+recall-first threshold (from val): 0.270 (reported test recall 0.917)
+
+test positives: 779   caught 714   missed 65
+
+template mix (share of test positives):
+template                 all   caught   missed  miss rate
+T1_phishing            19.4%    19.3%    20.0%       8.6%
+T2_exploit_web         35.2%    37.4%    10.8%       2.6%
+T3_valid_account       16.2%    14.7%    32.3%      16.7%
+T4_beacon_persist      13.2%    11.2%    35.4%      22.3%
+T5_service_lateral     16.0%    17.4%     1.5%       0.8%
+
+chain-relative position of missed vs all positives:
+  [0.00,0.25):  all= 23.9%   missed= 27.7%
+  [0.25,0.50):  all= 24.0%   missed= 26.2%
+  [0.50,0.75):  all= 24.3%   missed= 13.8%
+  [0.75,1.01):  all= 27.9%   missed= 32.3%
+
+topological context of test positives (full balls, no sampling):
+  caught  n=714  mean pos-in-past= 1.28  mean pos-in-future= 0.97  fully isolated (no pos either way): 157 (22%)
+  missed  n= 65  mean pos-in-past= 1.02  mean pos-in-future= 0.54  fully isolated (no pos either way): 25 (38%)
+
+model probability of the missed positives:
+  p10 = 0.052
+  p25 = 0.099
+  p50 = 0.142
+  p75 = 0.197
+  p90 = 0.248
+  33/65 missed positives scored >= half the threshold (recoverable by better ranking); the rest are far off
+
+  isolated misses by template: T1_phishing=4, T2_exploit_web=5, T3_valid_account=6, T4_beacon_persist=9, T5_service_lateral=1

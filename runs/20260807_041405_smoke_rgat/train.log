@@ -1,0 +1,48 @@
+04:14:05 ==============================================================================
+04:14:05 EVENT-PROVENANCE RGAT  |  focal loss  |  neighbourhood sampling
+04:14:05 ==============================================================================
+04:14:05 ==============================================================================
+EVENT-PROVENANCE SCHEMA (KQL contract)
+==============================================================================
+event types (6):  SignIn, ProcessCreate, NetworkConnection, FileActivity, SystemConfig, DnsQuery
+relations   (6):  PROCESS_CHILD, SESSION_ACTION, HOST_SEQUENCE, USER_SEQUENCE, NET_TRIGGER, CONFIG_TRIGGER
+------------------------------------------------------------------------------
+feature block             offset   dim  kind
+etype_onehot                   0     6  onehot
+hour_sin_cos                   6     2  dense
+dow_sin_cos                    8     2  dense
+host_role_onehot              10     6  onehot
+os_onehot                     16     2  onehot
+user_role_onehot              18     3  onehot
+auth_flags                    21     4  dense
+integrity_onehot              25     3  onehot
+net_flags                     28     2  dense
+protocol_onehot               30     3  onehot
+port_class_onehot             33     4  onehot
+log_bytes                     37     1  dense
+process_cat_onehot            38    14  onehot
+file_cat_onehot               52     9  onehot
+file_action_onehot            61     4  onehot
+config_kind_onehot            65     5  onehot
+dns_feats                     70     2  dense
+cmdline_feats                 72     6  dense
+behaviour_feats               78     4  dense
+TOTAL node features                 82
+edge features: 8  (log_dt_min + dt bucket onehot + log_bytes)
+==============================================================================
+04:14:05 [run ] run dir: runs\20260807_041405_smoke_rgat
+04:14:05 [env ] using CPU (torch 2.11.0+cu128)
+04:14:05 [data] loading cached dataset from data\graph_72c7a4629501.pt
+04:14:05 [data]   nodes=10,217
+[data]   PROCESS_CHILD    edges=    1,503
+[data]   SESSION_ACTION   edges=      796
+[data]   HOST_SEQUENCE    edges=    6,628
+[data]   USER_SEQUENCE    edges=    7,162
+[data]   NET_TRIGGER      edges=      683
+[data]   CONFIG_TRIGGER   edges=       40
+[data]   split train: nodes=   5,800  positive=   129  pos_rate=2.22%
+[data]   split val  : nodes=   2,187  positive=    40  pos_rate=1.83%
+[data]   split test : nodes=   1,889  positive=    43  pos_rate=2.28%
+04:14:05 [model] EventProvenanceRGAT  layers=3 hidden=48 heads=4 params=55,933
+04:14:05 [loss ] focal loss  gamma=2.0 alpha=0.8
+04:14:05 [train] 15 epochs x 2 steps (seeds/batch=256, pos=128/neg=128)

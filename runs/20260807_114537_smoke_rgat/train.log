@@ -1,0 +1,186 @@
+11:45:37 ==============================================================================
+11:45:37 EVENT-PROVENANCE RGAT  |  focal loss  |  neighbourhood sampling
+11:45:37 ==============================================================================
+11:45:37 ==============================================================================
+EVENT-PROVENANCE SCHEMA (KQL contract)
+==============================================================================
+event types (6):  SignIn, ProcessCreate, NetworkConnection, FileActivity, SystemConfig, DnsQuery
+relations   (6):  PROCESS_CHILD, SESSION_ACTION, HOST_SEQUENCE, USER_SEQUENCE, NET_TRIGGER, CONFIG_TRIGGER
+------------------------------------------------------------------------------
+feature block             offset   dim  kind
+etype_onehot                   0     6  onehot
+hour_sin_cos                   6     2  dense
+dow_sin_cos                    8     2  dense
+host_role_onehot              10     6  onehot
+os_onehot                     16     2  onehot
+user_role_onehot              18     3  onehot
+auth_flags                    21     4  dense
+integrity_onehot              25     3  onehot
+net_flags                     28     2  dense
+protocol_onehot               30     3  onehot
+port_class_onehot             33     4  onehot
+log_bytes                     37     1  dense
+process_cat_onehot            38    14  onehot
+file_cat_onehot               52     9  onehot
+file_action_onehot            61     4  onehot
+config_kind_onehot            65     5  onehot
+dns_feats                     70     2  dense
+cmdline_feats                 72     6  dense
+TOTAL node features                 78
+edge features: 8  (log_dt_min + dt bucket onehot + log_bytes)
+==============================================================================
+11:45:37 [run ] run dir: runs\20260807_114537_smoke_rgat
+11:45:37 [env ] CUDA device: NVIDIA GeForce RTX 5060  VRAM 8.0 GB  torch 2.11.0+cu128
+11:45:37 [data] loading cached dataset from data\graph_ee979a8d3dfa.pt
+11:45:37 [data]   nodes=15,990
+[data]   PROCESS_CHILD    edges=    1,438
+[data]   SESSION_ACTION   edges=      894
+[data]   HOST_SEQUENCE    edges=   11,169
+[data]   USER_SEQUENCE    edges=   12,323
+[data]   NET_TRIGGER      edges=      571
+[data]   CONFIG_TRIGGER   edges=      255
+[data]   split train: nodes=   9,464  positive=   156  pos_rate=1.65%
+[data]   split val  : nodes=   3,762  positive=    55  pos_rate=1.46%
+[data]   split test : nodes=   2,112  positive=    44  pos_rate=2.08%
+11:45:37 [model] EventProvenanceRGAT  layers=3 hidden=48 heads=4 params=56,893
+11:45:37 [loss ] focal loss  gamma=2.0 alpha=0.8
+11:45:37 [train] 15 epochs x 20 steps (seeds/batch=256, pos=128/neg=128)
+11:45:38 [train] ep 1 step   1/20 | loss 0.0612 (pos 0.239/neg 0.022) | sup 119+/533- | seedF1 0.110 | subgraph n=652 e=744 | lr 2.60e-04 | gpu 24MB
+11:45:38 [train] ep 1 step   3/20 | loss 0.0568 (pos 0.212/neg 0.022) | sup 119+/528- | seedF1 0.167 | subgraph n=647 e=726 | lr 3.80e-04 | gpu 25MB
+11:45:38 [train] ep 1 step   6/20 | loss 0.0518 (pos 0.171/neg 0.025) | sup 128+/564- | seedF1 0.246 | subgraph n=692 e=770 | lr 5.60e-04 | gpu 25MB
+11:45:38 [train] ep 1 step   9/20 | loss 0.0455 (pos 0.128/neg 0.028) | sup 118+/539- | seedF1 0.391 | subgraph n=657 e=751 | lr 7.40e-04 | gpu 25MB
+11:45:38 [train] ep 1 step  12/20 | loss 0.0426 (pos 0.105/neg 0.029) | sup 117+/531- | seedF1 0.506 | subgraph n=648 e=740 | lr 9.20e-04 | gpu 25MB
+11:45:38 [train] ep 1 step  15/20 | loss 0.0410 (pos 0.084/neg 0.031) | sup 125+/537- | seedF1 0.574 | subgraph n=662 e=745 | lr 1.10e-03 | gpu 25MB
+11:45:38 [train] ep 1 step  18/20 | loss 0.0366 (pos 0.083/neg 0.026) | sup 123+/531- | seedF1 0.614 | subgraph n=654 e=703 | lr 1.28e-03 | gpu 25MB
+11:45:38 ┌────────────────────────────────────────────────────────────────────────────
+11:45:38 │ EPOCH   1/15  train_loss 0.0459 (pos 0.134 / neg 0.026)  seedF1 0.637  1.1s  (11879 seeds/s)  eta ~0.3min
+11:45:38 │ VAL  AUROC 0.8301 | AUPRC 0.1967 (base 0.0146) | F1 0.2469 (thr 0.685) | P 0.3846 R 0.1818 | MCC 0.2572
+11:45:38 │ best AUPRC 0.1967 @ ep1   ** improved **
+11:45:38 └────────────────────────────────────────────────────────────────────────────
+11:45:38 [train] ep 2 step   1/20 | loss 0.0311 (pos 0.094/neg 0.018) | sup 111+/540- | seedF1 0.382 | subgraph n=651 e=724 | lr 1.46e-03 | gpu 25MB
+11:45:38 [train] ep 2 step   4/20 | loss 0.0271 (pos 0.083/neg 0.014) | sup 122+/529- | seedF1 0.447 | subgraph n=651 e=728 | lr 1.64e-03 | gpu 25MB
+11:45:38 [train] ep 2 step   7/20 | loss 0.0226 (pos 0.056/neg 0.015) | sup 127+/547- | seedF1 0.546 | subgraph n=674 e=737 | lr 1.82e-03 | gpu 25MB
+11:45:39 [train] ep 2 step  10/20 | loss 0.0209 (pos 0.063/neg 0.011) | sup 117+/514- | seedF1 0.629 | subgraph n=631 e=714 | lr 2.00e-03 | gpu 25MB
+11:45:39 [train] ep 2 step  13/20 | loss 0.0219 (pos 0.062/neg 0.013) | sup 127+/563- | seedF1 0.674 | subgraph n=690 e=782 | lr 2.00e-03 | gpu 25MB
+11:45:39 [train] ep 2 step  16/20 | loss 0.0200 (pos 0.039/neg 0.016) | sup 114+/561- | seedF1 0.709 | subgraph n=675 e=774 | lr 2.00e-03 | gpu 25MB
+11:45:39 [train] ep 2 step  19/20 | loss 0.0224 (pos 0.068/neg 0.009) | sup 134+/472- | seedF1 0.722 | subgraph n=606 e=665 | lr 1.99e-03 | gpu 25MB
+11:45:39 ┌────────────────────────────────────────────────────────────────────────────
+11:45:39 │ EPOCH   2/15  train_loss 0.0224 (pos 0.062 / neg 0.013)  seedF1 0.726  0.4s  (30423 seeds/s)  eta ~0.1min
+11:45:39 │ VAL  AUROC 0.6962 | AUPRC 0.1719 (base 0.0146) | F1 0.2571 (thr 0.805) | P 0.6000 R 0.1636 | MCC 0.3086
+11:45:39 │ best AUPRC 0.1967 @ ep1   patience 5/6
+11:45:39 └────────────────────────────────────────────────────────────────────────────
+11:45:39 [train] ep 3 step   1/20 | loss 0.0141 (pos 0.037/neg 0.009) | sup 115+/521- | seedF1 0.593 | subgraph n=636 e=737 | lr 1.99e-03 | gpu 25MB
+11:45:39 [train] ep 3 step   2/20 | loss 0.0150 (pos 0.034/neg 0.011) | sup 122+/538- | seedF1 0.578 | subgraph n=660 e=725 | lr 1.99e-03 | gpu 25MB
+11:45:39 [train] ep 3 step   5/20 | loss 0.0171 (pos 0.034/neg 0.013) | sup 118+/499- | seedF1 0.626 | subgraph n=617 e=681 | lr 1.99e-03 | gpu 25MB
+11:45:39 [train] ep 3 step   8/20 | loss 0.0153 (pos 0.055/neg 0.006) | sup 127+/545- | seedF1 0.612 | subgraph n=672 e=751 | lr 1.98e-03 | gpu 25MB
+11:45:39 [train] ep 3 step  11/20 | loss 0.0096 (pos 0.029/neg 0.006) | sup 122+/565- | seedF1 0.624 | subgraph n=687 e=770 | lr 1.97e-03 | gpu 25MB
+11:45:39 [train] ep 3 step  14/20 | loss 0.0144 (pos 0.033/neg 0.010) | sup 118+/540- | seedF1 0.638 | subgraph n=658 e=715 | lr 1.96e-03 | gpu 25MB
+11:45:39 [train] ep 3 step  17/20 | loss 0.0174 (pos 0.048/neg 0.010) | sup 124+/535- | seedF1 0.652 | subgraph n=659 e=724 | lr 1.95e-03 | gpu 25MB
+11:45:39 [train] ep 3 step  20/20 | loss 0.0136 (pos 0.038/neg 0.008) | sup 119+/531- | seedF1 0.663 | subgraph n=650 e=731 | lr 1.94e-03 | gpu 25MB
+11:45:39 ┌────────────────────────────────────────────────────────────────────────────
+11:45:39 │ EPOCH   3/15  train_loss 0.0145 (pos 0.038 / neg 0.009)  seedF1 0.663  0.4s  (30007 seeds/s)  eta ~0.1min
+11:45:39 │ VAL  AUROC 0.7325 | AUPRC 0.1721 (base 0.0146) | F1 0.2254 (thr 0.845) | P 0.5000 R 0.1455 | MCC 0.2643
+11:45:39 │ best AUPRC 0.1967 @ ep1   patience 4/6
+11:45:39 └────────────────────────────────────────────────────────────────────────────
+11:45:39 [train] ep 4 step   1/20 | loss 0.0119 (pos 0.032/neg 0.007) | sup 120+/537- | seedF1 0.659 | subgraph n=657 e=735 | lr 1.94e-03 | gpu 25MB
+11:45:39 [train] ep 4 step   3/20 | loss 0.0125 (pos 0.023/neg 0.010) | sup 127+/535- | seedF1 0.661 | subgraph n=662 e=750 | lr 1.93e-03 | gpu 25MB
+11:45:39 [train] ep 4 step   6/20 | loss 0.0124 (pos 0.031/neg 0.008) | sup 124+/526- | seedF1 0.633 | subgraph n=650 e=715 | lr 1.92e-03 | gpu 25MB
+11:45:39 [train] ep 4 step   9/20 | loss 0.0113 (pos 0.033/neg 0.007) | sup 109+/533- | seedF1 0.625 | subgraph n=642 e=732 | lr 1.90e-03 | gpu 25MB
+11:45:40 [train] ep 4 step  12/20 | loss 0.0094 (pos 0.028/neg 0.005) | sup 112+/507- | seedF1 0.614 | subgraph n=619 e=715 | lr 1.89e-03 | gpu 25MB
+11:45:40 [train] ep 4 step  15/20 | loss 0.0107 (pos 0.026/neg 0.007) | sup 114+/524- | seedF1 0.622 | subgraph n=638 e=720 | lr 1.87e-03 | gpu 25MB
+11:45:40 [train] ep 4 step  18/20 | loss 0.0097 (pos 0.024/neg 0.006) | sup 124+/547- | seedF1 0.642 | subgraph n=671 e=761 | lr 1.86e-03 | gpu 25MB
+11:45:40 ┌────────────────────────────────────────────────────────────────────────────
+11:45:40 │ EPOCH   4/15  train_loss 0.0111 (pos 0.029 / neg 0.007)  seedF1 0.652  0.4s  (31323 seeds/s)  eta ~0.1min
+11:45:40 │ VAL  AUROC 0.7174 | AUPRC 0.1757 (base 0.0146) | F1 0.2400 (thr 0.846) | P 0.4500 R 0.1636 | MCC 0.2652
+11:45:40 │ best AUPRC 0.1967 @ ep1   patience 3/6
+11:45:40 └────────────────────────────────────────────────────────────────────────────
+11:45:40 [train] ep 5 step   1/20 | loss 0.0117 (pos 0.032/neg 0.007) | sup 123+/538- | seedF1 0.717 | subgraph n=661 e=748 | lr 1.84e-03 | gpu 25MB
+11:45:40 [train] ep 5 step   4/20 | loss 0.0091 (pos 0.021/neg 0.006) | sup 117+/528- | seedF1 0.705 | subgraph n=645 e=720 | lr 1.82e-03 | gpu 25MB
+11:45:40 [train] ep 5 step   7/20 | loss 0.0106 (pos 0.034/neg 0.005) | sup 121+/522- | seedF1 0.702 | subgraph n=643 e=717 | lr 1.80e-03 | gpu 25MB
+11:45:40 [train] ep 5 step  10/20 | loss 0.0104 (pos 0.026/neg 0.007) | sup 121+/559- | seedF1 0.719 | subgraph n=680 e=747 | lr 1.78e-03 | gpu 25MB
+11:45:40 [train] ep 5 step  13/20 | loss 0.0094 (pos 0.017/neg 0.007) | sup 131+/487- | seedF1 0.733 | subgraph n=618 e=663 | lr 1.76e-03 | gpu 25MB
+11:45:40 [train] ep 5 step  16/20 | loss 0.0088 (pos 0.027/neg 0.005) | sup 111+/521- | seedF1 0.731 | subgraph n=632 e=694 | lr 1.73e-03 | gpu 25MB
+11:45:40 [train] ep 5 step  19/20 | loss 0.0102 (pos 0.024/neg 0.007) | sup 121+/517- | seedF1 0.729 | subgraph n=638 e=714 | lr 1.71e-03 | gpu 25MB
+11:45:40 ┌────────────────────────────────────────────────────────────────────────────
+11:45:40 │ EPOCH   5/15  train_loss 0.0099 (pos 0.027 / neg 0.006)  seedF1 0.734  0.4s  (30281 seeds/s)  eta ~0.1min
+11:45:40 │ VAL  AUROC 0.7538 | AUPRC 0.1391 (base 0.0146) | F1 0.2069 (thr 0.877) | P 0.2812 R 0.1636 | MCC 0.2058
+11:45:40 │ best AUPRC 0.1967 @ ep1   patience 2/6
+11:45:40 └────────────────────────────────────────────────────────────────────────────
+11:45:40 [train] ep 6 step   1/20 | loss 0.0112 (pos 0.014/neg 0.011) | sup 120+/536- | seedF1 0.753 | subgraph n=656 e=748 | lr 1.69e-03 | gpu 25MB
+11:45:40 [train] ep 6 step   2/20 | loss 0.0097 (pos 0.018/neg 0.008) | sup 112+/467- | seedF1 0.755 | subgraph n=579 e=638 | lr 1.69e-03 | gpu 25MB
+11:45:40 [train] ep 6 step   5/20 | loss 0.0121 (pos 0.040/neg 0.006) | sup 118+/518- | seedF1 0.703 | subgraph n=636 e=686 | lr 1.66e-03 | gpu 25MB
+11:45:40 [train] ep 6 step   8/20 | loss 0.0083 (pos 0.028/neg 0.004) | sup 126+/546- | seedF1 0.674 | subgraph n=672 e=767 | lr 1.63e-03 | gpu 25MB
+11:45:40 [train] ep 6 step  11/20 | loss 0.0098 (pos 0.023/neg 0.007) | sup 124+/512- | seedF1 0.671 | subgraph n=636 e=717 | lr 1.61e-03 | gpu 25MB
+11:45:41 [train] ep 6 step  14/20 | loss 0.0109 (pos 0.030/neg 0.007) | sup 119+/532- | seedF1 0.674 | subgraph n=651 e=705 | lr 1.58e-03 | gpu 25MB
+11:45:41 [train] ep 6 step  17/20 | loss 0.0104 (pos 0.030/neg 0.005) | sup 122+/492- | seedF1 0.672 | subgraph n=614 e=676 | lr 1.55e-03 | gpu 25MB
+11:45:41 [train] ep 6 step  20/20 | loss 0.0086 (pos 0.019/neg 0.006) | sup 113+/503- | seedF1 0.676 | subgraph n=616 e=696 | lr 1.52e-03 | gpu 25MB
+11:45:41 ┌────────────────────────────────────────────────────────────────────────────
+11:45:41 │ EPOCH   6/15  train_loss 0.0094 (pos 0.025 / neg 0.006)  seedF1 0.676  0.4s  (30622 seeds/s)  eta ~0.1min
+11:45:41 │ VAL  AUROC 0.7262 | AUPRC 0.1478 (base 0.0146) | F1 0.2222 (thr 0.876) | P 0.4706 R 0.1455 | MCC 0.2560
+11:45:41 │ best AUPRC 0.1967 @ ep1   patience 1/6
+11:45:41 └────────────────────────────────────────────────────────────────────────────
+11:45:41 [train] ep 7 step   1/20 | loss 0.0088 (pos 0.027/neg 0.005) | sup 118+/523- | seedF1 0.750 | subgraph n=641 e=684 | lr 1.52e-03 | gpu 25MB
+11:45:41 [train] ep 7 step   3/20 | loss 0.0080 (pos 0.017/neg 0.006) | sup 125+/556- | seedF1 0.781 | subgraph n=681 e=777 | lr 1.50e-03 | gpu 25MB
+11:45:41 [train] ep 7 step   6/20 | loss 0.0082 (pos 0.018/neg 0.006) | sup 116+/543- | seedF1 0.776 | subgraph n=659 e=737 | lr 1.47e-03 | gpu 25MB
+11:45:41 [train] ep 7 step   9/20 | loss 0.0087 (pos 0.031/neg 0.003) | sup 127+/502- | seedF1 0.767 | subgraph n=629 e=681 | lr 1.44e-03 | gpu 25MB
+11:45:41 [train] ep 7 step  12/20 | loss 0.0116 (pos 0.042/neg 0.005) | sup 120+/532- | seedF1 0.773 | subgraph n=652 e=719 | lr 1.41e-03 | gpu 25MB
+11:45:41 [train] ep 7 step  15/20 | loss 0.0083 (pos 0.016/neg 0.007) | sup 121+/530- | seedF1 0.775 | subgraph n=651 e=712 | lr 1.37e-03 | gpu 25MB
+11:45:41 [train] ep 7 step  18/20 | loss 0.0083 (pos 0.016/neg 0.007) | sup 116+/551- | seedF1 0.772 | subgraph n=667 e=710 | lr 1.34e-03 | gpu 25MB
+11:45:41 ┌────────────────────────────────────────────────────────────────────────────
+11:45:41 │ EPOCH   7/15  train_loss 0.0084 (pos 0.021 / neg 0.005)  seedF1 0.762  0.4s  (31180 seeds/s)  eta ~0.1min
+11:45:41 │ VAL  AUROC 0.7313 | AUPRC 0.1601 (base 0.0146) | F1 0.2400 (thr 0.845) | P 0.4500 R 0.1636 | MCC 0.2652
+11:45:41 │ best AUPRC 0.1967 @ ep1   patience 0/6
+11:45:41 └────────────────────────────────────────────────────────────────────────────
+11:45:41 [train] early stopping: no AUPRC improvement for 6 epochs.
+11:45:42 [eval] loaded checkpoint runs\20260807_114537_smoke_rgat\best.pt (epoch 1)
+11:45:42 ── VALIDATION ────────────────────────────────────────────────────
+  events=3,762  positives=55  pos_rate=1.46%
+  ranking:   AUROC=0.8301   AUPRC=0.1967   (baseline AP=0.0146, lift x13.5)
+  @thr=0.685:  F1=0.2469   P=0.3846   R=0.1818   MCC=0.2572
+  @thr=0.50:  F1=0.0749
+  confusion: TN=3,691  FP=16  FN=45  TP=10
+  triage:    precision@K(=n_pos)=0.2182  (lift x14.9 over random)
+──────────────────────────────────────────────────────────────────
+11:45:42 ── TEST ──────────────────────────────────────────────────────────
+  events=2,112  positives=44  pos_rate=2.08%
+  ranking:   AUROC=0.7363   AUPRC=0.2139   (baseline AP=0.0208, lift x10.3)
+  @thr=0.685:  F1=0.2571   P=0.3462   R=0.2045   MCC=0.2543
+  @thr=0.50:  F1=0.0918
+  confusion: TN=2,051  FP=17  FN=35  TP=9
+  triage:    precision@K(=n_pos)=0.2727  (lift x13.1 over random)
+──────────────────────────────────────────────────────────────────
+11:45:42 [eval] mean attention per edge, per provenance relation (what the model leans on, normalised for edge volume):
+11:45:42 [eval]   PROCESS_CHILD     20.2%  ########
+11:45:42 [eval]   HOST_SEQUENCE     20.2%  ########
+11:45:42 [eval]   USER_SEQUENCE     20.2%  ########
+11:45:42 [eval]   SESSION_ACTION    13.5%  #####
+11:45:42 [eval]   CONFIG_TRIGGER    12.9%  #####
+11:45:42 [eval]   NET_TRIGGER       12.9%  #####
+11:45:42 [eval] rewire ablation: permuting edge destinations (degrees kept, topology destroyed) ...
+11:45:43 ── TEST (REWIRE ablation) ────────────────────────────────────────
+  events=2,112  positives=44  pos_rate=2.08%
+  ranking:   AUROC=0.6919   AUPRC=0.1244   (baseline AP=0.0208, lift x6.0)
+  @thr=0.685:  F1=0.0870   P=1.0000   R=0.0455   MCC=0.2111
+  @thr=0.50:  F1=0.0930
+  confusion: TN=2,068  FP=0  FN=42  TP=2
+  triage:    precision@K(=n_pos)=0.1364  (lift x6.5 over random)
+──────────────────────────────────────────────────────────────────
+11:45:43 [eval] AUPRC drop from rewiring: 0.2139 -> 0.1244  (delta +0.0894). Model depends on graph structure as intended.
+11:45:43 [eval] report -> runs\20260807_114537_smoke_rgat\eval_report.json
+11:45:43 [mlp ] training feature-only baseline (no edges) ...
+11:45:43 [mlp ] ep 1 val AUPRC 0.0809  AUROC 0.6991  F1 0.1316
+11:45:43 [mlp ] ep 5 val AUPRC 0.1334  AUROC 0.7110  F1 0.2921
+11:45:44 [mlp ] ep10 val AUPRC 0.1491  AUROC 0.7254  F1 0.2857
+11:45:44 [mlp ] ep15 val AUPRC 0.0713  AUROC 0.7473  F1 0.1237
+11:45:45 [mlp ] ep20 val AUPRC 0.0608  AUROC 0.7676  F1 0.1222
+11:45:45 [mlp ] ep25 val AUPRC 0.0748  AUROC 0.7727  F1 0.1209
+11:45:45 ── TEST (MLP feature-only baseline) ──────────────────────────────
+  events=2,112  positives=44  pos_rate=2.08%
+  ranking:   AUROC=0.7404   AUPRC=0.2433   (baseline AP=0.0208, lift x11.7)
+  @thr=0.647:  F1=0.2821   P=0.3235   R=0.2500   MCC=0.2711
+  @thr=0.50:  F1=0.2609
+  confusion: TN=2,045  FP=23  FN=33  TP=11
+  triage:    precision@K(=n_pos)=0.2955  (lift x14.2 over random)
+──────────────────────────────────────────────────────────────────
+11:45:45 [run ] Compare: if RGAT test AUPRC >> MLP AUPRC, the model is reading TOPOLOGY, not just features — exactly the point of event-centric provenance graphs.
+11:45:45 [run ] done.
