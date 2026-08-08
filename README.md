@@ -63,8 +63,7 @@ python evaluate.py --run runs/<your_run>
 ```
 
 The neighbourhood sampler is self-contained (`sampling.py`, NumPy CSR +
-torch indexing), so the optional `torch-sparse` / `pyg-lib` kernels — which
-rarely have wheels for the newest Python/torch builds — are **not** required.
+torch indexing).
 
 Any knob can be overridden: `python train.py --config configs/full.yaml
 --set sampling.batch_seeds=256 --set train.epochs=20`.
