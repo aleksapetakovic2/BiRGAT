@@ -10,7 +10,7 @@ Entity graphs (IP / host / account as nodes) make the model memorise: *port
 8443 appeared in 3 incidents -> port 8443 is malicious forever*. With events
 as nodes, the same port, host or account appears in thousands of benign
 events too; the only signal left is **the shape and timing of the event
-chain** — the incident topography. This design forces that:
+chain** — the incident topology. This design forces that:
 
 * node features contain **no unique identifiers** at all (no IPs, hostnames,
   account names, literal command lines) — only shared-vocabulary categories
