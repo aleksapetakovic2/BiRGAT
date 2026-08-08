@@ -120,24 +120,6 @@ lifting. The RGAT beats the features-only MLP by +0.22 AUPRC / +0.09 AUROC,
 the comparison that proves the provenance graph adds signal beyond per-event
 attributes.
 
-**Operating points** of the single model (every threshold tuned on
-validation only, then applied to test):
-
-| policy            | recall | precision | missed | flagged events |
-|-------------------|-------:|----------:|-------:|---------------:|
-| F1-optimal        |  0.634 |     0.898 |    285 |     56 (0.09%) |
-| recall ≥ 0.90     |  0.936 |     0.139 |     50 |  4,517 (7.4%)  |
-| recall ≥ 0.93     |  0.958 |     0.108 |     33 |  6,175 (10.2%) |
-| recall ≥ 0.95     |  0.976 |     0.085 |     19 |  8,171 (13.5%) |
-| recall ≥ 0.97     |  0.986 |     0.063 |     11 | 11,517 (19.0%) |
-
-Even in the most recall-hungry deployment the model flags at most ~1 in 5
-events; at the 90% recall floor it catches 729/779 incidents by flagging
-under 9% of events. An ensemble of 6 independently trained members
-(3 seeds × 2 feature-encoder depths, `tools/ensemble_eval.py`) scores
-AUPRC 0.7478 with slightly smoother scores; the single model above was
-selected by validation AUPRC and is the canonical artifact.
-
 #### How the design got here (ablations, all on this dataset)
 
 * **Bidirectional sampling is the default** — a structural audit
