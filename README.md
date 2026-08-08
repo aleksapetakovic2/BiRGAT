@@ -4,7 +4,7 @@ A relational graph attention network that classifies **events** (not
 entities) as part-of-incident vs benign, trained on a provenance graph whose
 edges are exactly the joins a KQL `make-graph` stage will produce later.
 
-## Why events as nodes (the non-negotiable part)
+## Why events as nodes
 
 Entity graphs (IP / host / account as nodes) make the model memorise: *port
 8443 appeared in 3 incidents -> port 8443 is malicious forever*. With events
