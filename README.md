@@ -1,4 +1,4 @@
-# Event-Provenance RGAT for Sentinel incidents (PoC)
+# Bidirectional RGAT for Sentinel incidents (PoC)
 
 A relational graph attention network that classifies **events** (not
 entities) as part-of-incident vs benign, trained on a provenance graph whose
