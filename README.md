@@ -17,7 +17,7 @@ The synthetic data used for the training strives to be akin to what a mature SOC
 
 A SOC classifying incidents without proof/evidence justifying the decision (particularly of high severity ones) would not have the quality of data necessary to conduct tests without modest data engineering effort. 
 
-## Why events as nodes
+## Why events as nodes (the non-negotiable part)
 
 Entity graphs (IP / host / account as nodes) make the model memorise: *port
 8443 appeared in 3 incidents -> port 8443 is malicious forever*. With events
@@ -76,7 +76,8 @@ python evaluate.py --run runs/<your_run>
 ```
 
 The neighbourhood sampler is self-contained (`sampling.py`, NumPy CSR +
-torch indexing).
+torch indexing), so the optional `torch-sparse` / `pyg-lib` kernels — which
+rarely have wheels for the newest Python/torch builds — are **not** required.
 
 Any knob can be overridden: `python train.py --config configs/full.yaml
 --set sampling.batch_seeds=256 --set train.epochs=20`.
@@ -125,13 +126,61 @@ single-feature AUC stays far below the 0.95 abort threshold.
 | baseline (predict positive rate)        |     0.0128 |          – |          – |
 | MLP, features only, no edges            |     0.5358 |     0.8885 |     0.5363 |
 | **event-provenance RGAT (this repo)**   | **0.7544** | **0.9823** | **0.7434** |
-| same RGAT, edges rewired (topology destroyed) | 0.2832 |     0.7845 |     0.3333 |
+| same RGAT, *evaluated* with edges rewired (sensitivity check) | 0.2832 |     0.7845 |     0.3333 |
 
 Read it bottom-up: destroy the graph structure (degrees preserved) and the
-RGAT loses nearly two thirds of its AUPRC — chain topology does the heavy
-lifting. The RGAT beats the features-only MLP by +0.22 AUPRC / +0.09 AUROC,
-the comparison that proves the provenance graph adds signal beyond per-event
+RGAT loses nearly two thirds of its AUPRC. The RGAT beats the features-only
+MLP by +0.22 AUPRC / +0.09 AUROC — the graph adds signal beyond per-event
 attributes.
+
+#### Retraining control (kills the distribution-shift objection)
+
+The rewired row above evaluates the *trained* model on a destroyed graph —
+that shows dependence on connectivity, but conflates "topology carries
+signal" with "the model breaks under structural shift". The proper control
+trains from scratch on the destroyed graph (`tools/train_rewired.py`):
+destinations permuted **within each split** (degrees preserved, no
+cross-split edges, edge dt recomputed for the new pairs), threshold tuned on
+the rewired val and applied to the rewired test — this model's train and
+eval conditions match, so its score cannot be blamed on shift.
+
+Matched-recipe pair (canonical config; 30 epochs and
+`sampling.max_frontier=2000`, which caps the frontier explosion a random
+graph causes at sampling time):
+
+| arm (same recipe)                       | trained on | test AUPRC | test AUROC | test F1 |
+|-----------------------------------------|------------|-----------:|-----------:|--------:|
+| RGAT, intact graph                      | intact     |     0.7164 |     0.9771 |  0.7069 |
+| RGAT, rewired graph (control)           | rewired    |     0.4453 |     0.8737 |  0.4828 |
+
+(`runs/20260809_203905_intact_fast`, `runs/20260809_203653_rewire_retrain`;
+full-budget versions pending — minutes-scale now that the frontier is
+capped.) The only difference between the two runs is whether edges carry
+real incident structure: the **+0.27 AUPRC** gap is what true connectivity
+contributes. Random connectivity is worth *less than none*: the
+rewired-trained model lands below the features-only MLP (0.4453 < 0.5358) —
+scrambled-neighbour messages are noise, and the model's gain requires real
+event structure.
+
+**Operating points** of the single model (every threshold tuned on
+validation only, then applied to test):
+
+Flagged events = TP + FP, i.e. everything an analyst would have to look at.
+
+| policy            | recall | precision | missed | flagged events |
+|-------------------|-------:|----------:|-------:|---------------:|
+| F1-optimal        |  0.634 |     0.898 |    285 |    550 (0.91%) |
+| recall ≥ 0.90     |  0.936 |     0.139 |     50 |  5,246 (8.6%)  |
+| recall ≥ 0.93     |  0.958 |     0.108 |     33 |  6,921 (11.4%) |
+| recall ≥ 0.95     |  0.976 |     0.085 |     19 |  8,931 (14.7%) |
+| recall ≥ 0.97     |  0.986 |     0.063 |     11 | 12,285 (20.3%) |
+
+Even in the most recall-hungry deployment the model flags at most ~1 in 5
+events; at the 90% recall floor it catches 729 of the 779 positive events
+by flagging under 9% of events. An ensemble of 6 independently trained members
+(3 seeds × 2 feature-encoder depths, `tools/ensemble_eval.py`) scores
+AUPRC 0.7478 with slightly smoother scores; the single model above was
+selected by validation AUPRC and is the canonical artifact.
 
 #### How the design got here (ablations, all on this dataset)
 
@@ -180,5 +229,8 @@ tools/analyze_errors.py             joins a run's test predictions with incident
 tools/ensemble_eval.py              averaged scores of N same-dataset RGAT runs
                                     (threshold re-tuned on val, rewire included)
 tools/ensemble_recall_table.py      recall-floor vs investigation-cost table
+tools/train_rewired.py              retraining control: train from scratch on the
+                                    within-split rewired graph (ablation done right)
 tests/                              focal loss, RGAT, sampler, generator, pipeline
 ```
+
