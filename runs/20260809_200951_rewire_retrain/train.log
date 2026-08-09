@@ -1,0 +1,33 @@
+20:09:51 ==============================================================================
+20:09:51 REWIRE RETRAIN CONTROL  |  same config + seeds, topology destroyed
+20:09:51 ==============================================================================
+20:09:51 [ctrl] replicating config: runs/20260807_155539_full_rgat/config.yaml
+20:09:51 [env ] CUDA device: NVIDIA GeForce RTX 5060  VRAM 8.0 GB  torch 2.13.0+cu132
+20:09:51 [data] loading cached dataset from data\graph_d34b2d9b067a.pt
+20:09:51 [data]   nodes=402,064
+[data]   PROCESS_CHILD    edges=   44,696
+[data]   SESSION_ACTION   edges=   24,079
+[data]   HOST_SEQUENCE    edges=  292,980
+[data]   USER_SEQUENCE    edges=  315,563
+[data]   NET_TRIGGER      edges=    8,158
+[data]   CONFIG_TRIGGER   edges=    4,135
+[data]   split train: nodes= 275,273  positive= 2,367  pos_rate=0.86%
+[data]   split val  : nodes=  54,356  positive=   769  pos_rate=1.41%
+[data]   split test : nodes=  60,664  positive=   779  pos_rate=1.28%
+20:09:51 [ctrl] rewiring destinations within splits (seed 1338); degrees preserved, edge dt recomputed, no cross-split edges
+20:09:51 [ctrl] rewired; self-loop edges dropped: 0
+20:09:51 [model] EventProvenanceRGAT  layers=6 hidden=128 heads=4 params=784,497
+20:09:51 [loss ] focal loss  gamma=2.0 alpha=0.75
+20:09:51 [thr  ] threshold policy: f1
+20:09:51 [train] 80 epochs x 19 steps (seeds/batch=512, pos=128/neg=384)
+20:10:31 [train] ep 1 step   1/19 | loss 0.0465 (pos 0.132/neg 0.046) | sup 2005+/276620- | seedF1 0.408 | subgraph n=278,625 e=564,292 | lr 3.07e-05 | gpu 16805MB
+20:12:53 [train] ep 1 step   5/19 | loss 0.0389 (pos 0.157/neg 0.038) | sup 2016+/274855- | seedF1 0.321 | subgraph n=276,871 e=560,617 | lr 3.34e-05 | gpu 16942MB
+20:15:56 [train] ep 1 step  10/19 | loss 0.0304 (pos 0.198/neg 0.029) | sup 1909+/274376- | seedF1 0.268 | subgraph n=276,285 e=558,799 | lr 3.67e-05 | gpu 16978MB
+20:19:21 [train] ep 1 step  15/19 | loss 0.0233 (pos 0.255/neg 0.022) | sup 1959+/272224- | seedF1 0.223 | subgraph n=274,183 e=552,772 | lr 4.01e-05 | gpu 16978MB
+20:24:39 [warn] frontier cap triggered 57x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+20:25:11 ┌────────────────────────────────────────────────────────────────────────────
+20:25:11 │ EPOCH   1/80  train_loss 0.0312 (pos 0.206 / neg 0.030)  seedF1 0.194  887.7s  (5919 seeds/s)  eta ~1168.8min
+20:25:11 │ VAL  AUROC 0.6218 | AUPRC 0.0267 (base 0.0141) | F1 0.0710 (thr 0.329) | P 0.0446 R 0.1743 | MCC 0.0623
+20:25:11 │ best AUPRC 0.0267 @ ep1   ** improved **
+20:25:11 └────────────────────────────────────────────────────────────────────────────
+20:25:53 [train] ep 2 step   1/19 | loss 0.0178 (pos 0.320/neg 0.016) | sup 1985+/270134- | seedF1 0.429 | subgraph n=272,119 e=546,049 | lr 4.35e-05 | gpu 16978MB

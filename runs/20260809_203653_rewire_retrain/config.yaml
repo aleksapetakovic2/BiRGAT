@@ -1,0 +1,109 @@
+data:
+  seed: 1337
+  preset: full
+  days: 28
+  n_hosts: 350
+  n_users: 300
+  n_incidents: 155
+  attack_events_range:
+  - 25
+  - 60
+  data_dir: data
+  regenerate: false
+graph:
+  host_seq_window_min: 10.0
+  user_seq_window_min: 15.0
+  net_trigger_window_min: 10.0
+  net_trigger_max_links: 2
+  config_trigger_min_min: 5.0
+  config_trigger_max_h: 24.0
+  config_trigger_max_links: 2
+  session_max_h: 12.0
+  max_out_degree_per_rel: 4
+  split_train_frac: 0.65
+  split_val_frac: 0.17
+  split_gap_hours: 6.0
+  leakage_auc_threshold: 0.95
+model:
+  model: rgat
+  hidden_dim: 128
+  num_layers: 6
+  num_heads: 4
+  feat_drop: 0.25
+  attn_drop: 0.25
+  use_edge_bias: true
+  residual: true
+  negative_slope: 0.2
+  readout: jk
+  deep_input_proj: true
+sampling:
+  fanouts:
+    PROCESS_CHILD:
+    - 10
+    - 8
+    - 6
+    - 4
+    - 3
+    - 2
+    SESSION_ACTION:
+    - 10
+    - 8
+    - 6
+    - 4
+    - 3
+    - 2
+    HOST_SEQUENCE:
+    - 8
+    - 6
+    - 4
+    - 3
+    - 2
+    - 2
+    USER_SEQUENCE:
+    - 8
+    - 6
+    - 4
+    - 3
+    - 2
+    - 2
+    NET_TRIGGER:
+    - 10
+    - 8
+    - 6
+    - 4
+    - 3
+    - 2
+    CONFIG_TRIGGER:
+    - 8
+    - 6
+    - 4
+    - 3
+    - 2
+    - 2
+  eval_fanout_mult: 2
+  batch_seeds: 512
+  pos_seed_frac: 0.25
+  eval_batch_seeds: 1024
+  max_frontier: 2000
+  min_steps_per_epoch: 12
+  reverse_edges: true
+  eval_passes: 1
+  num_workers: 0
+train:
+  epochs: 30
+  seed: 7777
+  lr: 0.0003
+  weight_decay: 0.001
+  warmup_steps: 400
+  grad_clip: 1.0
+  focal_gamma: 2.0
+  focal_alpha: 0.75
+  patience: 8
+  min_delta: 0.0001
+  threshold_policy: f1
+  threshold_min_recall: 0.9
+  log_every: 5
+  amp: false
+  device: auto
+  run_name: rewire_retrain
+  run_mlp_baseline: true

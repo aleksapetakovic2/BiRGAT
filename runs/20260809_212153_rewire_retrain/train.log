@@ -1,0 +1,1216 @@
+21:21:53 ==============================================================================
+21:21:53 REWIRE RETRAIN CONTROL  |  same config + seeds, topology destroyed
+21:21:53 ==============================================================================
+21:21:53 [ctrl] replicating config: runs/20260809_211146_full_production/config.yaml
+21:21:53 [env ] CUDA device: NVIDIA GeForce RTX 5060  VRAM 8.0 GB  torch 2.13.0+cu132
+21:21:53 [data] loading cached dataset from data\graph_d34b2d9b067a.pt
+21:21:53 [data]   nodes=402,064
+[data]   PROCESS_CHILD    edges=   44,696
+[data]   SESSION_ACTION   edges=   24,079
+[data]   HOST_SEQUENCE    edges=  292,980
+[data]   USER_SEQUENCE    edges=  315,563
+[data]   NET_TRIGGER      edges=    8,158
+[data]   CONFIG_TRIGGER   edges=    4,135
+[data]   split train: nodes= 275,273  positive= 2,367  pos_rate=0.86%
+[data]   split val  : nodes=  54,356  positive=   769  pos_rate=1.41%
+[data]   split test : nodes=  60,664  positive=   779  pos_rate=1.28%
+21:21:53 [ctrl] rewiring destinations within splits (seed 1338); degrees preserved, edge dt recomputed, no cross-split edges
+21:21:53 [ctrl] rewired; self-loop edges dropped: 0
+21:21:54 [model] EventProvenanceRGAT  layers=6 hidden=128 heads=4 params=784,497
+21:21:54 [loss ] focal loss  gamma=2.0 alpha=0.75
+21:21:54 [thr  ] threshold policy: f1
+21:21:54 [train] 100 epochs x 19 steps (seeds/batch=512, pos=128/neg=384)
+21:21:55 [train] ep 1 step   1/19 | loss 0.0466 (pos 0.126/neg 0.046) | sup 233+/21013- | seedF1 0.372 | subgraph n=21,246 e=38,081 | lr 3.07e-05 | gpu 1257MB
+21:21:55 [train] ep 1 step   5/19 | loss 0.0393 (pos 0.162/neg 0.038) | sup 271+/20915- | seedF1 0.298 | subgraph n=21,186 e=37,998 | lr 3.34e-05 | gpu 1273MB
+21:21:56 [train] ep 1 step  10/19 | loss 0.0313 (pos 0.203/neg 0.029) | sup 260+/20911- | seedF1 0.262 | subgraph n=21,171 e=37,942 | lr 3.67e-05 | gpu 1275MB
+21:21:57 [train] ep 1 step  15/19 | loss 0.0243 (pos 0.262/neg 0.021) | sup 250+/20832- | seedF1 0.220 | subgraph n=21,082 e=37,823 | lr 4.01e-05 | gpu 1275MB
+21:21:57 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:21:59 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:21:59 ┌────────────────────────────────────────────────────────────────────────────
+21:21:59 │ EPOCH   1/100  train_loss 0.0320 (pos 0.211 / neg 0.030)  seedF1 0.193  3.6s  (112378 seeds/s)  eta ~5.9min
+21:21:59 │ VAL  AUROC 0.6110 | AUPRC 0.0231 (base 0.0141) | F1 0.0509 (thr 0.352) | P 0.0308 R 0.1469 | MCC 0.0379
+21:21:59 │ best AUPRC 0.0231 @ ep1   ** improved **
+21:21:59 └────────────────────────────────────────────────────────────────────────────
+21:21:59 [train] ep 2 step   1/19 | loss 0.0193 (pos 0.326/neg 0.015) | sup 259+/20826- | seedF1 0.416 | subgraph n=21,085 e=37,796 | lr 4.35e-05 | gpu 1275MB
+21:22:00 [train] ep 2 step   6/19 | loss 0.0152 (pos 0.419/neg 0.011) | sup 235+/20897- | seedF1 0.347 | subgraph n=21,132 e=37,973 | lr 4.69e-05 | gpu 1275MB
+21:22:01 [train] ep 2 step  11/19 | loss 0.0135 (pos 0.552/neg 0.007) | sup 242+/21001- | seedF1 0.289 | subgraph n=21,243 e=38,217 | lr 5.03e-05 | gpu 1276MB
+21:22:02 [train] ep 2 step  16/19 | loss 0.0124 (pos 0.644/neg 0.005) | sup 245+/21191- | seedF1 0.245 | subgraph n=21,436 e=38,527 | lr 5.36e-05 | gpu 1280MB
+21:22:02 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:04 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:04 ┌────────────────────────────────────────────────────────────────────────────
+21:22:04 │ EPOCH   2/100  train_loss 0.0146 (pos 0.511 / neg 0.009)  seedF1 0.222  2.8s  (142217 seeds/s)  eta ~4.6min
+21:22:04 │ VAL  AUROC 0.6572 | AUPRC 0.0311 (base 0.0141) | F1 0.0814 (thr 0.226) | P 0.0592 R 0.1300 | MCC 0.0684
+21:22:04 │ best AUPRC 0.0311 @ ep2   ** improved **
+21:22:04 └────────────────────────────────────────────────────────────────────────────
+21:22:04 [train] ep 3 step   1/19 | loss 0.0126 (pos 0.715/neg 0.004) | sup 254+/20995- | seedF1 0.375 | subgraph n=21,249 e=38,186 | lr 5.63e-05 | gpu 1280MB
+21:22:05 [train] ep 3 step   2/19 | loss 0.0125 (pos 0.729/neg 0.004) | sup 252+/20925- | seedF1 0.342 | subgraph n=21,177 e=38,008 | lr 5.70e-05 | gpu 1280MB
+21:22:05 [train] ep 3 step   7/19 | loss 0.0117 (pos 0.765/neg 0.003) | sup 236+/21038- | seedF1 0.360 | subgraph n=21,274 e=38,187 | lr 6.04e-05 | gpu 1280MB
+21:22:06 [train] ep 3 step  12/19 | loss 0.0119 (pos 0.731/neg 0.003) | sup 256+/20908- | seedF1 0.373 | subgraph n=21,164 e=37,984 | lr 6.38e-05 | gpu 1280MB
+21:22:07 [train] ep 3 step  17/19 | loss 0.0119 (pos 0.718/neg 0.003) | sup 259+/20930- | seedF1 0.379 | subgraph n=21,189 e=38,052 | lr 6.71e-05 | gpu 1280MB
+21:22:07 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:09 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:09 ┌────────────────────────────────────────────────────────────────────────────
+21:22:09 │ EPOCH   3/100  train_loss 0.0121 (pos 0.737 / neg 0.003)  seedF1 0.382  2.9s  (140394 seeds/s)  eta ~4.7min
+21:22:09 │ VAL  AUROC 0.7369 | AUPRC 0.0673 (base 0.0141) | F1 0.1397 (thr 0.226) | P 0.1431 R 0.1365 | MCC 0.1277
+21:22:09 │ best AUPRC 0.0673 @ ep3   ** improved **
+21:22:09 └────────────────────────────────────────────────────────────────────────────
+21:22:09 [train] ep 4 step   1/19 | loss 0.0111 (pos 0.682/neg 0.003) | sup 242+/20868- | seedF1 0.507 | subgraph n=21,110 e=37,937 | lr 6.92e-05 | gpu 1280MB
+21:22:10 [train] ep 4 step   3/19 | loss 0.0113 (pos 0.675/neg 0.003) | sup 250+/20963- | seedF1 0.461 | subgraph n=21,213 e=38,177 | lr 7.05e-05 | gpu 1280MB
+21:22:10 [train] ep 4 step   8/19 | loss 0.0112 (pos 0.650/neg 0.004) | sup 249+/20989- | seedF1 0.426 | subgraph n=21,238 e=38,092 | lr 7.39e-05 | gpu 1280MB
+21:22:11 [train] ep 4 step  13/19 | loss 0.0110 (pos 0.598/neg 0.004) | sup 256+/21074- | seedF1 0.433 | subgraph n=21,330 e=38,349 | lr 7.72e-05 | gpu 1280MB
+21:22:12 [train] ep 4 step  18/19 | loss 0.0109 (pos 0.595/neg 0.004) | sup 249+/20899- | seedF1 0.444 | subgraph n=21,148 e=37,930 | lr 8.06e-05 | gpu 1280MB
+21:22:12 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:14 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:14 ┌────────────────────────────────────────────────────────────────────────────
+21:22:14 │ EPOCH   4/100  train_loss 0.0112 (pos 0.631 / neg 0.004)  seedF1 0.446  2.8s  (142419 seeds/s)  eta ~4.5min
+21:22:14 │ VAL  AUROC 0.7508 | AUPRC 0.1356 (base 0.0141) | F1 0.2169 (thr 0.268) | P 0.2443 R 0.1951 | MCC 0.2083
+21:22:14 │ best AUPRC 0.1356 @ ep4   ** improved **
+21:22:14 └────────────────────────────────────────────────────────────────────────────
+21:22:14 [train] ep 5 step   1/19 | loss 0.0110 (pos 0.600/neg 0.004) | sup 250+/21064- | seedF1 0.382 | subgraph n=21,314 e=38,277 | lr 8.20e-05 | gpu 1280MB
+21:22:15 [train] ep 5 step   4/19 | loss 0.0110 (pos 0.575/neg 0.004) | sup 263+/21013- | seedF1 0.398 | subgraph n=21,276 e=38,137 | lr 8.40e-05 | gpu 1280MB
+21:22:15 [train] ep 5 step   9/19 | loss 0.0105 (pos 0.544/neg 0.004) | sup 270+/21073- | seedF1 0.445 | subgraph n=21,343 e=38,327 | lr 8.74e-05 | gpu 1280MB
+21:22:16 [train] ep 5 step  14/19 | loss 0.0103 (pos 0.564/neg 0.003) | sup 261+/20933- | seedF1 0.461 | subgraph n=21,194 e=37,950 | lr 9.07e-05 | gpu 1280MB
+21:22:17 [train] ep 5 step  19/19 | loss 0.0104 (pos 0.578/neg 0.003) | sup 265+/20941- | seedF1 0.454 | subgraph n=21,206 e=38,125 | lr 9.41e-05 | gpu 1280MB
+21:22:17 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:19 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:19 ┌────────────────────────────────────────────────────────────────────────────
+21:22:19 │ EPOCH   5/100  train_loss 0.0104 (pos 0.578 / neg 0.004)  seedF1 0.454  2.9s  (139705 seeds/s)  eta ~4.6min
+21:22:19 │ VAL  AUROC 0.7646 | AUPRC 0.1472 (base 0.0141) | F1 0.2396 (thr 0.278) | P 0.2514 R 0.2289 | MCC 0.2295
+21:22:19 │ best AUPRC 0.1472 @ ep5   ** improved **
+21:22:19 └────────────────────────────────────────────────────────────────────────────
+21:22:19 [train] ep 6 step   1/19 | loss 0.0101 (pos 0.600/neg 0.003) | sup 247+/20945- | seedF1 0.433 | subgraph n=21,192 e=38,096 | lr 9.48e-05 | gpu 1280MB
+21:22:20 [train] ep 6 step   5/19 | loss 0.0100 (pos 0.569/neg 0.003) | sup 254+/20817- | seedF1 0.439 | subgraph n=21,071 e=37,810 | lr 9.75e-05 | gpu 1280MB
+21:22:20 [train] ep 6 step  10/19 | loss 0.0101 (pos 0.564/neg 0.003) | sup 262+/20907- | seedF1 0.444 | subgraph n=21,169 e=37,980 | lr 1.01e-04 | gpu 1280MB
+21:22:21 [train] ep 6 step  15/19 | loss 0.0105 (pos 0.577/neg 0.003) | sup 267+/21053- | seedF1 0.453 | subgraph n=21,320 e=38,213 | lr 1.04e-04 | gpu 1280MB
+21:22:22 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:24 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:24 ┌────────────────────────────────────────────────────────────────────────────
+21:22:24 │ EPOCH   6/100  train_loss 0.0101 (pos 0.571 / neg 0.003)  seedF1 0.460  2.8s  (142740 seeds/s)  eta ~4.4min
+21:22:24 │ VAL  AUROC 0.7712 | AUPRC 0.2045 (base 0.0141) | F1 0.2845 (thr 0.357) | P 0.4378 R 0.2107 | MCC 0.2970
+21:22:24 │ best AUPRC 0.2045 @ ep6   ** improved **
+21:22:24 └────────────────────────────────────────────────────────────────────────────
+21:22:24 [train] ep 7 step   1/19 | loss 0.0097 (pos 0.546/neg 0.003) | sup 250+/21050- | seedF1 0.280 | subgraph n=21,300 e=38,323 | lr 1.08e-04 | gpu 1280MB
+21:22:24 [train] ep 7 step   6/19 | loss 0.0092 (pos 0.540/neg 0.003) | sup 240+/21073- | seedF1 0.338 | subgraph n=21,313 e=38,360 | lr 1.11e-04 | gpu 1280MB
+21:22:25 [train] ep 7 step  11/19 | loss 0.0093 (pos 0.532/neg 0.003) | sup 249+/21035- | seedF1 0.332 | subgraph n=21,284 e=38,267 | lr 1.14e-04 | gpu 1280MB
+21:22:26 [train] ep 7 step  16/19 | loss 0.0091 (pos 0.516/neg 0.003) | sup 251+/20869- | seedF1 0.353 | subgraph n=21,120 e=37,898 | lr 1.18e-04 | gpu 1280MB
+21:22:26 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:29 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:29 ┌────────────────────────────────────────────────────────────────────────────
+21:22:29 │ EPOCH   7/100  train_loss 0.0095 (pos 0.544 / neg 0.003)  seedF1 0.364  2.9s  (139312 seeds/s)  eta ~4.5min
+21:22:29 │ VAL  AUROC 0.7847 | AUPRC 0.2276 (base 0.0141) | F1 0.3035 (thr 0.383) | P 0.4663 R 0.2250 | MCC 0.3174
+21:22:29 │ best AUPRC 0.2276 @ ep7   ** improved **
+21:22:29 └────────────────────────────────────────────────────────────────────────────
+21:22:29 [train] ep 8 step   1/19 | loss 0.0099 (pos 0.529/neg 0.003) | sup 277+/20893- | seedF1 0.405 | subgraph n=21,170 e=38,019 | lr 1.20e-04 | gpu 1280MB
+21:22:29 [train] ep 8 step   2/19 | loss 0.0101 (pos 0.553/neg 0.003) | sup 274+/21064- | seedF1 0.365 | subgraph n=21,338 e=38,375 | lr 1.21e-04 | gpu 1280MB
+21:22:30 [train] ep 8 step   7/19 | loss 0.0087 (pos 0.502/neg 0.003) | sup 241+/20905- | seedF1 0.339 | subgraph n=21,146 e=37,907 | lr 1.24e-04 | gpu 1280MB
+21:22:31 [train] ep 8 step  12/19 | loss 0.0085 (pos 0.494/neg 0.003) | sup 235+/20944- | seedF1 0.351 | subgraph n=21,179 e=38,067 | lr 1.28e-04 | gpu 1280MB
+21:22:31 [train] ep 8 step  17/19 | loss 0.0095 (pos 0.531/neg 0.003) | sup 263+/21021- | seedF1 0.360 | subgraph n=21,284 e=38,233 | lr 1.31e-04 | gpu 1280MB
+21:22:32 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:34 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:34 ┌────────────────────────────────────────────────────────────────────────────
+21:22:34 │ EPOCH   8/100  train_loss 0.0093 (pos 0.526 / neg 0.003)  seedF1 0.366  3.0s  (136246 seeds/s)  eta ~4.5min
+21:22:34 │ VAL  AUROC 0.8063 | AUPRC 0.2574 (base 0.0141) | F1 0.3307 (thr 0.388) | P 0.4254 R 0.2705 | MCC 0.3318
+21:22:34 │ best AUPRC 0.2574 @ ep8   ** improved **
+21:22:34 └────────────────────────────────────────────────────────────────────────────
+21:22:34 [train] ep 9 step   1/19 | loss 0.0099 (pos 0.537/neg 0.003) | sup 281+/20966- | seedF1 0.402 | subgraph n=21,247 e=38,188 | lr 1.33e-04 | gpu 1280MB
+21:22:34 [train] ep 9 step   3/19 | loss 0.0091 (pos 0.506/neg 0.003) | sup 264+/20993- | seedF1 0.390 | subgraph n=21,257 e=38,130 | lr 1.35e-04 | gpu 1280MB
+21:22:35 [train] ep 9 step   8/19 | loss 0.0094 (pos 0.533/neg 0.003) | sup 258+/20944- | seedF1 0.386 | subgraph n=21,202 e=38,097 | lr 1.38e-04 | gpu 1280MB
+21:22:36 [train] ep 9 step  13/19 | loss 0.0095 (pos 0.498/neg 0.003) | sup 284+/20966- | seedF1 0.383 | subgraph n=21,250 e=38,155 | lr 1.41e-04 | gpu 1280MB
+21:22:36 [train] ep 9 step  18/19 | loss 0.0089 (pos 0.517/neg 0.003) | sup 249+/20964- | seedF1 0.386 | subgraph n=21,213 e=38,111 | lr 1.45e-04 | gpu 1280MB
+21:22:37 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:38 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:38 ┌────────────────────────────────────────────────────────────────────────────
+21:22:38 │ EPOCH   9/100  train_loss 0.0091 (pos 0.512 / neg 0.003)  seedF1 0.381  2.9s  (137198 seeds/s)  eta ~4.5min
+21:22:38 │ VAL  AUROC 0.8232 | AUPRC 0.2702 (base 0.0141) | F1 0.3413 (thr 0.427) | P 0.4963 R 0.2601 | MCC 0.3528
+21:22:38 │ best AUPRC 0.2702 @ ep9   ** improved **
+21:22:38 └────────────────────────────────────────────────────────────────────────────
+21:22:39 [train] ep10 step   1/19 | loss 0.0094 (pos 0.524/neg 0.003) | sup 268+/21019- | seedF1 0.310 | subgraph n=21,287 e=38,285 | lr 1.46e-04 | gpu 1280MB
+21:22:39 [train] ep10 step   4/19 | loss 0.0092 (pos 0.533/neg 0.003) | sup 255+/21010- | seedF1 0.321 | subgraph n=21,265 e=38,198 | lr 1.48e-04 | gpu 1280MB
+21:22:40 [train] ep10 step   9/19 | loss 0.0082 (pos 0.479/neg 0.003) | sup 238+/21079- | seedF1 0.321 | subgraph n=21,317 e=38,372 | lr 1.51e-04 | gpu 1280MB
+21:22:41 [train] ep10 step  14/19 | loss 0.0086 (pos 0.488/neg 0.003) | sup 261+/21017- | seedF1 0.344 | subgraph n=21,278 e=38,220 | lr 1.55e-04 | gpu 1280MB
+21:22:41 [train] ep10 step  19/19 | loss 0.0086 (pos 0.485/neg 0.003) | sup 256+/20854- | seedF1 0.347 | subgraph n=21,110 e=37,799 | lr 1.58e-04 | gpu 1280MB
+21:22:41 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:43 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:43 ┌────────────────────────────────────────────────────────────────────────────
+21:22:43 │ EPOCH  10/100  train_loss 0.0087 (pos 0.500 / neg 0.003)  seedF1 0.347  2.9s  (140785 seeds/s)  eta ~4.3min
+21:22:43 │ VAL  AUROC 0.8332 | AUPRC 0.2748 (base 0.0141) | F1 0.3487 (thr 0.409) | P 0.4259 R 0.2952 | MCC 0.3469
+21:22:43 │ best AUPRC 0.2748 @ ep10   ** improved **
+21:22:43 └────────────────────────────────────────────────────────────────────────────
+21:22:43 [train] ep11 step   1/19 | loss 0.0083 (pos 0.481/neg 0.003) | sup 248+/20991- | seedF1 0.411 | subgraph n=21,239 e=38,152 | lr 1.59e-04 | gpu 1280MB
+21:22:44 [train] ep11 step   5/19 | loss 0.0083 (pos 0.437/neg 0.003) | sup 269+/21024- | seedF1 0.446 | subgraph n=21,293 e=38,231 | lr 1.62e-04 | gpu 1280MB
+21:22:45 [train] ep11 step  10/19 | loss 0.0080 (pos 0.450/neg 0.003) | sup 247+/21032- | seedF1 0.450 | subgraph n=21,279 e=38,231 | lr 1.65e-04 | gpu 1280MB
+21:22:46 [train] ep11 step  15/19 | loss 0.0085 (pos 0.473/neg 0.003) | sup 264+/21066- | seedF1 0.448 | subgraph n=21,330 e=38,376 | lr 1.68e-04 | gpu 1280MB
+21:22:46 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:48 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:48 ┌────────────────────────────────────────────────────────────────────────────
+21:22:48 │ EPOCH  11/100  train_loss 0.0084 (pos 0.469 / neg 0.003)  seedF1 0.462  2.8s  (142742 seeds/s)  eta ~4.2min
+21:22:48 │ VAL  AUROC 0.8382 | AUPRC 0.3037 (base 0.0141) | F1 0.3669 (thr 0.438) | P 0.4810 R 0.2965 | MCC 0.3708
+21:22:48 │ best AUPRC 0.3037 @ ep11   ** improved **
+21:22:48 └────────────────────────────────────────────────────────────────────────────
+21:22:48 [train] ep12 step   1/19 | loss 0.0079 (pos 0.466/neg 0.003) | sup 242+/20911- | seedF1 0.348 | subgraph n=21,153 e=37,947 | lr 1.72e-04 | gpu 1280MB
+21:22:49 [train] ep12 step   6/19 | loss 0.0081 (pos 0.453/neg 0.003) | sup 260+/20986- | seedF1 0.424 | subgraph n=21,246 e=38,126 | lr 1.75e-04 | gpu 1280MB
+21:22:50 [train] ep12 step  11/19 | loss 0.0082 (pos 0.470/neg 0.003) | sup 253+/21111- | seedF1 0.434 | subgraph n=21,364 e=38,322 | lr 1.78e-04 | gpu 1280MB
+21:22:51 [train] ep12 step  16/19 | loss 0.0082 (pos 0.465/neg 0.002) | sup 261+/20787- | seedF1 0.442 | subgraph n=21,048 e=37,779 | lr 1.82e-04 | gpu 1280MB
+21:22:51 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:53 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:53 ┌────────────────────────────────────────────────────────────────────────────
+21:22:53 │ EPOCH  12/100  train_loss 0.0081 (pos 0.468 / neg 0.003)  seedF1 0.436  2.8s  (141702 seeds/s)  eta ~4.2min
+21:22:53 │ VAL  AUROC 0.8439 | AUPRC 0.3237 (base 0.0141) | F1 0.3987 (thr 0.437) | P 0.5290 R 0.3199 | MCC 0.4050
+21:22:53 │ best AUPRC 0.3237 @ ep12   ** improved **
+21:22:53 └────────────────────────────────────────────────────────────────────────────
+21:22:53 [train] ep13 step   1/19 | loss 0.0085 (pos 0.487/neg 0.003) | sup 259+/20895- | seedF1 0.402 | subgraph n=21,154 e=37,907 | lr 1.85e-04 | gpu 1280MB
+21:22:53 [train] ep13 step   2/19 | loss 0.0082 (pos 0.445/neg 0.003) | sup 264+/20872- | seedF1 0.458 | subgraph n=21,136 e=37,958 | lr 1.85e-04 | gpu 1280MB
+21:22:54 [train] ep13 step   7/19 | loss 0.0081 (pos 0.440/neg 0.003) | sup 264+/21075- | seedF1 0.456 | subgraph n=21,339 e=38,357 | lr 1.89e-04 | gpu 1280MB
+21:22:55 [train] ep13 step  12/19 | loss 0.0069 (pos 0.387/neg 0.003) | sup 237+/20953- | seedF1 0.464 | subgraph n=21,190 e=38,063 | lr 1.92e-04 | gpu 1280MB
+21:22:56 [train] ep13 step  17/19 | loss 0.0082 (pos 0.452/neg 0.003) | sup 270+/20878- | seedF1 0.463 | subgraph n=21,148 e=38,003 | lr 1.95e-04 | gpu 1280MB
+21:22:56 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:22:58 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:22:58 ┌────────────────────────────────────────────────────────────────────────────
+21:22:58 │ EPOCH  13/100  train_loss 0.0081 (pos 0.455 / neg 0.003)  seedF1 0.468  2.9s  (138209 seeds/s)  eta ~4.2min
+21:22:58 │ VAL  AUROC 0.8484 | AUPRC 0.3362 (base 0.0141) | F1 0.3824 (thr 0.477) | P 0.5143 R 0.3043 | MCC 0.3891
+21:22:58 │ best AUPRC 0.3362 @ ep13   ** improved **
+21:22:58 └────────────────────────────────────────────────────────────────────────────
+21:22:58 [train] ep14 step   1/19 | loss 0.0085 (pos 0.447/neg 0.003) | sup 279+/21034- | seedF1 0.380 | subgraph n=21,313 e=38,289 | lr 1.97e-04 | gpu 1280MB
+21:22:58 [train] ep14 step   3/19 | loss 0.0076 (pos 0.428/neg 0.003) | sup 245+/20948- | seedF1 0.384 | subgraph n=21,193 e=38,019 | lr 1.99e-04 | gpu 1280MB
+21:22:59 [train] ep14 step   8/19 | loss 0.0080 (pos 0.480/neg 0.002) | sup 245+/20904- | seedF1 0.411 | subgraph n=21,149 e=37,955 | lr 2.02e-04 | gpu 1280MB
+21:23:00 [train] ep14 step  13/19 | loss 0.0080 (pos 0.439/neg 0.003) | sup 264+/21097- | seedF1 0.426 | subgraph n=21,361 e=38,409 | lr 2.05e-04 | gpu 1280MB
+21:23:01 [train] ep14 step  18/19 | loss 0.0078 (pos 0.426/neg 0.003) | sup 267+/21019- | seedF1 0.439 | subgraph n=21,286 e=38,323 | lr 2.09e-04 | gpu 1280MB
+21:23:01 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:03 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:03 ┌────────────────────────────────────────────────────────────────────────────
+21:23:03 │ EPOCH  14/100  train_loss 0.0078 (pos 0.439 / neg 0.003)  seedF1 0.448  2.8s  (142299 seeds/s)  eta ~4.1min
+21:23:03 │ VAL  AUROC 0.8544 | AUPRC 0.3471 (base 0.0141) | F1 0.4003 (thr 0.477) | P 0.5581 R 0.3121 | MCC 0.4113
+21:23:03 │ best AUPRC 0.3471 @ ep14   ** improved **
+21:23:03 └────────────────────────────────────────────────────────────────────────────
+21:23:03 [train] ep15 step   1/19 | loss 0.0078 (pos 0.459/neg 0.002) | sup 252+/21036- | seedF1 0.488 | subgraph n=21,288 e=38,245 | lr 2.10e-04 | gpu 1280MB
+21:23:03 [train] ep15 step   4/19 | loss 0.0077 (pos 0.438/neg 0.003) | sup 252+/20979- | seedF1 0.444 | subgraph n=21,231 e=38,100 | lr 2.12e-04 | gpu 1280MB
+21:23:04 [train] ep15 step   9/19 | loss 0.0077 (pos 0.432/neg 0.002) | sup 258+/20952- | seedF1 0.452 | subgraph n=21,210 e=38,074 | lr 2.16e-04 | gpu 1280MB
+21:23:05 [train] ep15 step  14/19 | loss 0.0073 (pos 0.443/neg 0.002) | sup 240+/20829- | seedF1 0.458 | subgraph n=21,069 e=37,829 | lr 2.19e-04 | gpu 1281MB
+21:23:06 [train] ep15 step  19/19 | loss 0.0077 (pos 0.421/neg 0.002) | sup 264+/20794- | seedF1 0.468 | subgraph n=21,058 e=37,788 | lr 2.22e-04 | gpu 1281MB
+21:23:06 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:08 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:08 ┌────────────────────────────────────────────────────────────────────────────
+21:23:08 │ EPOCH  15/100  train_loss 0.0075 (pos 0.432 / neg 0.002)  seedF1 0.468  2.9s  (140587 seeds/s)  eta ~4.1min
+21:23:08 │ VAL  AUROC 0.8543 | AUPRC 0.3498 (base 0.0141) | F1 0.4014 (thr 0.540) | P 0.6392 R 0.2926 | MCC 0.4273
+21:23:08 │ best AUPRC 0.3498 @ ep15   ** improved **
+21:23:08 └────────────────────────────────────────────────────────────────────────────
+21:23:08 [train] ep16 step   1/19 | loss 0.0080 (pos 0.426/neg 0.002) | sup 274+/20921- | seedF1 0.407 | subgraph n=21,195 e=38,034 | lr 2.23e-04 | gpu 1281MB
+21:23:09 [train] ep16 step   5/19 | loss 0.0075 (pos 0.421/neg 0.002) | sup 260+/21070- | seedF1 0.403 | subgraph n=21,330 e=38,337 | lr 2.26e-04 | gpu 1281MB
+21:23:09 [train] ep16 step  10/19 | loss 0.0077 (pos 0.425/neg 0.002) | sup 267+/21047- | seedF1 0.421 | subgraph n=21,314 e=38,314 | lr 2.29e-04 | gpu 1281MB
+21:23:10 [train] ep16 step  15/19 | loss 0.0082 (pos 0.443/neg 0.002) | sup 280+/20917- | seedF1 0.439 | subgraph n=21,197 e=38,032 | lr 2.32e-04 | gpu 1281MB
+21:23:11 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:12 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:13 ┌────────────────────────────────────────────────────────────────────────────
+21:23:13 │ EPOCH  16/100  train_loss 0.0075 (pos 0.416 / neg 0.002)  seedF1 0.441  2.8s  (143055 seeds/s)  eta ~3.9min
+21:23:13 │ VAL  AUROC 0.8608 | AUPRC 0.3677 (base 0.0141) | F1 0.4155 (thr 0.541) | P 0.6431 R 0.3069 | MCC 0.4391
+21:23:13 │ best AUPRC 0.3677 @ ep16   ** improved **
+21:23:13 └────────────────────────────────────────────────────────────────────────────
+21:23:13 [train] ep17 step   1/19 | loss 0.0072 (pos 0.424/neg 0.002) | sup 243+/20927- | seedF1 0.351 | subgraph n=21,170 e=37,883 | lr 2.36e-04 | gpu 1281MB
+21:23:13 [train] ep17 step   6/19 | loss 0.0064 (pos 0.366/neg 0.002) | sup 243+/21031- | seedF1 0.422 | subgraph n=21,274 e=38,227 | lr 2.39e-04 | gpu 1281MB
+21:23:14 [train] ep17 step  11/19 | loss 0.0074 (pos 0.427/neg 0.002) | sup 256+/21006- | seedF1 0.420 | subgraph n=21,262 e=38,223 | lr 2.43e-04 | gpu 1281MB
+21:23:15 [train] ep17 step  16/19 | loss 0.0079 (pos 0.454/neg 0.002) | sup 264+/20905- | seedF1 0.435 | subgraph n=21,169 e=37,956 | lr 2.46e-04 | gpu 1281MB
+21:23:15 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:17 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:17 ┌────────────────────────────────────────────────────────────────────────────
+21:23:17 │ EPOCH  17/100  train_loss 0.0072 (pos 0.410 / neg 0.002)  seedF1 0.436  2.8s  (144066 seeds/s)  eta ~3.9min
+21:23:17 │ VAL  AUROC 0.8616 | AUPRC 0.3798 (base 0.0141) | F1 0.4317 (thr 0.538) | P 0.6997 R 0.3121 | MCC 0.4626
+21:23:17 │ best AUPRC 0.3798 @ ep17   ** improved **
+21:23:17 └────────────────────────────────────────────────────────────────────────────
+21:23:17 [train] ep18 step   1/19 | loss 0.0071 (pos 0.420/neg 0.002) | sup 247+/20999- | seedF1 0.405 | subgraph n=21,246 e=38,169 | lr 2.49e-04 | gpu 1281MB
+21:23:18 [train] ep18 step   2/19 | loss 0.0071 (pos 0.412/neg 0.002) | sup 250+/20900- | seedF1 0.434 | subgraph n=21,150 e=38,043 | lr 2.49e-04 | gpu 1281MB
+21:23:18 [train] ep18 step   7/19 | loss 0.0076 (pos 0.452/neg 0.002) | sup 264+/20852- | seedF1 0.462 | subgraph n=21,116 e=37,922 | lr 2.53e-04 | gpu 1281MB
+21:23:19 [train] ep18 step  12/19 | loss 0.0072 (pos 0.371/neg 0.003) | sup 269+/20988- | seedF1 0.479 | subgraph n=21,257 e=38,248 | lr 2.56e-04 | gpu 1281MB
+21:23:20 [train] ep18 step  17/19 | loss 0.0073 (pos 0.408/neg 0.002) | sup 267+/20841- | seedF1 0.484 | subgraph n=21,108 e=37,871 | lr 2.59e-04 | gpu 1281MB
+21:23:20 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:22 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:22 ┌────────────────────────────────────────────────────────────────────────────
+21:23:22 │ EPOCH  18/100  train_loss 0.0070 (pos 0.399 / neg 0.002)  seedF1 0.484  2.8s  (142950 seeds/s)  eta ~3.9min
+21:23:22 │ VAL  AUROC 0.8689 | AUPRC 0.3870 (base 0.0141) | F1 0.4407 (thr 0.583) | P 0.7653 R 0.3095 | MCC 0.4825
+21:23:22 │ best AUPRC 0.3870 @ ep18   ** improved **
+21:23:22 └────────────────────────────────────────────────────────────────────────────
+21:23:22 [train] ep19 step   1/19 | loss 0.0069 (pos 0.371/neg 0.002) | sup 254+/21014- | seedF1 0.380 | subgraph n=21,268 e=38,227 | lr 2.62e-04 | gpu 1281MB
+21:23:23 [train] ep19 step   3/19 | loss 0.0072 (pos 0.403/neg 0.002) | sup 251+/20944- | seedF1 0.378 | subgraph n=21,195 e=38,024 | lr 2.63e-04 | gpu 1281MB
+21:23:23 [train] ep19 step   8/19 | loss 0.0068 (pos 0.410/neg 0.002) | sup 249+/21043- | seedF1 0.427 | subgraph n=21,292 e=38,229 | lr 2.66e-04 | gpu 1281MB
+21:23:24 [train] ep19 step  13/19 | loss 0.0066 (pos 0.363/neg 0.002) | sup 253+/21015- | seedF1 0.434 | subgraph n=21,268 e=38,216 | lr 2.70e-04 | gpu 1281MB
+21:23:25 [train] ep19 step  18/19 | loss 0.0068 (pos 0.384/neg 0.002) | sup 255+/20961- | seedF1 0.446 | subgraph n=21,216 e=38,044 | lr 2.73e-04 | gpu 1281MB
+21:23:25 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:27 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:27 ┌────────────────────────────────────────────────────────────────────────────
+21:23:27 │ EPOCH  19/100  train_loss 0.0069 (pos 0.394 / neg 0.002)  seedF1 0.445  2.9s  (138079 seeds/s)  eta ~3.9min
+21:23:27 │ VAL  AUROC 0.8615 | AUPRC 0.3814 (base 0.0141) | F1 0.4358 (thr 0.610) | P 0.7938 R 0.3004 | MCC 0.4843
+21:23:27 │ best AUPRC 0.3870 @ ep18   patience 19/20
+21:23:27 └────────────────────────────────────────────────────────────────────────────
+21:23:27 [train] ep20 step   1/19 | loss 0.0076 (pos 0.398/neg 0.002) | sup 282+/20883- | seedF1 0.439 | subgraph n=21,165 e=38,033 | lr 2.74e-04 | gpu 1281MB
+21:23:28 [train] ep20 step   4/19 | loss 0.0068 (pos 0.367/neg 0.002) | sup 261+/20811- | seedF1 0.434 | subgraph n=21,072 e=37,833 | lr 2.76e-04 | gpu 1281MB
+21:23:28 [train] ep20 step   9/19 | loss 0.0069 (pos 0.379/neg 0.002) | sup 273+/20993- | seedF1 0.438 | subgraph n=21,266 e=38,196 | lr 2.80e-04 | gpu 1281MB
+21:23:29 [train] ep20 step  14/19 | loss 0.0065 (pos 0.385/neg 0.002) | sup 245+/21072- | seedF1 0.446 | subgraph n=21,317 e=38,386 | lr 2.83e-04 | gpu 1281MB
+21:23:30 [train] ep20 step  19/19 | loss 0.0067 (pos 0.396/neg 0.002) | sup 255+/20992- | seedF1 0.449 | subgraph n=21,247 e=38,207 | lr 2.86e-04 | gpu 1281MB
+21:23:30 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:32 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:32 ┌────────────────────────────────────────────────────────────────────────────
+21:23:32 │ EPOCH  20/100  train_loss 0.0067 (pos 0.382 / neg 0.002)  seedF1 0.449  2.8s  (144280 seeds/s)  eta ~3.7min
+21:23:32 │ VAL  AUROC 0.8590 | AUPRC 0.3746 (base 0.0141) | F1 0.4400 (thr 0.618) | P 0.8034 R 0.3030 | MCC 0.4895
+21:23:32 │ best AUPRC 0.3870 @ ep18   patience 18/20
+21:23:32 └────────────────────────────────────────────────────────────────────────────
+21:23:32 [train] ep21 step   1/19 | loss 0.0066 (pos 0.390/neg 0.002) | sup 247+/20859- | seedF1 0.383 | subgraph n=21,106 e=37,824 | lr 2.87e-04 | gpu 1281MB
+21:23:32 [train] ep21 step   5/19 | loss 0.0069 (pos 0.397/neg 0.002) | sup 255+/21046- | seedF1 0.426 | subgraph n=21,301 e=38,258 | lr 2.90e-04 | gpu 1281MB
+21:23:33 [train] ep21 step  10/19 | loss 0.0068 (pos 0.380/neg 0.002) | sup 255+/20749- | seedF1 0.422 | subgraph n=21,004 e=37,648 | lr 2.93e-04 | gpu 1281MB
+21:23:34 [train] ep21 step  15/19 | loss 0.0066 (pos 0.365/neg 0.002) | sup 253+/20961- | seedF1 0.439 | subgraph n=21,214 e=38,140 | lr 2.97e-04 | gpu 1281MB
+21:23:35 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:36 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:37 ┌────────────────────────────────────────────────────────────────────────────
+21:23:37 │ EPOCH  21/100  train_loss 0.0067 (pos 0.382 / neg 0.002)  seedF1 0.440  2.7s  (146576 seeds/s)  eta ~3.6min
+21:23:37 │ VAL  AUROC 0.8684 | AUPRC 0.3825 (base 0.0141) | F1 0.4508 (thr 0.637) | P 0.8489 R 0.3069 | MCC 0.5068
+21:23:37 │ best AUPRC 0.3870 @ ep18   patience 17/20
+21:23:37 └────────────────────────────────────────────────────────────────────────────
+21:23:37 [train] ep22 step   1/19 | loss 0.0059 (pos 0.344/neg 0.002) | sup 239+/20921- | seedF1 0.473 | subgraph n=21,160 e=38,014 | lr 3.00e-04 | gpu 1281MB
+21:23:37 [train] ep22 step   6/19 | loss 0.0069 (pos 0.411/neg 0.002) | sup 263+/20854- | seedF1 0.449 | subgraph n=21,117 e=37,858 | lr 3.00e-04 | gpu 1281MB
+21:23:38 [train] ep22 step  11/19 | loss 0.0070 (pos 0.359/neg 0.002) | sup 268+/20950- | seedF1 0.448 | subgraph n=21,218 e=38,178 | lr 3.00e-04 | gpu 1281MB
+21:23:39 [train] ep22 step  16/19 | loss 0.0066 (pos 0.404/neg 0.002) | sup 242+/20840- | seedF1 0.462 | subgraph n=21,082 e=37,836 | lr 3.00e-04 | gpu 1281MB
+21:23:39 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:41 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:41 ┌────────────────────────────────────────────────────────────────────────────
+21:23:41 │ EPOCH  22/100  train_loss 0.0065 (pos 0.369 / neg 0.002)  seedF1 0.456  2.8s  (146525 seeds/s)  eta ~3.6min
+21:23:41 │ VAL  AUROC 0.8624 | AUPRC 0.3585 (base 0.0141) | F1 0.4374 (thr 0.674) | P 0.9024 R 0.2887 | MCC 0.5072
+21:23:41 │ best AUPRC 0.3870 @ ep18   patience 16/20
+21:23:41 └────────────────────────────────────────────────────────────────────────────
+21:23:41 [train] ep23 step   1/19 | loss 0.0067 (pos 0.363/neg 0.002) | sup 261+/21041- | seedF1 0.455 | subgraph n=21,302 e=38,264 | lr 3.00e-04 | gpu 1281MB
+21:23:42 [train] ep23 step   2/19 | loss 0.0061 (pos 0.338/neg 0.002) | sup 249+/21114- | seedF1 0.444 | subgraph n=21,363 e=38,326 | lr 3.00e-04 | gpu 1281MB
+21:23:42 [train] ep23 step   7/19 | loss 0.0065 (pos 0.375/neg 0.002) | sup 248+/20989- | seedF1 0.457 | subgraph n=21,237 e=38,148 | lr 3.00e-04 | gpu 1281MB
+21:23:43 [train] ep23 step  12/19 | loss 0.0066 (pos 0.417/neg 0.002) | sup 248+/21124- | seedF1 0.447 | subgraph n=21,372 e=38,434 | lr 3.00e-04 | gpu 1281MB
+21:23:44 [train] ep23 step  17/19 | loss 0.0066 (pos 0.383/neg 0.002) | sup 249+/20941- | seedF1 0.458 | subgraph n=21,190 e=38,000 | lr 3.00e-04 | gpu 1281MB
+21:23:44 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:46 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:46 ┌────────────────────────────────────────────────────────────────────────────
+21:23:46 │ EPOCH  23/100  train_loss 0.0065 (pos 0.371 / neg 0.002)  seedF1 0.458  2.8s  (144506 seeds/s)  eta ~3.6min
+21:23:46 │ VAL  AUROC 0.8657 | AUPRC 0.3795 (base 0.0141) | F1 0.4519 (thr 0.656) | P 0.8672 R 0.3056 | MCC 0.5113
+21:23:46 │ best AUPRC 0.3870 @ ep18   patience 15/20
+21:23:46 └────────────────────────────────────────────────────────────────────────────
+21:23:46 [train] ep24 step   1/19 | loss 0.0063 (pos 0.340/neg 0.002) | sup 263+/21017- | seedF1 0.488 | subgraph n=21,280 e=38,221 | lr 3.00e-04 | gpu 1281MB
+21:23:46 [train] ep24 step   3/19 | loss 0.0067 (pos 0.370/neg 0.002) | sup 257+/20881- | seedF1 0.461 | subgraph n=21,138 e=37,902 | lr 3.00e-04 | gpu 1281MB
+21:23:47 [train] ep24 step   8/19 | loss 0.0067 (pos 0.392/neg 0.002) | sup 251+/20928- | seedF1 0.444 | subgraph n=21,179 e=37,987 | lr 2.99e-04 | gpu 1281MB
+21:23:48 [train] ep24 step  13/19 | loss 0.0057 (pos 0.341/neg 0.002) | sup 239+/21036- | seedF1 0.472 | subgraph n=21,275 e=38,165 | lr 2.99e-04 | gpu 1281MB
+21:23:49 [train] ep24 step  18/19 | loss 0.0057 (pos 0.334/neg 0.002) | sup 239+/20947- | seedF1 0.474 | subgraph n=21,186 e=38,052 | lr 2.99e-04 | gpu 1281MB
+21:23:49 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:51 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:51 ┌────────────────────────────────────────────────────────────────────────────
+21:23:51 │ EPOCH  24/100  train_loss 0.0063 (pos 0.360 / neg 0.002)  seedF1 0.476  2.8s  (142340 seeds/s)  eta ~3.6min
+21:23:51 │ VAL  AUROC 0.8630 | AUPRC 0.3662 (base 0.0141) | F1 0.4414 (thr 0.680) | P 0.8636 R 0.2965 | MCC 0.5025
+21:23:51 │ best AUPRC 0.3870 @ ep18   patience 14/20
+21:23:51 └────────────────────────────────────────────────────────────────────────────
+21:23:51 [train] ep25 step   1/19 | loss 0.0065 (pos 0.381/neg 0.002) | sup 249+/20877- | seedF1 0.438 | subgraph n=21,126 e=37,888 | lr 2.99e-04 | gpu 1281MB
+21:23:52 [train] ep25 step   4/19 | loss 0.0063 (pos 0.339/neg 0.002) | sup 264+/20996- | seedF1 0.446 | subgraph n=21,260 e=38,219 | lr 2.99e-04 | gpu 1281MB
+21:23:52 [train] ep25 step   9/19 | loss 0.0058 (pos 0.327/neg 0.002) | sup 247+/20979- | seedF1 0.451 | subgraph n=21,226 e=38,129 | lr 2.99e-04 | gpu 1281MB
+21:23:53 [train] ep25 step  14/19 | loss 0.0067 (pos 0.383/neg 0.002) | sup 270+/20893- | seedF1 0.459 | subgraph n=21,163 e=37,928 | lr 2.98e-04 | gpu 1281MB
+21:23:54 [train] ep25 step  19/19 | loss 0.0066 (pos 0.353/neg 0.002) | sup 261+/20982- | seedF1 0.478 | subgraph n=21,243 e=38,171 | lr 2.98e-04 | gpu 1281MB
+21:23:54 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:23:56 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:23:56 ┌────────────────────────────────────────────────────────────────────────────
+21:23:56 │ EPOCH  25/100  train_loss 0.0064 (pos 0.359 / neg 0.002)  seedF1 0.478  3.0s  (136465 seeds/s)  eta ~3.7min
+21:23:56 │ VAL  AUROC 0.8645 | AUPRC 0.3753 (base 0.0141) | F1 0.4496 (thr 0.723) | P 0.8821 R 0.3017 | MCC 0.5125
+21:23:56 │ best AUPRC 0.3870 @ ep18   patience 13/20
+21:23:56 └────────────────────────────────────────────────────────────────────────────
+21:23:56 [train] ep26 step   1/19 | loss 0.0063 (pos 0.338/neg 0.002) | sup 265+/20936- | seedF1 0.480 | subgraph n=21,201 e=38,028 | lr 2.98e-04 | gpu 1281MB
+21:23:57 [train] ep26 step   5/19 | loss 0.0063 (pos 0.355/neg 0.002) | sup 260+/20872- | seedF1 0.429 | subgraph n=21,132 e=37,908 | lr 2.98e-04 | gpu 1281MB
+21:23:58 [train] ep26 step  10/19 | loss 0.0060 (pos 0.320/neg 0.002) | sup 254+/20990- | seedF1 0.443 | subgraph n=21,244 e=38,169 | lr 2.98e-04 | gpu 1281MB
+21:23:58 [train] ep26 step  15/19 | loss 0.0058 (pos 0.337/neg 0.002) | sup 258+/20999- | seedF1 0.447 | subgraph n=21,257 e=38,216 | lr 2.97e-04 | gpu 1281MB
+21:23:59 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:01 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:01 ┌────────────────────────────────────────────────────────────────────────────
+21:24:01 │ EPOCH  26/100  train_loss 0.0061 (pos 0.352 / neg 0.002)  seedF1 0.449  2.8s  (142760 seeds/s)  eta ~3.5min
+21:24:01 │ VAL  AUROC 0.8685 | AUPRC 0.3767 (base 0.0141) | F1 0.4585 (thr 0.739) | P 0.9547 R 0.3017 | MCC 0.5337
+21:24:01 │ best AUPRC 0.3870 @ ep18   patience 12/20
+21:24:01 └────────────────────────────────────────────────────────────────────────────
+21:24:01 [train] ep27 step   1/19 | loss 0.0059 (pos 0.343/neg 0.002) | sup 248+/20952- | seedF1 0.440 | subgraph n=21,200 e=38,047 | lr 2.97e-04 | gpu 1281MB
+21:24:02 [train] ep27 step   6/19 | loss 0.0066 (pos 0.343/neg 0.002) | sup 273+/20902- | seedF1 0.449 | subgraph n=21,175 e=38,016 | lr 2.97e-04 | gpu 1281MB
+21:24:03 [train] ep27 step  11/19 | loss 0.0064 (pos 0.357/neg 0.002) | sup 269+/20889- | seedF1 0.430 | subgraph n=21,158 e=38,051 | lr 2.97e-04 | gpu 1281MB
+21:24:04 [train] ep27 step  16/19 | loss 0.0057 (pos 0.318/neg 0.002) | sup 249+/21084- | seedF1 0.441 | subgraph n=21,333 e=38,306 | lr 2.96e-04 | gpu 1281MB
+21:24:04 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:06 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:06 ┌────────────────────────────────────────────────────────────────────────────
+21:24:06 │ EPOCH  27/100  train_loss 0.0062 (pos 0.352 / neg 0.002)  seedF1 0.436  2.9s  (138233 seeds/s)  eta ~3.5min
+21:24:06 │ VAL  AUROC 0.8631 | AUPRC 0.3702 (base 0.0141) | F1 0.4508 (thr 0.744) | P 0.9271 R 0.2978 | MCC 0.5223
+21:24:06 │ best AUPRC 0.3870 @ ep18   patience 11/20
+21:24:06 └────────────────────────────────────────────────────────────────────────────
+21:24:06 [train] ep28 step   1/19 | loss 0.0057 (pos 0.315/neg 0.002) | sup 253+/20904- | seedF1 0.488 | subgraph n=21,157 e=37,954 | lr 2.96e-04 | gpu 1281MB
+21:24:06 [train] ep28 step   2/19 | loss 0.0062 (pos 0.353/neg 0.002) | sup 253+/21009- | seedF1 0.491 | subgraph n=21,262 e=38,247 | lr 2.96e-04 | gpu 1281MB
+21:24:07 [train] ep28 step   7/19 | loss 0.0063 (pos 0.353/neg 0.002) | sup 263+/20973- | seedF1 0.414 | subgraph n=21,236 e=38,163 | lr 2.96e-04 | gpu 1281MB
+21:24:08 [train] ep28 step  12/19 | loss 0.0059 (pos 0.336/neg 0.002) | sup 250+/20864- | seedF1 0.412 | subgraph n=21,114 e=37,870 | lr 2.95e-04 | gpu 1281MB
+21:24:09 [train] ep28 step  17/19 | loss 0.0063 (pos 0.334/neg 0.002) | sup 272+/21061- | seedF1 0.423 | subgraph n=21,333 e=38,336 | lr 2.95e-04 | gpu 1281MB
+21:24:09 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:11 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:11 ┌────────────────────────────────────────────────────────────────────────────
+21:24:11 │ EPOCH  28/100  train_loss 0.0061 (pos 0.342 / neg 0.002)  seedF1 0.435  2.8s  (143592 seeds/s)  eta ~3.4min
+21:24:11 │ VAL  AUROC 0.8588 | AUPRC 0.3614 (base 0.0141) | F1 0.4455 (thr 0.754) | P 0.9336 R 0.2926 | MCC 0.5196
+21:24:11 │ best AUPRC 0.3870 @ ep18   patience 10/20
+21:24:11 └────────────────────────────────────────────────────────────────────────────
+21:24:11 [train] ep29 step   1/19 | loss 0.0059 (pos 0.339/neg 0.002) | sup 255+/20984- | seedF1 0.464 | subgraph n=21,239 e=38,089 | lr 2.95e-04 | gpu 1281MB
+21:24:11 [train] ep29 step   3/19 | loss 0.0069 (pos 0.394/neg 0.002) | sup 279+/20981- | seedF1 0.475 | subgraph n=21,260 e=38,173 | lr 2.94e-04 | gpu 1281MB
+21:24:12 [train] ep29 step   8/19 | loss 0.0058 (pos 0.302/neg 0.002) | sup 262+/21043- | seedF1 0.464 | subgraph n=21,305 e=38,316 | lr 2.94e-04 | gpu 1281MB
+21:24:13 [train] ep29 step  13/19 | loss 0.0062 (pos 0.357/neg 0.002) | sup 261+/21036- | seedF1 0.456 | subgraph n=21,297 e=38,278 | lr 2.93e-04 | gpu 1281MB
+21:24:13 [train] ep29 step  18/19 | loss 0.0055 (pos 0.316/neg 0.002) | sup 245+/20864- | seedF1 0.448 | subgraph n=21,109 e=37,936 | lr 2.93e-04 | gpu 1281MB
+21:24:14 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:15 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:16 ┌────────────────────────────────────────────────────────────────────────────
+21:24:16 │ EPOCH  29/100  train_loss 0.0061 (pos 0.345 / neg 0.002)  seedF1 0.450  2.8s  (144495 seeds/s)  eta ~3.3min
+21:24:16 │ VAL  AUROC 0.8735 | AUPRC 0.3742 (base 0.0141) | F1 0.4552 (thr 0.724) | P 0.8505 R 0.3108 | MCC 0.5105
+21:24:16 │ best AUPRC 0.3870 @ ep18   patience 9/20
+21:24:16 └────────────────────────────────────────────────────────────────────────────
+21:24:16 [train] ep30 step   1/19 | loss 0.0060 (pos 0.345/neg 0.002) | sup 260+/20818- | seedF1 0.517 | subgraph n=21,078 e=37,799 | lr 2.93e-04 | gpu 1281MB
+21:24:16 [train] ep30 step   4/19 | loss 0.0066 (pos 0.372/neg 0.002) | sup 263+/20952- | seedF1 0.493 | subgraph n=21,215 e=38,047 | lr 2.93e-04 | gpu 1281MB
+21:24:17 [train] ep30 step   9/19 | loss 0.0052 (pos 0.303/neg 0.002) | sup 249+/21050- | seedF1 0.493 | subgraph n=21,299 e=38,300 | lr 2.92e-04 | gpu 1281MB
+21:24:18 [train] ep30 step  14/19 | loss 0.0056 (pos 0.335/neg 0.002) | sup 231+/20950- | seedF1 0.485 | subgraph n=21,181 e=38,064 | lr 2.92e-04 | gpu 1281MB
+21:24:18 [train] ep30 step  19/19 | loss 0.0059 (pos 0.332/neg 0.002) | sup 261+/20969- | seedF1 0.477 | subgraph n=21,230 e=38,062 | lr 2.91e-04 | gpu 1281MB
+21:24:18 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:20 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:20 ┌────────────────────────────────────────────────────────────────────────────
+21:24:20 │ EPOCH  30/100  train_loss 0.0058 (pos 0.337 / neg 0.002)  seedF1 0.477  2.8s  (142929 seeds/s)  eta ~3.3min
+21:24:20 │ VAL  AUROC 0.8683 | AUPRC 0.3795 (base 0.0141) | F1 0.4489 (thr 0.752) | P 0.8453 R 0.3056 | MCC 0.5046
+21:24:20 │ best AUPRC 0.3870 @ ep18   patience 8/20
+21:24:20 └────────────────────────────────────────────────────────────────────────────
+21:24:21 [train] ep31 step   1/19 | loss 0.0064 (pos 0.363/neg 0.002) | sup 261+/20970- | seedF1 0.442 | subgraph n=21,231 e=38,154 | lr 2.91e-04 | gpu 1281MB
+21:24:21 [train] ep31 step   5/19 | loss 0.0059 (pos 0.346/neg 0.002) | sup 240+/20976- | seedF1 0.431 | subgraph n=21,216 e=38,105 | lr 2.91e-04 | gpu 1281MB
+21:24:22 [train] ep31 step  10/19 | loss 0.0060 (pos 0.316/neg 0.002) | sup 267+/20969- | seedF1 0.444 | subgraph n=21,236 e=38,129 | lr 2.90e-04 | gpu 1281MB
+21:24:23 [train] ep31 step  15/19 | loss 0.0057 (pos 0.332/neg 0.002) | sup 249+/20953- | seedF1 0.450 | subgraph n=21,202 e=38,046 | lr 2.89e-04 | gpu 1281MB
+21:24:23 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:25 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:25 ┌────────────────────────────────────────────────────────────────────────────
+21:24:25 │ EPOCH  31/100  train_loss 0.0060 (pos 0.337 / neg 0.002)  seedF1 0.458  2.8s  (145587 seeds/s)  eta ~3.2min
+21:24:25 │ VAL  AUROC 0.8730 | AUPRC 0.3725 (base 0.0141) | F1 0.4473 (thr 0.774) | P 0.9494 R 0.2926 | MCC 0.5240
+21:24:25 │ best AUPRC 0.3870 @ ep18   patience 7/20
+21:24:25 └────────────────────────────────────────────────────────────────────────────
+21:24:25 [train] ep32 step   1/19 | loss 0.0063 (pos 0.381/neg 0.002) | sup 256+/20962- | seedF1 0.382 | subgraph n=21,218 e=38,065 | lr 2.89e-04 | gpu 1281MB
+21:24:26 [train] ep32 step   6/19 | loss 0.0054 (pos 0.312/neg 0.002) | sup 234+/20937- | seedF1 0.437 | subgraph n=21,171 e=38,026 | lr 2.88e-04 | gpu 1281MB
+21:24:27 [train] ep32 step  11/19 | loss 0.0056 (pos 0.326/neg 0.002) | sup 249+/21079- | seedF1 0.454 | subgraph n=21,328 e=38,309 | lr 2.88e-04 | gpu 1281MB
+21:24:27 [train] ep32 step  16/19 | loss 0.0056 (pos 0.326/neg 0.002) | sup 253+/21045- | seedF1 0.453 | subgraph n=21,298 e=38,311 | lr 2.87e-04 | gpu 1281MB
+21:24:28 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:30 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:30 ┌────────────────────────────────────────────────────────────────────────────
+21:24:30 │ EPOCH  32/100  train_loss 0.0058 (pos 0.334 / neg 0.002)  seedF1 0.453  2.8s  (146662 seeds/s)  eta ~3.1min
+21:24:30 │ VAL  AUROC 0.8668 | AUPRC 0.3792 (base 0.0141) | F1 0.4658 (thr 0.751) | P 0.9407 R 0.3095 | MCC 0.5365
+21:24:30 │ best AUPRC 0.3870 @ ep18   patience 6/20
+21:24:30 └────────────────────────────────────────────────────────────────────────────
+21:24:30 [train] ep33 step   1/19 | loss 0.0062 (pos 0.350/neg 0.002) | sup 275+/21088- | seedF1 0.452 | subgraph n=21,363 e=38,348 | lr 2.87e-04 | gpu 1281MB
+21:24:30 [train] ep33 step   2/19 | loss 0.0059 (pos 0.334/neg 0.002) | sup 256+/20958- | seedF1 0.471 | subgraph n=21,214 e=38,028 | lr 2.86e-04 | gpu 1281MB
+21:24:31 [train] ep33 step   7/19 | loss 0.0062 (pos 0.371/neg 0.002) | sup 258+/21011- | seedF1 0.457 | subgraph n=21,269 e=38,145 | lr 2.86e-04 | gpu 1281MB
+21:24:32 [train] ep33 step  12/19 | loss 0.0054 (pos 0.300/neg 0.002) | sup 245+/20977- | seedF1 0.464 | subgraph n=21,222 e=38,038 | lr 2.85e-04 | gpu 1281MB
+21:24:32 [train] ep33 step  17/19 | loss 0.0061 (pos 0.334/neg 0.002) | sup 270+/20950- | seedF1 0.451 | subgraph n=21,220 e=38,091 | lr 2.84e-04 | gpu 1281MB
+21:24:33 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:35 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:35 ┌────────────────────────────────────────────────────────────────────────────
+21:24:35 │ EPOCH  33/100  train_loss 0.0059 (pos 0.338 / neg 0.002)  seedF1 0.450  2.9s  (140311 seeds/s)  eta ~3.2min
+21:24:35 │ VAL  AUROC 0.8778 | AUPRC 0.3703 (base 0.0141) | F1 0.4540 (thr 0.774) | P 0.9170 R 0.3017 | MCC 0.5228
+21:24:35 │ best AUPRC 0.3870 @ ep18   patience 5/20
+21:24:35 └────────────────────────────────────────────────────────────────────────────
+21:24:35 [train] ep34 step   1/19 | loss 0.0058 (pos 0.347/neg 0.002) | sup 254+/21078- | seedF1 0.518 | subgraph n=21,332 e=38,339 | lr 2.84e-04 | gpu 1281MB
+21:24:35 [train] ep34 step   3/19 | loss 0.0055 (pos 0.322/neg 0.002) | sup 245+/20915- | seedF1 0.474 | subgraph n=21,160 e=37,990 | lr 2.84e-04 | gpu 1281MB
+21:24:36 [train] ep34 step   8/19 | loss 0.0054 (pos 0.307/neg 0.002) | sup 241+/21008- | seedF1 0.459 | subgraph n=21,249 e=38,159 | lr 2.83e-04 | gpu 1281MB
+21:24:37 [train] ep34 step  13/19 | loss 0.0055 (pos 0.304/neg 0.002) | sup 267+/21050- | seedF1 0.457 | subgraph n=21,317 e=38,384 | lr 2.82e-04 | gpu 1281MB
+21:24:38 [train] ep34 step  18/19 | loss 0.0059 (pos 0.349/neg 0.002) | sup 253+/20895- | seedF1 0.463 | subgraph n=21,148 e=37,965 | lr 2.82e-04 | gpu 1281MB
+21:24:38 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:40 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:40 ┌────────────────────────────────────────────────────────────────────────────
+21:24:40 │ EPOCH  34/100  train_loss 0.0057 (pos 0.331 / neg 0.002)  seedF1 0.463  2.9s  (138522 seeds/s)  eta ~3.2min
+21:24:40 │ VAL  AUROC 0.8893 | AUPRC 0.3899 (base 0.0141) | F1 0.4553 (thr 0.769) | P 0.9280 R 0.3017 | MCC 0.5260
+21:24:40 │ best AUPRC 0.3899 @ ep34   ** improved **
+21:24:40 └────────────────────────────────────────────────────────────────────────────
+21:24:40 [train] ep35 step   1/19 | loss 0.0059 (pos 0.362/neg 0.002) | sup 254+/20900- | seedF1 0.462 | subgraph n=21,154 e=37,962 | lr 2.81e-04 | gpu 1281MB
+21:24:40 [train] ep35 step   4/19 | loss 0.0059 (pos 0.323/neg 0.002) | sup 258+/20781- | seedF1 0.451 | subgraph n=21,039 e=37,690 | lr 2.81e-04 | gpu 1281MB
+21:24:41 [train] ep35 step   9/19 | loss 0.0053 (pos 0.320/neg 0.002) | sup 241+/21030- | seedF1 0.457 | subgraph n=21,271 e=38,241 | lr 2.80e-04 | gpu 1281MB
+21:24:42 [train] ep35 step  14/19 | loss 0.0060 (pos 0.343/neg 0.002) | sup 254+/20980- | seedF1 0.466 | subgraph n=21,234 e=38,000 | lr 2.79e-04 | gpu 1281MB
+21:24:43 [train] ep35 step  19/19 | loss 0.0056 (pos 0.331/neg 0.002) | sup 257+/20906- | seedF1 0.486 | subgraph n=21,163 e=38,014 | lr 2.79e-04 | gpu 1281MB
+21:24:43 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:45 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:45 ┌────────────────────────────────────────────────────────────────────────────
+21:24:45 │ EPOCH  35/100  train_loss 0.0056 (pos 0.324 / neg 0.002)  seedF1 0.486  2.9s  (140295 seeds/s)  eta ~3.1min
+21:24:45 │ VAL  AUROC 0.8817 | AUPRC 0.3889 (base 0.0141) | F1 0.4682 (thr 0.766) | P 0.9484 R 0.3108 | MCC 0.5399
+21:24:45 │ best AUPRC 0.3899 @ ep34   patience 19/20
+21:24:45 └────────────────────────────────────────────────────────────────────────────
+21:24:45 [train] ep36 step   1/19 | loss 0.0059 (pos 0.354/neg 0.002) | sup 253+/20876- | seedF1 0.395 | subgraph n=21,129 e=37,834 | lr 2.78e-04 | gpu 1281MB
+21:24:45 [train] ep36 step   5/19 | loss 0.0054 (pos 0.290/neg 0.002) | sup 237+/21161- | seedF1 0.448 | subgraph n=21,398 e=38,468 | lr 2.78e-04 | gpu 1281MB
+21:24:46 [train] ep36 step  10/19 | loss 0.0053 (pos 0.323/neg 0.002) | sup 244+/20993- | seedF1 0.451 | subgraph n=21,237 e=38,183 | lr 2.77e-04 | gpu 1281MB
+21:24:47 [train] ep36 step  15/19 | loss 0.0055 (pos 0.320/neg 0.002) | sup 248+/20944- | seedF1 0.475 | subgraph n=21,192 e=38,035 | lr 2.76e-04 | gpu 1281MB
+21:24:47 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:49 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:49 ┌────────────────────────────────────────────────────────────────────────────
+21:24:49 │ EPOCH  36/100  train_loss 0.0057 (pos 0.325 / neg 0.002)  seedF1 0.479  2.8s  (143944 seeds/s)  eta ~3.0min
+21:24:49 │ VAL  AUROC 0.8836 | AUPRC 0.3896 (base 0.0141) | F1 0.4659 (thr 0.778) | P 0.9300 R 0.3108 | MCC 0.5345
+21:24:49 │ best AUPRC 0.3899 @ ep34   patience 18/20
+21:24:49 └────────────────────────────────────────────────────────────────────────────
+21:24:50 [train] ep37 step   1/19 | loss 0.0055 (pos 0.332/neg 0.002) | sup 246+/20829- | seedF1 0.408 | subgraph n=21,075 e=37,820 | lr 2.75e-04 | gpu 1281MB
+21:24:50 [train] ep37 step   6/19 | loss 0.0059 (pos 0.314/neg 0.002) | sup 275+/21106- | seedF1 0.412 | subgraph n=21,381 e=38,442 | lr 2.75e-04 | gpu 1281MB
+21:24:51 [train] ep37 step  11/19 | loss 0.0052 (pos 0.285/neg 0.002) | sup 232+/20979- | seedF1 0.431 | subgraph n=21,211 e=38,107 | lr 2.74e-04 | gpu 1282MB
+21:24:52 [train] ep37 step  16/19 | loss 0.0056 (pos 0.367/neg 0.001) | sup 241+/20926- | seedF1 0.445 | subgraph n=21,167 e=37,976 | lr 2.73e-04 | gpu 1282MB
+21:24:52 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:54 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:54 ┌────────────────────────────────────────────────────────────────────────────
+21:24:54 │ EPOCH  37/100  train_loss 0.0057 (pos 0.322 / neg 0.002)  seedF1 0.450  2.8s  (142398 seeds/s)  eta ~3.0min
+21:24:54 │ VAL  AUROC 0.8705 | AUPRC 0.3672 (base 0.0141) | F1 0.4533 (thr 0.787) | P 0.8996 R 0.3030 | MCC 0.5188
+21:24:54 │ best AUPRC 0.3899 @ ep34   patience 17/20
+21:24:54 └────────────────────────────────────────────────────────────────────────────
+21:24:54 [train] ep38 step   1/19 | loss 0.0050 (pos 0.295/neg 0.002) | sup 239+/21048- | seedF1 0.552 | subgraph n=21,287 e=38,262 | lr 2.72e-04 | gpu 1282MB
+21:24:55 [train] ep38 step   2/19 | loss 0.0059 (pos 0.352/neg 0.002) | sup 253+/20906- | seedF1 0.515 | subgraph n=21,159 e=37,950 | lr 2.72e-04 | gpu 1282MB
+21:24:55 [train] ep38 step   7/19 | loss 0.0054 (pos 0.310/neg 0.002) | sup 249+/20960- | seedF1 0.458 | subgraph n=21,209 e=38,065 | lr 2.71e-04 | gpu 1282MB
+21:24:56 [train] ep38 step  12/19 | loss 0.0053 (pos 0.313/neg 0.002) | sup 245+/20985- | seedF1 0.449 | subgraph n=21,230 e=38,118 | lr 2.70e-04 | gpu 1282MB
+21:24:57 [train] ep38 step  17/19 | loss 0.0061 (pos 0.358/neg 0.002) | sup 262+/20840- | seedF1 0.452 | subgraph n=21,102 e=37,894 | lr 2.69e-04 | gpu 1282MB
+21:24:57 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:24:59 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:24:59 ┌────────────────────────────────────────────────────────────────────────────
+21:24:59 │ EPOCH  38/100  train_loss 0.0056 (pos 0.324 / neg 0.002)  seedF1 0.450  2.9s  (139715 seeds/s)  eta ~3.0min
+21:24:59 │ VAL  AUROC 0.8738 | AUPRC 0.3708 (base 0.0141) | F1 0.4615 (thr 0.811) | P 0.9551 R 0.3043 | MCC 0.5361
+21:24:59 │ best AUPRC 0.3899 @ ep34   patience 16/20
+21:24:59 └────────────────────────────────────────────────────────────────────────────
+21:24:59 [train] ep39 step   1/19 | loss 0.0057 (pos 0.324/neg 0.002) | sup 253+/20866- | seedF1 0.390 | subgraph n=21,119 e=37,864 | lr 2.69e-04 | gpu 1282MB
+21:25:00 [train] ep39 step   3/19 | loss 0.0060 (pos 0.350/neg 0.002) | sup 260+/20899- | seedF1 0.411 | subgraph n=21,159 e=37,948 | lr 2.68e-04 | gpu 1282MB
+21:25:00 [train] ep39 step   8/19 | loss 0.0057 (pos 0.310/neg 0.002) | sup 268+/20983- | seedF1 0.457 | subgraph n=21,251 e=38,192 | lr 2.67e-04 | gpu 1282MB
+21:25:01 [train] ep39 step  13/19 | loss 0.0057 (pos 0.336/neg 0.002) | sup 264+/20972- | seedF1 0.463 | subgraph n=21,236 e=38,119 | lr 2.66e-04 | gpu 1282MB
+21:25:02 [train] ep39 step  18/19 | loss 0.0057 (pos 0.301/neg 0.002) | sup 269+/20940- | seedF1 0.460 | subgraph n=21,209 e=38,032 | lr 2.65e-04 | gpu 1282MB
+21:25:02 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:04 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:04 ┌────────────────────────────────────────────────────────────────────────────
+21:25:04 │ EPOCH  39/100  train_loss 0.0055 (pos 0.312 / neg 0.002)  seedF1 0.460  2.8s  (142422 seeds/s)  eta ~2.9min
+21:25:04 │ VAL  AUROC 0.8776 | AUPRC 0.3912 (base 0.0141) | F1 0.4721 (thr 0.791) | P 0.9108 R 0.3186 | MCC 0.5354
+21:25:04 │ best AUPRC 0.3912 @ ep39   ** improved **
+21:25:04 └────────────────────────────────────────────────────────────────────────────
+21:25:04 [train] ep40 step   1/19 | loss 0.0058 (pos 0.336/neg 0.002) | sup 255+/20894- | seedF1 0.464 | subgraph n=21,149 e=37,954 | lr 2.65e-04 | gpu 1282MB
+21:25:05 [train] ep40 step   4/19 | loss 0.0053 (pos 0.290/neg 0.002) | sup 270+/21118- | seedF1 0.480 | subgraph n=21,388 e=38,552 | lr 2.64e-04 | gpu 1282MB
+21:25:05 [train] ep40 step   9/19 | loss 0.0056 (pos 0.325/neg 0.002) | sup 255+/20922- | seedF1 0.478 | subgraph n=21,177 e=38,013 | lr 2.63e-04 | gpu 1282MB
+21:25:06 [train] ep40 step  14/19 | loss 0.0051 (pos 0.294/neg 0.002) | sup 241+/21070- | seedF1 0.476 | subgraph n=21,311 e=38,250 | lr 2.62e-04 | gpu 1282MB
+21:25:07 [train] ep40 step  19/19 | loss 0.0051 (pos 0.279/neg 0.002) | sup 259+/20846- | seedF1 0.476 | subgraph n=21,105 e=37,877 | lr 2.61e-04 | gpu 1282MB
+21:25:07 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:09 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:09 ┌────────────────────────────────────────────────────────────────────────────
+21:25:09 │ EPOCH  40/100  train_loss 0.0055 (pos 0.318 / neg 0.002)  seedF1 0.476  2.9s  (140785 seeds/s)  eta ~2.9min
+21:25:09 │ VAL  AUROC 0.8822 | AUPRC 0.3764 (base 0.0141) | F1 0.4533 (thr 0.831) | P 0.9620 R 0.2965 | MCC 0.5311
+21:25:09 │ best AUPRC 0.3912 @ ep39   patience 19/20
+21:25:09 └────────────────────────────────────────────────────────────────────────────
+21:25:09 [train] ep41 step   1/19 | loss 0.0051 (pos 0.299/neg 0.002) | sup 243+/21027- | seedF1 0.432 | subgraph n=21,270 e=38,260 | lr 2.61e-04 | gpu 1282MB
+21:25:10 [train] ep41 step   5/19 | loss 0.0052 (pos 0.280/neg 0.002) | sup 258+/21055- | seedF1 0.448 | subgraph n=21,313 e=38,224 | lr 2.60e-04 | gpu 1282MB
+21:25:10 [train] ep41 step  10/19 | loss 0.0058 (pos 0.352/neg 0.002) | sup 258+/20933- | seedF1 0.446 | subgraph n=21,191 e=38,013 | lr 2.59e-04 | gpu 1282MB
+21:25:11 [train] ep41 step  15/19 | loss 0.0053 (pos 0.306/neg 0.002) | sup 246+/20969- | seedF1 0.449 | subgraph n=21,215 e=38,085 | lr 2.58e-04 | gpu 1282MB
+21:25:12 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:14 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:14 ┌────────────────────────────────────────────────────────────────────────────
+21:25:14 │ EPOCH  41/100  train_loss 0.0053 (pos 0.314 / neg 0.002)  seedF1 0.455  2.8s  (142029 seeds/s)  eta ~2.8min
+21:25:14 │ VAL  AUROC 0.8846 | AUPRC 0.3873 (base 0.0141) | F1 0.4583 (thr 0.793) | P 0.9042 R 0.3069 | MCC 0.5235
+21:25:14 │ best AUPRC 0.3912 @ ep39   patience 18/20
+21:25:14 └────────────────────────────────────────────────────────────────────────────
+21:25:14 [train] ep42 step   1/19 | loss 0.0061 (pos 0.348/neg 0.002) | sup 276+/20952- | seedF1 0.397 | subgraph n=21,228 e=38,085 | lr 2.57e-04 | gpu 1282MB
+21:25:14 [train] ep42 step   6/19 | loss 0.0053 (pos 0.289/neg 0.002) | sup 260+/21071- | seedF1 0.493 | subgraph n=21,331 e=38,354 | lr 2.56e-04 | gpu 1282MB
+21:25:15 [train] ep42 step  11/19 | loss 0.0052 (pos 0.326/neg 0.002) | sup 231+/21012- | seedF1 0.491 | subgraph n=21,243 e=38,164 | lr 2.55e-04 | gpu 1282MB
+21:25:16 [train] ep42 step  16/19 | loss 0.0048 (pos 0.264/neg 0.002) | sup 246+/20937- | seedF1 0.490 | subgraph n=21,183 e=38,065 | lr 2.54e-04 | gpu 1282MB
+21:25:17 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:18 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:19 ┌────────────────────────────────────────────────────────────────────────────
+21:25:19 │ EPOCH  42/100  train_loss 0.0054 (pos 0.313 / neg 0.002)  seedF1 0.486  2.9s  (138070 seeds/s)  eta ~2.8min
+21:25:19 │ VAL  AUROC 0.8845 | AUPRC 0.3994 (base 0.0141) | F1 0.4697 (thr 0.804) | P 0.9486 R 0.3121 | MCC 0.5411
+21:25:19 │ best AUPRC 0.3994 @ ep42   ** improved **
+21:25:19 └────────────────────────────────────────────────────────────────────────────
+21:25:19 [train] ep43 step   1/19 | loss 0.0051 (pos 0.307/neg 0.002) | sup 250+/21095- | seedF1 0.526 | subgraph n=21,345 e=38,311 | lr 2.53e-04 | gpu 1282MB
+21:25:19 [train] ep43 step   2/19 | loss 0.0053 (pos 0.334/neg 0.002) | sup 238+/21083- | seedF1 0.473 | subgraph n=21,321 e=38,289 | lr 2.53e-04 | gpu 1282MB
+21:25:20 [train] ep43 step   7/19 | loss 0.0058 (pos 0.335/neg 0.002) | sup 270+/20998- | seedF1 0.493 | subgraph n=21,268 e=38,233 | lr 2.52e-04 | gpu 1282MB
+21:25:20 [train] ep43 step  12/19 | loss 0.0056 (pos 0.333/neg 0.002) | sup 254+/20932- | seedF1 0.475 | subgraph n=21,186 e=38,030 | lr 2.51e-04 | gpu 1282MB
+21:25:21 [train] ep43 step  17/19 | loss 0.0046 (pos 0.287/neg 0.002) | sup 233+/21100- | seedF1 0.473 | subgraph n=21,333 e=38,351 | lr 2.49e-04 | gpu 1282MB
+21:25:21 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:23 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:23 ┌────────────────────────────────────────────────────────────────────────────
+21:25:23 │ EPOCH  43/100  train_loss 0.0053 (pos 0.310 / neg 0.002)  seedF1 0.472  2.8s  (142423 seeds/s)  eta ~2.7min
+21:25:23 │ VAL  AUROC 0.8802 | AUPRC 0.3888 (base 0.0141) | F1 0.4722 (thr 0.816) | P 0.9453 R 0.3147 | MCC 0.5424
+21:25:23 │ best AUPRC 0.3994 @ ep42   patience 19/20
+21:25:23 └────────────────────────────────────────────────────────────────────────────
+21:25:23 [train] ep44 step   1/19 | loss 0.0052 (pos 0.313/neg 0.002) | sup 245+/20875- | seedF1 0.494 | subgraph n=21,120 e=37,875 | lr 2.49e-04 | gpu 1282MB
+21:25:24 [train] ep44 step   3/19 | loss 0.0056 (pos 0.324/neg 0.002) | sup 260+/21097- | seedF1 0.464 | subgraph n=21,357 e=38,391 | lr 2.48e-04 | gpu 1282MB
+21:25:24 [train] ep44 step   8/19 | loss 0.0051 (pos 0.311/neg 0.002) | sup 242+/21021- | seedF1 0.492 | subgraph n=21,263 e=38,182 | lr 2.47e-04 | gpu 1282MB
+21:25:25 [train] ep44 step  13/19 | loss 0.0058 (pos 0.317/neg 0.002) | sup 258+/20869- | seedF1 0.489 | subgraph n=21,127 e=37,946 | lr 2.46e-04 | gpu 1282MB
+21:25:26 [train] ep44 step  18/19 | loss 0.0050 (pos 0.304/neg 0.002) | sup 239+/21016- | seedF1 0.473 | subgraph n=21,255 e=38,192 | lr 2.45e-04 | gpu 1282MB
+21:25:26 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:28 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:28 ┌────────────────────────────────────────────────────────────────────────────
+21:25:28 │ EPOCH  44/100  train_loss 0.0054 (pos 0.312 / neg 0.002)  seedF1 0.473  2.8s  (142136 seeds/s)  eta ~2.6min
+21:25:28 │ VAL  AUROC 0.8844 | AUPRC 0.3767 (base 0.0141) | F1 0.4528 (thr 0.826) | P 0.9312 R 0.2991 | MCC 0.5246
+21:25:28 │ best AUPRC 0.3994 @ ep42   patience 18/20
+21:25:28 └────────────────────────────────────────────────────────────────────────────
+21:25:28 [train] ep45 step   1/19 | loss 0.0056 (pos 0.311/neg 0.002) | sup 272+/20879- | seedF1 0.372 | subgraph n=21,151 e=37,981 | lr 2.44e-04 | gpu 1282MB
+21:25:29 [train] ep45 step   4/19 | loss 0.0057 (pos 0.309/neg 0.002) | sup 272+/20804- | seedF1 0.407 | subgraph n=21,076 e=37,830 | lr 2.44e-04 | gpu 1282MB
+21:25:30 [train] ep45 step   9/19 | loss 0.0051 (pos 0.308/neg 0.002) | sup 242+/20990- | seedF1 0.460 | subgraph n=21,232 e=38,097 | lr 2.42e-04 | gpu 1282MB
+21:25:30 [train] ep45 step  14/19 | loss 0.0061 (pos 0.339/neg 0.002) | sup 264+/20978- | seedF1 0.457 | subgraph n=21,242 e=38,131 | lr 2.41e-04 | gpu 1282MB
+21:25:31 [train] ep45 step  19/19 | loss 0.0054 (pos 0.304/neg 0.002) | sup 243+/20965- | seedF1 0.446 | subgraph n=21,208 e=38,030 | lr 2.40e-04 | gpu 1282MB
+21:25:31 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:33 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:33 ┌────────────────────────────────────────────────────────────────────────────
+21:25:33 │ EPOCH  45/100  train_loss 0.0056 (pos 0.314 / neg 0.002)  seedF1 0.446  2.8s  (142895 seeds/s)  eta ~2.6min
+21:25:33 │ VAL  AUROC 0.8859 | AUPRC 0.4003 (base 0.0141) | F1 0.4759 (thr 0.833) | P 0.9758 R 0.3147 | MCC 0.5513
+21:25:33 │ best AUPRC 0.4003 @ ep45   ** improved **
+21:25:33 └────────────────────────────────────────────────────────────────────────────
+21:25:33 [train] ep46 step   1/19 | loss 0.0049 (pos 0.266/neg 0.002) | sup 243+/20915- | seedF1 0.385 | subgraph n=21,158 e=37,915 | lr 2.40e-04 | gpu 1282MB
+21:25:34 [train] ep46 step   5/19 | loss 0.0055 (pos 0.326/neg 0.002) | sup 254+/20892- | seedF1 0.457 | subgraph n=21,146 e=37,987 | lr 2.39e-04 | gpu 1282MB
+21:25:34 [train] ep46 step  10/19 | loss 0.0052 (pos 0.311/neg 0.002) | sup 244+/20901- | seedF1 0.446 | subgraph n=21,145 e=37,943 | lr 2.38e-04 | gpu 1282MB
+21:25:35 [train] ep46 step  15/19 | loss 0.0055 (pos 0.315/neg 0.002) | sup 272+/21159- | seedF1 0.454 | subgraph n=21,431 e=38,510 | lr 2.36e-04 | gpu 1282MB
+21:25:36 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:38 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:38 ┌────────────────────────────────────────────────────────────────────────────
+21:25:38 │ EPOCH  46/100  train_loss 0.0053 (pos 0.308 / neg 0.002)  seedF1 0.453  2.8s  (144313 seeds/s)  eta ~2.5min
+21:25:38 │ VAL  AUROC 0.8798 | AUPRC 0.3788 (base 0.0141) | F1 0.4680 (thr 0.828) | P 0.9234 R 0.3134 | MCC 0.5348
+21:25:38 │ best AUPRC 0.4003 @ ep45   patience 19/20
+21:25:38 └────────────────────────────────────────────────────────────────────────────
+21:25:38 [train] ep47 step   1/19 | loss 0.0058 (pos 0.318/neg 0.002) | sup 267+/21013- | seedF1 0.471 | subgraph n=21,280 e=38,235 | lr 2.35e-04 | gpu 1282MB
+21:25:38 [train] ep47 step   6/19 | loss 0.0054 (pos 0.310/neg 0.002) | sup 252+/20841- | seedF1 0.474 | subgraph n=21,093 e=37,843 | lr 2.34e-04 | gpu 1282MB
+21:25:39 [train] ep47 step  11/19 | loss 0.0050 (pos 0.260/neg 0.002) | sup 262+/21024- | seedF1 0.470 | subgraph n=21,286 e=38,287 | lr 2.33e-04 | gpu 1282MB
+21:25:40 [train] ep47 step  16/19 | loss 0.0052 (pos 0.297/neg 0.002) | sup 262+/21181- | seedF1 0.475 | subgraph n=21,443 e=38,574 | lr 2.31e-04 | gpu 1282MB
+21:25:40 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:42 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:42 ┌────────────────────────────────────────────────────────────────────────────
+21:25:42 │ EPOCH  47/100  train_loss 0.0054 (pos 0.309 / neg 0.002)  seedF1 0.475  2.8s  (142862 seeds/s)  eta ~2.5min
+21:25:42 │ VAL  AUROC 0.8722 | AUPRC 0.3755 (base 0.0141) | F1 0.4635 (thr 0.843) | P 0.9592 R 0.3056 | MCC 0.5384
+21:25:42 │ best AUPRC 0.4003 @ ep45   patience 18/20
+21:25:42 └────────────────────────────────────────────────────────────────────────────
+21:25:43 [train] ep48 step   1/19 | loss 0.0047 (pos 0.261/neg 0.002) | sup 247+/21035- | seedF1 0.523 | subgraph n=21,282 e=38,267 | lr 2.30e-04 | gpu 1282MB
+21:25:43 [train] ep48 step   2/19 | loss 0.0052 (pos 0.296/neg 0.002) | sup 255+/20962- | seedF1 0.536 | subgraph n=21,217 e=38,101 | lr 2.30e-04 | gpu 1282MB
+21:25:44 [train] ep48 step   7/19 | loss 0.0050 (pos 0.293/neg 0.002) | sup 238+/20928- | seedF1 0.464 | subgraph n=21,166 e=37,940 | lr 2.29e-04 | gpu 1282MB
+21:25:44 [train] ep48 step  12/19 | loss 0.0052 (pos 0.313/neg 0.002) | sup 251+/20963- | seedF1 0.452 | subgraph n=21,214 e=38,091 | lr 2.27e-04 | gpu 1282MB
+21:25:45 [train] ep48 step  17/19 | loss 0.0059 (pos 0.313/neg 0.002) | sup 280+/21095- | seedF1 0.459 | subgraph n=21,375 e=38,429 | lr 2.26e-04 | gpu 1282MB
+21:25:45 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:47 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:47 ┌────────────────────────────────────────────────────────────────────────────
+21:25:47 │ EPOCH  48/100  train_loss 0.0053 (pos 0.303 / neg 0.002)  seedF1 0.464  2.9s  (137604 seeds/s)  eta ~2.5min
+21:25:47 │ VAL  AUROC 0.8807 | AUPRC 0.3921 (base 0.0141) | F1 0.4750 (thr 0.824) | P 0.9680 R 0.3147 | MCC 0.5490
+21:25:47 │ best AUPRC 0.4003 @ ep45   patience 17/20
+21:25:47 └────────────────────────────────────────────────────────────────────────────
+21:25:48 [train] ep49 step   1/19 | loss 0.0052 (pos 0.306/neg 0.002) | sup 238+/20946- | seedF1 0.454 | subgraph n=21,184 e=37,938 | lr 2.25e-04 | gpu 1282MB
+21:25:48 [train] ep49 step   3/19 | loss 0.0058 (pos 0.343/neg 0.002) | sup 256+/20946- | seedF1 0.468 | subgraph n=21,202 e=38,104 | lr 2.25e-04 | gpu 1282MB
+21:25:49 [train] ep49 step   8/19 | loss 0.0053 (pos 0.311/neg 0.002) | sup 252+/20974- | seedF1 0.482 | subgraph n=21,226 e=38,151 | lr 2.24e-04 | gpu 1282MB
+21:25:49 [train] ep49 step  13/19 | loss 0.0048 (pos 0.269/neg 0.002) | sup 254+/21122- | seedF1 0.484 | subgraph n=21,376 e=38,482 | lr 2.22e-04 | gpu 1282MB
+21:25:50 [train] ep49 step  18/19 | loss 0.0054 (pos 0.293/neg 0.002) | sup 270+/21075- | seedF1 0.483 | subgraph n=21,345 e=38,399 | lr 2.21e-04 | gpu 1282MB
+21:25:50 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:52 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:52 ┌────────────────────────────────────────────────────────────────────────────
+21:25:52 │ EPOCH  49/100  train_loss 0.0054 (pos 0.306 / neg 0.002)  seedF1 0.483  2.8s  (142846 seeds/s)  eta ~2.4min
+21:25:52 │ VAL  AUROC 0.8795 | AUPRC 0.3832 (base 0.0141) | F1 0.4712 (thr 0.863) | P 1.0000 R 0.3082 | MCC 0.5524
+21:25:52 │ best AUPRC 0.4003 @ ep45   patience 16/20
+21:25:52 └────────────────────────────────────────────────────────────────────────────
+21:25:52 [train] ep50 step   1/19 | loss 0.0055 (pos 0.301/neg 0.002) | sup 262+/21031- | seedF1 0.479 | subgraph n=21,293 e=38,290 | lr 2.20e-04 | gpu 1282MB
+21:25:53 [train] ep50 step   4/19 | loss 0.0047 (pos 0.266/neg 0.002) | sup 245+/21035- | seedF1 0.489 | subgraph n=21,280 e=38,214 | lr 2.20e-04 | gpu 1282MB
+21:25:54 [train] ep50 step   9/19 | loss 0.0054 (pos 0.317/neg 0.002) | sup 254+/20875- | seedF1 0.460 | subgraph n=21,129 e=37,843 | lr 2.18e-04 | gpu 1282MB
+21:25:54 [train] ep50 step  14/19 | loss 0.0053 (pos 0.305/neg 0.002) | sup 254+/21143- | seedF1 0.453 | subgraph n=21,397 e=38,430 | lr 2.17e-04 | gpu 1282MB
+21:25:55 [train] ep50 step  19/19 | loss 0.0053 (pos 0.297/neg 0.002) | sup 270+/20754- | seedF1 0.444 | subgraph n=21,024 e=37,723 | lr 2.15e-04 | gpu 1282MB
+21:25:55 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:25:57 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:25:57 ┌────────────────────────────────────────────────────────────────────────────
+21:25:57 │ EPOCH  50/100  train_loss 0.0052 (pos 0.302 / neg 0.002)  seedF1 0.444  2.8s  (144670 seeds/s)  eta ~2.3min
+21:25:57 │ VAL  AUROC 0.8854 | AUPRC 0.3920 (base 0.0141) | F1 0.4695 (thr 0.841) | P 0.9598 R 0.3108 | MCC 0.5432
+21:25:57 │ best AUPRC 0.4003 @ ep45   patience 15/20
+21:25:57 └────────────────────────────────────────────────────────────────────────────
+21:25:57 [train] ep51 step   1/19 | loss 0.0048 (pos 0.274/neg 0.002) | sup 249+/20936- | seedF1 0.523 | subgraph n=21,185 e=38,007 | lr 2.15e-04 | gpu 1282MB
+21:25:58 [train] ep51 step   5/19 | loss 0.0053 (pos 0.286/neg 0.002) | sup 256+/20991- | seedF1 0.487 | subgraph n=21,247 e=38,114 | lr 2.14e-04 | gpu 1282MB
+21:25:58 [train] ep51 step  10/19 | loss 0.0056 (pos 0.340/neg 0.002) | sup 255+/20946- | seedF1 0.481 | subgraph n=21,201 e=38,034 | lr 2.13e-04 | gpu 1282MB
+21:25:59 [train] ep51 step  15/19 | loss 0.0050 (pos 0.289/neg 0.002) | sup 245+/20871- | seedF1 0.482 | subgraph n=21,116 e=37,919 | lr 2.11e-04 | gpu 1282MB
+21:26:00 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:02 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:02 ┌────────────────────────────────────────────────────────────────────────────
+21:26:02 │ EPOCH  51/100  train_loss 0.0052 (pos 0.302 / neg 0.002)  seedF1 0.476  2.8s  (144917 seeds/s)  eta ~2.3min
+21:26:02 │ VAL  AUROC 0.8836 | AUPRC 0.3886 (base 0.0141) | F1 0.4679 (thr 0.843) | P 0.9713 R 0.3082 | MCC 0.5442
+21:26:02 │ best AUPRC 0.4003 @ ep45   patience 14/20
+21:26:02 └────────────────────────────────────────────────────────────────────────────
+21:26:02 [train] ep52 step   1/19 | loss 0.0052 (pos 0.305/neg 0.002) | sup 254+/20930- | seedF1 0.581 | subgraph n=21,184 e=37,963 | lr 2.10e-04 | gpu 1282MB
+21:26:03 [train] ep52 step   6/19 | loss 0.0054 (pos 0.302/neg 0.002) | sup 260+/20845- | seedF1 0.488 | subgraph n=21,105 e=37,821 | lr 2.09e-04 | gpu 1282MB
+21:26:03 [train] ep52 step  11/19 | loss 0.0050 (pos 0.287/neg 0.002) | sup 246+/21144- | seedF1 0.484 | subgraph n=21,390 e=38,409 | lr 2.07e-04 | gpu 1282MB
+21:26:04 [train] ep52 step  16/19 | loss 0.0053 (pos 0.289/neg 0.002) | sup 260+/20870- | seedF1 0.486 | subgraph n=21,130 e=37,939 | lr 2.06e-04 | gpu 1282MB
+21:26:05 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:06 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:07 ┌────────────────────────────────────────────────────────────────────────────
+21:26:07 │ EPOCH  52/100  train_loss 0.0053 (pos 0.307 / neg 0.002)  seedF1 0.481  2.8s  (142278 seeds/s)  eta ~2.3min
+21:26:07 │ VAL  AUROC 0.8892 | AUPRC 0.4010 (base 0.0141) | F1 0.4768 (thr 0.809) | P 0.9251 R 0.3212 | MCC 0.5419
+21:26:07 │ best AUPRC 0.4010 @ ep52   ** improved **
+21:26:07 └────────────────────────────────────────────────────────────────────────────
+21:26:07 [train] ep53 step   1/19 | loss 0.0045 (pos 0.273/neg 0.001) | sup 240+/21018- | seedF1 0.469 | subgraph n=21,258 e=38,092 | lr 2.05e-04 | gpu 1282MB
+21:26:07 [train] ep53 step   2/19 | loss 0.0055 (pos 0.340/neg 0.001) | sup 250+/20970- | seedF1 0.489 | subgraph n=21,220 e=38,149 | lr 2.04e-04 | gpu 1282MB
+21:26:08 [train] ep53 step   7/19 | loss 0.0053 (pos 0.284/neg 0.002) | sup 254+/20806- | seedF1 0.489 | subgraph n=21,060 e=37,848 | lr 2.03e-04 | gpu 1282MB
+21:26:08 [train] ep53 step  12/19 | loss 0.0052 (pos 0.295/neg 0.002) | sup 261+/20964- | seedF1 0.501 | subgraph n=21,225 e=38,153 | lr 2.02e-04 | gpu 1282MB
+21:26:09 [train] ep53 step  17/19 | loss 0.0051 (pos 0.263/neg 0.002) | sup 269+/20808- | seedF1 0.494 | subgraph n=21,077 e=37,823 | lr 2.00e-04 | gpu 1282MB
+21:26:09 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:11 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:11 ┌────────────────────────────────────────────────────────────────────────────
+21:26:11 │ EPOCH  53/100  train_loss 0.0053 (pos 0.300 / neg 0.002)  seedF1 0.495  2.7s  (147708 seeds/s)  eta ~2.1min
+21:26:11 │ VAL  AUROC 0.8892 | AUPRC 0.3927 (base 0.0141) | F1 0.4768 (thr 0.848) | P 0.9959 R 0.3134 | MCC 0.5559
+21:26:11 │ best AUPRC 0.4010 @ ep52   patience 19/20
+21:26:11 └────────────────────────────────────────────────────────────────────────────
+21:26:11 [train] ep54 step   1/19 | loss 0.0051 (pos 0.304/neg 0.002) | sup 237+/21025- | seedF1 0.428 | subgraph n=21,262 e=38,227 | lr 1.99e-04 | gpu 1282MB
+21:26:12 [train] ep54 step   3/19 | loss 0.0051 (pos 0.304/neg 0.002) | sup 240+/20973- | seedF1 0.433 | subgraph n=21,213 e=38,103 | lr 1.99e-04 | gpu 1282MB
+21:26:12 [train] ep54 step   8/19 | loss 0.0051 (pos 0.301/neg 0.002) | sup 253+/20914- | seedF1 0.476 | subgraph n=21,167 e=38,045 | lr 1.97e-04 | gpu 1282MB
+21:26:13 [train] ep54 step  13/19 | loss 0.0043 (pos 0.260/neg 0.002) | sup 222+/20986- | seedF1 0.481 | subgraph n=21,208 e=38,099 | lr 1.96e-04 | gpu 1284MB
+21:26:14 [train] ep54 step  18/19 | loss 0.0055 (pos 0.309/neg 0.002) | sup 269+/20791- | seedF1 0.480 | subgraph n=21,060 e=37,788 | lr 1.94e-04 | gpu 1284MB
+21:26:14 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:16 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:16 ┌────────────────────────────────────────────────────────────────────────────
+21:26:16 │ EPOCH  54/100  train_loss 0.0051 (pos 0.301 / neg 0.002)  seedF1 0.476  2.8s  (146062 seeds/s)  eta ~2.1min
+21:26:16 │ VAL  AUROC 0.8832 | AUPRC 0.3962 (base 0.0141) | F1 0.4725 (thr 0.831) | P 0.9602 R 0.3134 | MCC 0.5456
+21:26:16 │ best AUPRC 0.4010 @ ep52   patience 18/20
+21:26:16 └────────────────────────────────────────────────────────────────────────────
+21:26:16 [train] ep55 step   1/19 | loss 0.0053 (pos 0.294/neg 0.002) | sup 269+/21030- | seedF1 0.488 | subgraph n=21,299 e=38,287 | lr 1.94e-04 | gpu 1284MB
+21:26:16 [train] ep55 step   4/19 | loss 0.0049 (pos 0.282/neg 0.002) | sup 251+/20931- | seedF1 0.508 | subgraph n=21,182 e=38,026 | lr 1.93e-04 | gpu 1284MB
+21:26:17 [train] ep55 step   9/19 | loss 0.0047 (pos 0.281/neg 0.002) | sup 236+/20814- | seedF1 0.494 | subgraph n=21,050 e=37,752 | lr 1.91e-04 | gpu 1284MB
+21:26:18 [train] ep55 step  14/19 | loss 0.0049 (pos 0.291/neg 0.002) | sup 240+/20989- | seedF1 0.496 | subgraph n=21,229 e=38,098 | lr 1.90e-04 | gpu 1284MB
+21:26:19 [train] ep55 step  19/19 | loss 0.0055 (pos 0.326/neg 0.002) | sup 258+/20988- | seedF1 0.495 | subgraph n=21,246 e=38,139 | lr 1.89e-04 | gpu 1284MB
+21:26:19 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:20 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:21 ┌────────────────────────────────────────────────────────────────────────────
+21:26:21 │ EPOCH  55/100  train_loss 0.0051 (pos 0.296 / neg 0.002)  seedF1 0.495  2.8s  (145502 seeds/s)  eta ~2.1min
+21:26:21 │ VAL  AUROC 0.8843 | AUPRC 0.3995 (base 0.0141) | F1 0.4728 (thr 0.808) | P 0.8485 R 0.3277 | MCC 0.5236
+21:26:21 │ best AUPRC 0.4010 @ ep52   patience 17/20
+21:26:21 └────────────────────────────────────────────────────────────────────────────
+21:26:21 [train] ep56 step   1/19 | loss 0.0053 (pos 0.313/neg 0.002) | sup 258+/21098- | seedF1 0.556 | subgraph n=21,356 e=38,404 | lr 1.88e-04 | gpu 1284MB
+21:26:21 [train] ep56 step   5/19 | loss 0.0054 (pos 0.326/neg 0.002) | sup 247+/21137- | seedF1 0.539 | subgraph n=21,384 e=38,458 | lr 1.87e-04 | gpu 1284MB
+21:26:22 [train] ep56 step  10/19 | loss 0.0053 (pos 0.323/neg 0.001) | sup 253+/20920- | seedF1 0.528 | subgraph n=21,173 e=37,989 | lr 1.86e-04 | gpu 1284MB
+21:26:23 [train] ep56 step  15/19 | loss 0.0048 (pos 0.256/neg 0.002) | sup 257+/21117- | seedF1 0.531 | subgraph n=21,374 e=38,402 | lr 1.84e-04 | gpu 1284MB
+21:26:23 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:25 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:25 ┌────────────────────────────────────────────────────────────────────────────
+21:26:25 │ EPOCH  56/100  train_loss 0.0052 (pos 0.297 / neg 0.002)  seedF1 0.523  2.8s  (146362 seeds/s)  eta ~2.0min
+21:26:25 │ VAL  AUROC 0.8854 | AUPRC 0.3933 (base 0.0141) | F1 0.4738 (thr 0.828) | P 0.9349 R 0.3173 | MCC 0.5415
+21:26:25 │ best AUPRC 0.4010 @ ep52   patience 16/20
+21:26:25 └────────────────────────────────────────────────────────────────────────────
+21:26:25 [train] ep57 step   1/19 | loss 0.0052 (pos 0.294/neg 0.002) | sup 253+/20958- | seedF1 0.488 | subgraph n=21,211 e=38,077 | lr 1.83e-04 | gpu 1284MB
+21:26:26 [train] ep57 step   6/19 | loss 0.0055 (pos 0.337/neg 0.002) | sup 246+/20807- | seedF1 0.508 | subgraph n=21,053 e=37,736 | lr 1.81e-04 | gpu 1284MB
+21:26:27 [train] ep57 step  11/19 | loss 0.0054 (pos 0.307/neg 0.002) | sup 268+/20900- | seedF1 0.492 | subgraph n=21,168 e=37,972 | lr 1.80e-04 | gpu 1284MB
+21:26:28 [train] ep57 step  16/19 | loss 0.0053 (pos 0.309/neg 0.002) | sup 254+/20874- | seedF1 0.495 | subgraph n=21,128 e=37,955 | lr 1.78e-04 | gpu 1284MB
+21:26:28 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:30 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:30 ┌────────────────────────────────────────────────────────────────────────────
+21:26:30 │ EPOCH  57/100  train_loss 0.0051 (pos 0.297 / neg 0.002)  seedF1 0.488  2.8s  (142142 seeds/s)  eta ~2.0min
+21:26:30 │ VAL  AUROC 0.8847 | AUPRC 0.3988 (base 0.0141) | F1 0.4721 (thr 0.847) | P 0.9563 R 0.3134 | MCC 0.5445
+21:26:30 │ best AUPRC 0.4010 @ ep52   patience 15/20
+21:26:30 └────────────────────────────────────────────────────────────────────────────
+21:26:30 [train] ep58 step   1/19 | loss 0.0051 (pos 0.308/neg 0.002) | sup 236+/20851- | seedF1 0.476 | subgraph n=21,087 e=37,827 | lr 1.77e-04 | gpu 1284MB
+21:26:30 [train] ep58 step   2/19 | loss 0.0052 (pos 0.287/neg 0.002) | sup 258+/20972- | seedF1 0.453 | subgraph n=21,230 e=38,084 | lr 1.77e-04 | gpu 1284MB
+21:26:31 [train] ep58 step   7/19 | loss 0.0050 (pos 0.281/neg 0.002) | sup 249+/20963- | seedF1 0.474 | subgraph n=21,212 e=38,070 | lr 1.75e-04 | gpu 1284MB
+21:26:32 [train] ep58 step  12/19 | loss 0.0051 (pos 0.300/neg 0.001) | sup 264+/21027- | seedF1 0.478 | subgraph n=21,291 e=38,212 | lr 1.74e-04 | gpu 1284MB
+21:26:33 [train] ep58 step  17/19 | loss 0.0048 (pos 0.276/neg 0.002) | sup 245+/21026- | seedF1 0.487 | subgraph n=21,271 e=38,186 | lr 1.72e-04 | gpu 1284MB
+21:26:33 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:35 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:35 ┌────────────────────────────────────────────────────────────────────────────
+21:26:35 │ EPOCH  58/100  train_loss 0.0051 (pos 0.292 / neg 0.002)  seedF1 0.491  2.9s  (137588 seeds/s)  eta ~2.1min
+21:26:35 │ VAL  AUROC 0.8889 | AUPRC 0.3919 (base 0.0141) | F1 0.4704 (thr 0.872) | P 0.9794 R 0.3095 | MCC 0.5477
+21:26:35 │ best AUPRC 0.4010 @ ep52   patience 14/20
+21:26:35 └────────────────────────────────────────────────────────────────────────────
+21:26:35 [train] ep59 step   1/19 | loss 0.0052 (pos 0.311/neg 0.002) | sup 254+/21237- | seedF1 0.469 | subgraph n=21,491 e=38,643 | lr 1.72e-04 | gpu 1284MB
+21:26:36 [train] ep59 step   3/19 | loss 0.0049 (pos 0.287/neg 0.002) | sup 245+/21042- | seedF1 0.422 | subgraph n=21,287 e=38,320 | lr 1.71e-04 | gpu 1284MB
+21:26:36 [train] ep59 step   8/19 | loss 0.0052 (pos 0.286/neg 0.002) | sup 262+/21150- | seedF1 0.444 | subgraph n=21,412 e=38,445 | lr 1.69e-04 | gpu 1284MB
+21:26:37 [train] ep59 step  13/19 | loss 0.0055 (pos 0.300/neg 0.002) | sup 273+/20938- | seedF1 0.443 | subgraph n=21,211 e=38,036 | lr 1.68e-04 | gpu 1284MB
+21:26:38 [train] ep59 step  18/19 | loss 0.0056 (pos 0.329/neg 0.002) | sup 255+/20886- | seedF1 0.450 | subgraph n=21,141 e=37,946 | lr 1.66e-04 | gpu 1284MB
+21:26:38 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:40 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:40 ┌────────────────────────────────────────────────────────────────────────────
+21:26:40 │ EPOCH  59/100  train_loss 0.0053 (pos 0.301 / neg 0.002)  seedF1 0.451  2.9s  (137860 seeds/s)  eta ~2.0min
+21:26:40 │ VAL  AUROC 0.8851 | AUPRC 0.3986 (base 0.0141) | F1 0.4776 (thr 0.847) | P 0.9533 R 0.3186 | MCC 0.5481
+21:26:40 │ best AUPRC 0.4010 @ ep52   patience 13/20
+21:26:40 └────────────────────────────────────────────────────────────────────────────
+21:26:40 [train] ep60 step   1/19 | loss 0.0051 (pos 0.293/neg 0.002) | sup 247+/20929- | seedF1 0.536 | subgraph n=21,176 e=38,054 | lr 1.66e-04 | gpu 1284MB
+21:26:41 [train] ep60 step   4/19 | loss 0.0054 (pos 0.301/neg 0.002) | sup 263+/20944- | seedF1 0.496 | subgraph n=21,207 e=38,058 | lr 1.65e-04 | gpu 1284MB
+21:26:41 [train] ep60 step   9/19 | loss 0.0050 (pos 0.298/neg 0.002) | sup 244+/20937- | seedF1 0.487 | subgraph n=21,181 e=37,912 | lr 1.63e-04 | gpu 1284MB
+21:26:42 [train] ep60 step  14/19 | loss 0.0050 (pos 0.296/neg 0.001) | sup 257+/20950- | seedF1 0.499 | subgraph n=21,207 e=38,100 | lr 1.62e-04 | gpu 1284MB
+21:26:43 [train] ep60 step  19/19 | loss 0.0051 (pos 0.294/neg 0.002) | sup 246+/20925- | seedF1 0.495 | subgraph n=21,171 e=38,044 | lr 1.60e-04 | gpu 1284MB
+21:26:43 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:45 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:45 ┌────────────────────────────────────────────────────────────────────────────
+21:26:45 │ EPOCH  60/100  train_loss 0.0052 (pos 0.301 / neg 0.002)  seedF1 0.495  2.9s  (139107 seeds/s)  eta ~1.9min
+21:26:45 │ VAL  AUROC 0.8857 | AUPRC 0.3906 (base 0.0141) | F1 0.4609 (thr 0.860) | P 0.9255 R 0.3069 | MCC 0.5298
+21:26:45 │ best AUPRC 0.4010 @ ep52   patience 12/20
+21:26:45 └────────────────────────────────────────────────────────────────────────────
+21:26:45 [train] ep61 step   1/19 | loss 0.0053 (pos 0.298/neg 0.002) | sup 248+/20850- | seedF1 0.430 | subgraph n=21,098 e=37,813 | lr 1.60e-04 | gpu 1284MB
+21:26:46 [train] ep61 step   5/19 | loss 0.0048 (pos 0.271/neg 0.002) | sup 251+/20963- | seedF1 0.459 | subgraph n=21,214 e=38,077 | lr 1.59e-04 | gpu 1284MB
+21:26:47 [train] ep61 step  10/19 | loss 0.0052 (pos 0.305/neg 0.002) | sup 254+/20823- | seedF1 0.452 | subgraph n=21,077 e=37,807 | lr 1.57e-04 | gpu 1284MB
+21:26:47 [train] ep61 step  15/19 | loss 0.0049 (pos 0.270/neg 0.002) | sup 249+/20848- | seedF1 0.459 | subgraph n=21,097 e=37,932 | lr 1.56e-04 | gpu 1284MB
+21:26:48 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:50 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:50 ┌────────────────────────────────────────────────────────────────────────────
+21:26:50 │ EPOCH  61/100  train_loss 0.0052 (pos 0.295 / neg 0.002)  seedF1 0.467  2.9s  (136673 seeds/s)  eta ~1.9min
+21:26:50 │ VAL  AUROC 0.8899 | AUPRC 0.4005 (base 0.0141) | F1 0.4743 (thr 0.840) | P 0.8861 R 0.3238 | MCC 0.5322
+21:26:50 │ best AUPRC 0.4010 @ ep52   patience 11/20
+21:26:50 └────────────────────────────────────────────────────────────────────────────
+21:26:50 [train] ep62 step   1/19 | loss 0.0049 (pos 0.285/neg 0.002) | sup 238+/20994- | seedF1 0.554 | subgraph n=21,232 e=38,138 | lr 1.55e-04 | gpu 1284MB
+21:26:51 [train] ep62 step   6/19 | loss 0.0049 (pos 0.294/neg 0.002) | sup 238+/20952- | seedF1 0.533 | subgraph n=21,190 e=38,003 | lr 1.53e-04 | gpu 1284MB
+21:26:51 [train] ep62 step  11/19 | loss 0.0058 (pos 0.330/neg 0.002) | sup 272+/20987- | seedF1 0.498 | subgraph n=21,259 e=38,202 | lr 1.52e-04 | gpu 1284MB
+21:26:52 [train] ep62 step  16/19 | loss 0.0056 (pos 0.316/neg 0.002) | sup 273+/21115- | seedF1 0.506 | subgraph n=21,388 e=38,420 | lr 1.50e-04 | gpu 1284MB
+21:26:53 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:55 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:55 ┌────────────────────────────────────────────────────────────────────────────
+21:26:55 │ EPOCH  62/100  train_loss 0.0052 (pos 0.299 / neg 0.002)  seedF1 0.500  2.8s  (144105 seeds/s)  eta ~1.8min
+21:26:55 │ VAL  AUROC 0.8857 | AUPRC 0.3910 (base 0.0141) | F1 0.4626 (thr 0.823) | P 0.8531 R 0.3173 | MCC 0.5167
+21:26:55 │ best AUPRC 0.4010 @ ep52   patience 10/20
+21:26:55 └────────────────────────────────────────────────────────────────────────────
+21:26:55 [train] ep63 step   1/19 | loss 0.0058 (pos 0.330/neg 0.002) | sup 268+/20927- | seedF1 0.520 | subgraph n=21,195 e=38,061 | lr 1.49e-04 | gpu 1284MB
+21:26:55 [train] ep63 step   2/19 | loss 0.0053 (pos 0.311/neg 0.002) | sup 253+/20797- | seedF1 0.461 | subgraph n=21,050 e=37,669 | lr 1.49e-04 | gpu 1284MB
+21:26:56 [train] ep63 step   7/19 | loss 0.0054 (pos 0.308/neg 0.002) | sup 260+/20912- | seedF1 0.474 | subgraph n=21,172 e=37,961 | lr 1.47e-04 | gpu 1284MB
+21:26:56 [train] ep63 step  12/19 | loss 0.0050 (pos 0.280/neg 0.002) | sup 265+/21114- | seedF1 0.475 | subgraph n=21,379 e=38,437 | lr 1.46e-04 | gpu 1284MB
+21:26:57 [train] ep63 step  17/19 | loss 0.0048 (pos 0.278/neg 0.001) | sup 257+/20895- | seedF1 0.499 | subgraph n=21,152 e=37,964 | lr 1.44e-04 | gpu 1284MB
+21:26:57 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:26:59 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:26:59 ┌────────────────────────────────────────────────────────────────────────────
+21:26:59 │ EPOCH  63/100  train_loss 0.0051 (pos 0.290 / neg 0.002)  seedF1 0.507  2.8s  (141920 seeds/s)  eta ~1.8min
+21:26:59 │ VAL  AUROC 0.8865 | AUPRC 0.3989 (base 0.0141) | F1 0.4741 (thr 0.854) | P 0.9492 R 0.3160 | MCC 0.5447
+21:26:59 │ best AUPRC 0.4010 @ ep52   patience 9/20
+21:26:59 └────────────────────────────────────────────────────────────────────────────
+21:27:00 [train] ep64 step   1/19 | loss 0.0048 (pos 0.264/neg 0.002) | sup 261+/21012- | seedF1 0.494 | subgraph n=21,273 e=38,237 | lr 1.43e-04 | gpu 1284MB
+21:27:00 [train] ep64 step   3/19 | loss 0.0056 (pos 0.309/neg 0.002) | sup 266+/20923- | seedF1 0.486 | subgraph n=21,189 e=38,063 | lr 1.43e-04 | gpu 1284MB
+21:27:01 [train] ep64 step   8/19 | loss 0.0055 (pos 0.295/neg 0.002) | sup 282+/21014- | seedF1 0.473 | subgraph n=21,296 e=38,238 | lr 1.41e-04 | gpu 1284MB
+21:27:01 [train] ep64 step  13/19 | loss 0.0055 (pos 0.318/neg 0.002) | sup 264+/20890- | seedF1 0.479 | subgraph n=21,154 e=37,944 | lr 1.40e-04 | gpu 1284MB
+21:27:02 [train] ep64 step  18/19 | loss 0.0050 (pos 0.282/neg 0.002) | sup 256+/20939- | seedF1 0.480 | subgraph n=21,195 e=38,121 | lr 1.38e-04 | gpu 1284MB
+21:27:02 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:04 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:04 ┌────────────────────────────────────────────────────────────────────────────
+21:27:04 │ EPOCH  64/100  train_loss 0.0051 (pos 0.290 / neg 0.002)  seedF1 0.483  2.8s  (145339 seeds/s)  eta ~1.7min
+21:27:04 │ VAL  AUROC 0.8817 | AUPRC 0.3961 (base 0.0141) | F1 0.4756 (thr 0.871) | P 0.9494 R 0.3173 | MCC 0.5458
+21:27:04 │ best AUPRC 0.4010 @ ep52   patience 8/20
+21:27:04 └────────────────────────────────────────────────────────────────────────────
+21:27:04 [train] ep65 step   1/19 | loss 0.0050 (pos 0.286/neg 0.002) | sup 244+/21032- | seedF1 0.420 | subgraph n=21,276 e=38,226 | lr 1.38e-04 | gpu 1284MB
+21:27:05 [train] ep65 step   4/19 | loss 0.0048 (pos 0.253/neg 0.002) | sup 267+/20946- | seedF1 0.449 | subgraph n=21,213 e=38,107 | lr 1.37e-04 | gpu 1284MB
+21:27:06 [train] ep65 step   9/19 | loss 0.0054 (pos 0.327/neg 0.001) | sup 255+/20889- | seedF1 0.451 | subgraph n=21,144 e=37,955 | lr 1.35e-04 | gpu 1284MB
+21:27:06 [train] ep65 step  14/19 | loss 0.0051 (pos 0.273/neg 0.002) | sup 271+/20930- | seedF1 0.449 | subgraph n=21,201 e=38,071 | lr 1.34e-04 | gpu 1284MB
+21:27:07 [train] ep65 step  19/19 | loss 0.0049 (pos 0.281/neg 0.002) | sup 239+/20859- | seedF1 0.453 | subgraph n=21,098 e=37,859 | lr 1.32e-04 | gpu 1284MB
+21:27:07 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:09 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:09 ┌────────────────────────────────────────────────────────────────────────────
+21:27:09 │ EPOCH  65/100  train_loss 0.0052 (pos 0.298 / neg 0.002)  seedF1 0.453  2.8s  (142668 seeds/s)  eta ~1.6min
+21:27:09 │ VAL  AUROC 0.8833 | AUPRC 0.4024 (base 0.0141) | F1 0.4782 (thr 0.840) | P 0.9356 R 0.3212 | MCC 0.5451
+21:27:09 │ best AUPRC 0.4024 @ ep65   ** improved **
+21:27:09 └────────────────────────────────────────────────────────────────────────────
+21:27:09 [train] ep66 step   1/19 | loss 0.0046 (pos 0.249/neg 0.002) | sup 251+/21042- | seedF1 0.536 | subgraph n=21,293 e=38,279 | lr 1.32e-04 | gpu 1284MB
+21:27:10 [train] ep66 step   5/19 | loss 0.0052 (pos 0.314/neg 0.001) | sup 250+/20985- | seedF1 0.501 | subgraph n=21,235 e=38,165 | lr 1.31e-04 | gpu 1284MB
+21:27:11 [train] ep66 step  10/19 | loss 0.0049 (pos 0.280/neg 0.002) | sup 248+/20895- | seedF1 0.495 | subgraph n=21,143 e=37,918 | lr 1.29e-04 | gpu 1284MB
+21:27:11 [train] ep66 step  15/19 | loss 0.0049 (pos 0.280/neg 0.002) | sup 253+/21013- | seedF1 0.495 | subgraph n=21,266 e=38,249 | lr 1.28e-04 | gpu 1284MB
+21:27:12 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:14 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:14 ┌────────────────────────────────────────────────────────────────────────────
+21:27:14 │ EPOCH  66/100  train_loss 0.0051 (pos 0.289 / neg 0.002)  seedF1 0.495  2.9s  (141293 seeds/s)  eta ~1.6min
+21:27:14 │ VAL  AUROC 0.8845 | AUPRC 0.3997 (base 0.0141) | F1 0.4731 (thr 0.856) | P 0.9528 R 0.3147 | MCC 0.5446
+21:27:14 │ best AUPRC 0.4024 @ ep65   patience 19/20
+21:27:14 └────────────────────────────────────────────────────────────────────────────
+21:27:14 [train] ep67 step   1/19 | loss 0.0056 (pos 0.322/neg 0.002) | sup 267+/20981- | seedF1 0.590 | subgraph n=21,248 e=38,154 | lr 1.26e-04 | gpu 1284MB
+21:27:15 [train] ep67 step   6/19 | loss 0.0052 (pos 0.305/neg 0.002) | sup 249+/20847- | seedF1 0.493 | subgraph n=21,096 e=37,838 | lr 1.25e-04 | gpu 1284MB
+21:27:15 [train] ep67 step  11/19 | loss 0.0044 (pos 0.247/neg 0.002) | sup 237+/21094- | seedF1 0.476 | subgraph n=21,331 e=38,407 | lr 1.24e-04 | gpu 1284MB
+21:27:16 [train] ep67 step  16/19 | loss 0.0051 (pos 0.296/neg 0.002) | sup 258+/21007- | seedF1 0.467 | subgraph n=21,265 e=38,205 | lr 1.22e-04 | gpu 1284MB
+21:27:17 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:18 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:19 ┌────────────────────────────────────────────────────────────────────────────
+21:27:19 │ EPOCH  67/100  train_loss 0.0051 (pos 0.291 / neg 0.002)  seedF1 0.474  2.8s  (144554 seeds/s)  eta ~1.5min
+21:27:19 │ VAL  AUROC 0.8874 | AUPRC 0.4020 (base 0.0141) | F1 0.4735 (thr 0.818) | P 0.8279 R 0.3316 | MCC 0.5202
+21:27:19 │ best AUPRC 0.4024 @ ep65   patience 18/20
+21:27:19 └────────────────────────────────────────────────────────────────────────────
+21:27:19 [train] ep68 step   1/19 | loss 0.0054 (pos 0.328/neg 0.002) | sup 256+/21035- | seedF1 0.558 | subgraph n=21,291 e=38,267 | lr 1.21e-04 | gpu 1284MB
+21:27:19 [train] ep68 step   2/19 | loss 0.0052 (pos 0.309/neg 0.001) | sup 260+/21264- | seedF1 0.538 | subgraph n=21,524 e=38,764 | lr 1.21e-04 | gpu 1284MB
+21:27:20 [train] ep68 step   7/19 | loss 0.0054 (pos 0.336/neg 0.001) | sup 249+/21062- | seedF1 0.533 | subgraph n=21,311 e=38,239 | lr 1.19e-04 | gpu 1284MB
+21:27:20 [train] ep68 step  12/19 | loss 0.0047 (pos 0.267/neg 0.002) | sup 247+/20917- | seedF1 0.521 | subgraph n=21,164 e=38,066 | lr 1.18e-04 | gpu 1284MB
+21:27:21 [train] ep68 step  17/19 | loss 0.0046 (pos 0.247/neg 0.002) | sup 254+/20986- | seedF1 0.524 | subgraph n=21,240 e=38,160 | lr 1.16e-04 | gpu 1284MB
+21:27:21 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:23 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:23 ┌────────────────────────────────────────────────────────────────────────────
+21:27:23 │ EPOCH  68/100  train_loss 0.0051 (pos 0.295 / neg 0.002)  seedF1 0.527  2.8s  (143178 seeds/s)  eta ~1.5min
+21:27:23 │ VAL  AUROC 0.8858 | AUPRC 0.4084 (base 0.0141) | F1 0.4847 (thr 0.833) | P 0.9200 R 0.3290 | MCC 0.5470
+21:27:23 │ best AUPRC 0.4084 @ ep68   ** improved **
+21:27:23 └────────────────────────────────────────────────────────────────────────────
+21:27:24 [train] ep69 step   1/19 | loss 0.0053 (pos 0.320/neg 0.002) | sup 249+/21001- | seedF1 0.415 | subgraph n=21,250 e=38,185 | lr 1.15e-04 | gpu 1284MB
+21:27:24 [train] ep69 step   3/19 | loss 0.0059 (pos 0.328/neg 0.002) | sup 278+/21024- | seedF1 0.504 | subgraph n=21,302 e=38,259 | lr 1.15e-04 | gpu 1284MB
+21:27:25 [train] ep69 step   8/19 | loss 0.0051 (pos 0.303/neg 0.002) | sup 241+/20868- | seedF1 0.482 | subgraph n=21,109 e=37,861 | lr 1.13e-04 | gpu 1284MB
+21:27:25 [train] ep69 step  13/19 | loss 0.0049 (pos 0.294/neg 0.002) | sup 236+/20969- | seedF1 0.485 | subgraph n=21,205 e=38,004 | lr 1.12e-04 | gpu 1284MB
+21:27:26 [train] ep69 step  18/19 | loss 0.0048 (pos 0.272/neg 0.002) | sup 250+/20930- | seedF1 0.489 | subgraph n=21,180 e=38,041 | lr 1.11e-04 | gpu 1284MB
+21:27:26 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:28 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:28 ┌────────────────────────────────────────────────────────────────────────────
+21:27:28 │ EPOCH  69/100  train_loss 0.0051 (pos 0.296 / neg 0.002)  seedF1 0.487  2.9s  (141096 seeds/s)  eta ~1.5min
+21:27:28 │ VAL  AUROC 0.8906 | AUPRC 0.4048 (base 0.0141) | F1 0.4834 (thr 0.834) | P 0.8916 R 0.3316 | MCC 0.5404
+21:27:28 │ best AUPRC 0.4084 @ ep68   patience 19/20
+21:27:28 └────────────────────────────────────────────────────────────────────────────
+21:27:28 [train] ep70 step   1/19 | loss 0.0049 (pos 0.271/neg 0.002) | sup 256+/20874- | seedF1 0.425 | subgraph n=21,130 e=37,931 | lr 1.10e-04 | gpu 1284MB
+21:27:29 [train] ep70 step   4/19 | loss 0.0051 (pos 0.286/neg 0.002) | sup 259+/21026- | seedF1 0.440 | subgraph n=21,285 e=38,216 | lr 1.09e-04 | gpu 1284MB
+21:27:30 [train] ep70 step   9/19 | loss 0.0051 (pos 0.312/neg 0.001) | sup 249+/20929- | seedF1 0.487 | subgraph n=21,178 e=38,010 | lr 1.08e-04 | gpu 1284MB
+21:27:30 [train] ep70 step  14/19 | loss 0.0057 (pos 0.324/neg 0.002) | sup 269+/20963- | seedF1 0.483 | subgraph n=21,232 e=38,109 | lr 1.06e-04 | gpu 1284MB
+21:27:31 [train] ep70 step  19/19 | loss 0.0048 (pos 0.275/neg 0.002) | sup 239+/21003- | seedF1 0.489 | subgraph n=21,242 e=38,084 | lr 1.05e-04 | gpu 1284MB
+21:27:31 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:33 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:33 ┌────────────────────────────────────────────────────────────────────────────
+21:27:33 │ EPOCH  70/100  train_loss 0.0050 (pos 0.287 / neg 0.002)  seedF1 0.489  2.8s  (145809 seeds/s)  eta ~1.4min
+21:27:33 │ VAL  AUROC 0.8872 | AUPRC 0.4096 (base 0.0141) | F1 0.4816 (thr 0.855) | P 0.9396 R 0.3238 | MCC 0.5485
+21:27:33 │ best AUPRC 0.4096 @ ep70   ** improved **
+21:27:33 └────────────────────────────────────────────────────────────────────────────
+21:27:33 [train] ep71 step   1/19 | loss 0.0051 (pos 0.277/neg 0.002) | sup 263+/20897- | seedF1 0.538 | subgraph n=21,160 e=37,994 | lr 1.05e-04 | gpu 1284MB
+21:27:34 [train] ep71 step   5/19 | loss 0.0048 (pos 0.270/neg 0.001) | sup 263+/20990- | seedF1 0.497 | subgraph n=21,253 e=38,176 | lr 1.04e-04 | gpu 1284MB
+21:27:35 [train] ep71 step  10/19 | loss 0.0050 (pos 0.313/neg 0.001) | sup 246+/21018- | seedF1 0.494 | subgraph n=21,264 e=38,216 | lr 1.02e-04 | gpu 1284MB
+21:27:35 [train] ep71 step  15/19 | loss 0.0049 (pos 0.270/neg 0.002) | sup 258+/20956- | seedF1 0.500 | subgraph n=21,214 e=38,103 | lr 1.01e-04 | gpu 1284MB
+21:27:36 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:38 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:38 ┌────────────────────────────────────────────────────────────────────────────
+21:27:38 │ EPOCH  71/100  train_loss 0.0049 (pos 0.288 / neg 0.002)  seedF1 0.500  2.9s  (139931 seeds/s)  eta ~1.4min
+21:27:38 │ VAL  AUROC 0.8911 | AUPRC 0.4102 (base 0.0141) | F1 0.4879 (thr 0.846) | P 0.9654 R 0.3264 | MCC 0.5584
+21:27:38 │ best AUPRC 0.4102 @ ep71   ** improved **
+21:27:38 └────────────────────────────────────────────────────────────────────────────
+21:27:38 [train] ep72 step   1/19 | loss 0.0046 (pos 0.258/neg 0.002) | sup 246+/20966- | seedF1 0.509 | subgraph n=21,212 e=38,072 | lr 9.95e-05 | gpu 1284MB
+21:27:39 [train] ep72 step   6/19 | loss 0.0038 (pos 0.211/neg 0.002) | sup 224+/20972- | seedF1 0.523 | subgraph n=21,196 e=38,056 | lr 9.82e-05 | gpu 1284MB
+21:27:40 [train] ep72 step  11/19 | loss 0.0050 (pos 0.285/neg 0.001) | sup 261+/20940- | seedF1 0.517 | subgraph n=21,201 e=38,048 | lr 9.68e-05 | gpu 1284MB
+21:27:40 [train] ep72 step  16/19 | loss 0.0049 (pos 0.264/neg 0.002) | sup 268+/20973- | seedF1 0.514 | subgraph n=21,241 e=38,184 | lr 9.55e-05 | gpu 1284MB
+21:27:41 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:43 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:43 ┌────────────────────────────────────────────────────────────────────────────
+21:27:43 │ EPOCH  72/100  train_loss 0.0050 (pos 0.291 / neg 0.002)  seedF1 0.513  2.8s  (141429 seeds/s)  eta ~1.3min
+21:27:43 │ VAL  AUROC 0.8844 | AUPRC 0.4033 (base 0.0141) | F1 0.4767 (thr 0.826) | P 0.8838 R 0.3264 | MCC 0.5337
+21:27:43 │ best AUPRC 0.4102 @ ep71   patience 19/20
+21:27:43 └────────────────────────────────────────────────────────────────────────────
+21:27:43 [train] ep73 step   1/19 | loss 0.0049 (pos 0.283/neg 0.002) | sup 252+/20922- | seedF1 0.540 | subgraph n=21,174 e=38,016 | lr 9.44e-05 | gpu 1284MB
+21:27:43 [train] ep73 step   2/19 | loss 0.0046 (pos 0.252/neg 0.002) | sup 258+/21002- | seedF1 0.549 | subgraph n=21,260 e=38,225 | lr 9.41e-05 | gpu 1284MB
+21:27:44 [train] ep73 step   7/19 | loss 0.0047 (pos 0.312/neg 0.002) | sup 220+/21021- | seedF1 0.521 | subgraph n=21,241 e=38,131 | lr 9.28e-05 | gpu 1284MB
+21:27:45 [train] ep73 step  12/19 | loss 0.0047 (pos 0.269/neg 0.002) | sup 247+/21011- | seedF1 0.505 | subgraph n=21,258 e=38,180 | lr 9.15e-05 | gpu 1284MB
+21:27:46 [train] ep73 step  17/19 | loss 0.0049 (pos 0.278/neg 0.002) | sup 255+/20859- | seedF1 0.513 | subgraph n=21,114 e=37,931 | lr 9.02e-05 | gpu 1284MB
+21:27:46 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:48 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:48 ┌────────────────────────────────────────────────────────────────────────────
+21:27:48 │ EPOCH  73/100  train_loss 0.0050 (pos 0.287 / neg 0.002)  seedF1 0.515  3.0s  (136523 seeds/s)  eta ~1.3min
+21:27:48 │ VAL  AUROC 0.8935 | AUPRC 0.4136 (base 0.0141) | F1 0.4847 (thr 0.844) | P 0.9104 R 0.3303 | MCC 0.5451
+21:27:48 │ best AUPRC 0.4136 @ ep73   ** improved **
+21:27:48 └────────────────────────────────────────────────────────────────────────────
+21:27:48 [train] ep74 step   1/19 | loss 0.0045 (pos 0.269/neg 0.001) | sup 238+/20988- | seedF1 0.484 | subgraph n=21,226 e=38,166 | lr 8.94e-05 | gpu 1284MB
+21:27:48 [train] ep74 step   3/19 | loss 0.0051 (pos 0.310/neg 0.001) | sup 253+/21067- | seedF1 0.529 | subgraph n=21,320 e=38,326 | lr 8.89e-05 | gpu 1284MB
+21:27:49 [train] ep74 step   8/19 | loss 0.0054 (pos 0.341/neg 0.001) | sup 243+/20941- | seedF1 0.507 | subgraph n=21,184 e=38,050 | lr 8.75e-05 | gpu 1284MB
+21:27:50 [train] ep74 step  13/19 | loss 0.0049 (pos 0.276/neg 0.002) | sup 253+/21015- | seedF1 0.510 | subgraph n=21,268 e=38,192 | lr 8.63e-05 | gpu 1284MB
+21:27:50 [train] ep74 step  18/19 | loss 0.0053 (pos 0.282/neg 0.002) | sup 269+/20851- | seedF1 0.503 | subgraph n=21,120 e=37,938 | lr 8.50e-05 | gpu 1284MB
+21:27:51 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:53 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:53 ┌────────────────────────────────────────────────────────────────────────────
+21:27:53 │ EPOCH  74/100  train_loss 0.0051 (pos 0.289 / neg 0.002)  seedF1 0.503  2.8s  (145161 seeds/s)  eta ~1.2min
+21:27:53 │ VAL  AUROC 0.8904 | AUPRC 0.4088 (base 0.0141) | F1 0.4844 (thr 0.854) | P 0.9614 R 0.3238 | MCC 0.5550
+21:27:53 │ best AUPRC 0.4136 @ ep73   patience 19/20
+21:27:53 └────────────────────────────────────────────────────────────────────────────
+21:27:53 [train] ep75 step   1/19 | loss 0.0050 (pos 0.279/neg 0.002) | sup 260+/20933- | seedF1 0.427 | subgraph n=21,193 e=37,975 | lr 8.44e-05 | gpu 1284MB
+21:27:53 [train] ep75 step   4/19 | loss 0.0045 (pos 0.260/neg 0.002) | sup 242+/21002- | seedF1 0.451 | subgraph n=21,244 e=38,221 | lr 8.37e-05 | gpu 1284MB
+21:27:54 [train] ep75 step   9/19 | loss 0.0054 (pos 0.285/neg 0.002) | sup 277+/20923- | seedF1 0.492 | subgraph n=21,200 e=38,125 | lr 8.24e-05 | gpu 1284MB
+21:27:55 [train] ep75 step  14/19 | loss 0.0054 (pos 0.294/neg 0.002) | sup 264+/20911- | seedF1 0.501 | subgraph n=21,175 e=37,995 | lr 8.11e-05 | gpu 1284MB
+21:27:56 [train] ep75 step  19/19 | loss 0.0045 (pos 0.273/neg 0.002) | sup 228+/21010- | seedF1 0.506 | subgraph n=21,238 e=38,123 | lr 7.99e-05 | gpu 1284MB
+21:27:56 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:27:58 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:27:58 ┌────────────────────────────────────────────────────────────────────────────
+21:27:58 │ EPOCH  75/100  train_loss 0.0052 (pos 0.295 / neg 0.002)  seedF1 0.506  2.9s  (137757 seeds/s)  eta ~1.2min
+21:27:58 │ VAL  AUROC 0.8895 | AUPRC 0.4107 (base 0.0141) | F1 0.4837 (thr 0.846) | P 0.9231 R 0.3277 | MCC 0.5468
+21:27:58 │ best AUPRC 0.4136 @ ep73   patience 18/20
+21:27:58 └────────────────────────────────────────────────────────────────────────────
+21:27:58 [train] ep76 step   1/19 | loss 0.0057 (pos 0.320/neg 0.002) | sup 267+/20928- | seedF1 0.476 | subgraph n=21,195 e=38,061 | lr 7.96e-05 | gpu 1284MB
+21:27:58 [train] ep76 step   5/19 | loss 0.0051 (pos 0.287/neg 0.002) | sup 259+/20945- | seedF1 0.504 | subgraph n=21,204 e=38,052 | lr 7.86e-05 | gpu 1284MB
+21:27:59 [train] ep76 step  10/19 | loss 0.0060 (pos 0.331/neg 0.002) | sup 289+/21103- | seedF1 0.493 | subgraph n=21,392 e=38,468 | lr 7.74e-05 | gpu 1284MB
+21:28:00 [train] ep76 step  15/19 | loss 0.0055 (pos 0.316/neg 0.002) | sup 262+/21027- | seedF1 0.483 | subgraph n=21,289 e=38,153 | lr 7.62e-05 | gpu 1284MB
+21:28:00 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:02 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:03 ┌────────────────────────────────────────────────────────────────────────────
+21:28:03 │ EPOCH  76/100  train_loss 0.0051 (pos 0.291 / neg 0.002)  seedF1 0.488  2.8s  (141875 seeds/s)  eta ~1.1min
+21:28:03 │ VAL  AUROC 0.8874 | AUPRC 0.4097 (base 0.0141) | F1 0.4879 (thr 0.843) | P 0.9440 R 0.3290 | MCC 0.5542
+21:28:03 │ best AUPRC 0.4136 @ ep73   patience 17/20
+21:28:03 └────────────────────────────────────────────────────────────────────────────
+21:28:03 [train] ep77 step   1/19 | loss 0.0047 (pos 0.277/neg 0.002) | sup 246+/20941- | seedF1 0.482 | subgraph n=21,187 e=38,076 | lr 7.50e-05 | gpu 1284MB
+21:28:03 [train] ep77 step   6/19 | loss 0.0052 (pos 0.305/neg 0.002) | sup 247+/21055- | seedF1 0.502 | subgraph n=21,302 e=38,300 | lr 7.37e-05 | gpu 1284MB
+21:28:04 [train] ep77 step  11/19 | loss 0.0052 (pos 0.301/neg 0.002) | sup 259+/20974- | seedF1 0.495 | subgraph n=21,233 e=38,072 | lr 7.25e-05 | gpu 1284MB
+21:28:05 [train] ep77 step  16/19 | loss 0.0050 (pos 0.287/neg 0.002) | sup 248+/20880- | seedF1 0.501 | subgraph n=21,128 e=37,858 | lr 7.13e-05 | gpu 1284MB
+21:28:05 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:07 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:07 ┌────────────────────────────────────────────────────────────────────────────
+21:28:07 │ EPOCH  77/100  train_loss 0.0050 (pos 0.289 / neg 0.002)  seedF1 0.504  2.8s  (142775 seeds/s)  eta ~1.1min
+21:28:07 │ VAL  AUROC 0.8912 | AUPRC 0.4016 (base 0.0141) | F1 0.4733 (thr 0.854) | P 0.9313 R 0.3173 | MCC 0.5405
+21:28:07 │ best AUPRC 0.4136 @ ep73   patience 16/20
+21:28:07 └────────────────────────────────────────────────────────────────────────────
+21:28:08 [train] ep78 step   1/19 | loss 0.0051 (pos 0.280/neg 0.002) | sup 273+/20985- | seedF1 0.509 | subgraph n=21,258 e=38,165 | lr 7.04e-05 | gpu 1284MB
+21:28:08 [train] ep78 step   2/19 | loss 0.0050 (pos 0.316/neg 0.002) | sup 233+/20960- | seedF1 0.485 | subgraph n=21,193 e=38,068 | lr 7.02e-05 | gpu 1284MB
+21:28:08 [train] ep78 step   7/19 | loss 0.0046 (pos 0.279/neg 0.002) | sup 236+/20949- | seedF1 0.496 | subgraph n=21,185 e=38,054 | lr 6.90e-05 | gpu 1284MB
+21:28:09 [train] ep78 step  12/19 | loss 0.0052 (pos 0.295/neg 0.001) | sup 267+/20899- | seedF1 0.513 | subgraph n=21,166 e=38,070 | lr 6.78e-05 | gpu 1284MB
+21:28:10 [train] ep78 step  17/19 | loss 0.0051 (pos 0.298/neg 0.001) | sup 257+/20968- | seedF1 0.508 | subgraph n=21,225 e=38,090 | lr 6.67e-05 | gpu 1284MB
+21:28:10 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:12 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:12 ┌────────────────────────────────────────────────────────────────────────────
+21:28:12 │ EPOCH  78/100  train_loss 0.0049 (pos 0.282 / neg 0.002)  seedF1 0.508  2.9s  (139004 seeds/s)  eta ~1.1min
+21:28:12 │ VAL  AUROC 0.8910 | AUPRC 0.4088 (base 0.0141) | F1 0.4784 (thr 0.821) | P 0.8586 R 0.3316 | MCC 0.5300
+21:28:12 │ best AUPRC 0.4136 @ ep73   patience 15/20
+21:28:12 └────────────────────────────────────────────────────────────────────────────
+21:28:12 [train] ep79 step   1/19 | loss 0.0054 (pos 0.327/neg 0.002) | sup 256+/20972- | seedF1 0.529 | subgraph n=21,228 e=38,113 | lr 6.60e-05 | gpu 1284MB
+21:28:13 [train] ep79 step   3/19 | loss 0.0051 (pos 0.298/neg 0.002) | sup 254+/20776- | seedF1 0.504 | subgraph n=21,030 e=37,721 | lr 6.55e-05 | gpu 1284MB
+21:28:13 [train] ep79 step   8/19 | loss 0.0046 (pos 0.261/neg 0.002) | sup 241+/20891- | seedF1 0.530 | subgraph n=21,132 e=37,950 | lr 6.44e-05 | gpu 1284MB
+21:28:14 [train] ep79 step  13/19 | loss 0.0052 (pos 0.313/neg 0.002) | sup 240+/20917- | seedF1 0.534 | subgraph n=21,157 e=37,982 | lr 6.33e-05 | gpu 1284MB
+21:28:15 [train] ep79 step  18/19 | loss 0.0053 (pos 0.318/neg 0.002) | sup 249+/21006- | seedF1 0.528 | subgraph n=21,255 e=38,182 | lr 6.21e-05 | gpu 1284MB
+21:28:15 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:17 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:17 ┌────────────────────────────────────────────────────────────────────────────
+21:28:17 │ EPOCH  79/100  train_loss 0.0051 (pos 0.297 / neg 0.002)  seedF1 0.526  2.8s  (143064 seeds/s)  eta ~1.0min
+21:28:17 │ VAL  AUROC 0.8863 | AUPRC 0.4062 (base 0.0141) | F1 0.4781 (thr 0.864) | P 0.9462 R 0.3199 | MCC 0.5471
+21:28:17 │ best AUPRC 0.4136 @ ep73   patience 14/20
+21:28:17 └────────────────────────────────────────────────────────────────────────────
+21:28:17 [train] ep80 step   1/19 | loss 0.0050 (pos 0.270/neg 0.002) | sup 265+/20900- | seedF1 0.439 | subgraph n=21,165 e=37,931 | lr 6.17e-05 | gpu 1284MB
+21:28:18 [train] ep80 step   4/19 | loss 0.0052 (pos 0.310/neg 0.002) | sup 252+/21000- | seedF1 0.443 | subgraph n=21,252 e=38,252 | lr 6.10e-05 | gpu 1284MB
+21:28:19 [train] ep80 step   9/19 | loss 0.0046 (pos 0.263/neg 0.002) | sup 243+/20958- | seedF1 0.494 | subgraph n=21,201 e=38,111 | lr 6.00e-05 | gpu 1284MB
+21:28:19 [train] ep80 step  14/19 | loss 0.0047 (pos 0.255/neg 0.002) | sup 263+/20878- | seedF1 0.486 | subgraph n=21,141 e=37,929 | lr 5.89e-05 | gpu 1284MB
+21:28:20 [train] ep80 step  19/19 | loss 0.0054 (pos 0.316/neg 0.001) | sup 269+/20989- | seedF1 0.490 | subgraph n=21,258 e=38,128 | lr 5.78e-05 | gpu 1284MB
+21:28:20 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:22 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:22 ┌────────────────────────────────────────────────────────────────────────────
+21:28:22 │ EPOCH  80/100  train_loss 0.0049 (pos 0.282 / neg 0.002)  seedF1 0.490  2.9s  (140028 seeds/s)  eta ~1.0min
+21:28:22 │ VAL  AUROC 0.8863 | AUPRC 0.4068 (base 0.0141) | F1 0.4708 (thr 0.865) | P 0.9344 R 0.3147 | MCC 0.5391
+21:28:22 │ best AUPRC 0.4136 @ ep73   patience 13/20
+21:28:22 └────────────────────────────────────────────────────────────────────────────
+21:28:22 [train] ep81 step   1/19 | loss 0.0046 (pos 0.291/neg 0.002) | sup 229+/21031- | seedF1 0.429 | subgraph n=21,260 e=38,155 | lr 5.76e-05 | gpu 1284MB
+21:28:23 [train] ep81 step   5/19 | loss 0.0053 (pos 0.303/neg 0.002) | sup 268+/20859- | seedF1 0.444 | subgraph n=21,127 e=37,953 | lr 5.67e-05 | gpu 1284MB
+21:28:24 [train] ep81 step  10/19 | loss 0.0047 (pos 0.260/neg 0.002) | sup 245+/20995- | seedF1 0.453 | subgraph n=21,240 e=38,215 | lr 5.57e-05 | gpu 1284MB
+21:28:24 [train] ep81 step  15/19 | loss 0.0050 (pos 0.277/neg 0.002) | sup 258+/20940- | seedF1 0.452 | subgraph n=21,198 e=38,044 | lr 5.46e-05 | gpu 1284MB
+21:28:25 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:27 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:27 ┌────────────────────────────────────────────────────────────────────────────
+21:28:27 │ EPOCH  81/100  train_loss 0.0051 (pos 0.287 / neg 0.002)  seedF1 0.466  2.8s  (142576 seeds/s)  eta ~0.9min
+21:28:27 │ VAL  AUROC 0.8909 | AUPRC 0.4152 (base 0.0141) | F1 0.4863 (thr 0.860) | P 0.9765 R 0.3238 | MCC 0.5594
+21:28:27 │ best AUPRC 0.4152 @ ep81   ** improved **
+21:28:27 └────────────────────────────────────────────────────────────────────────────
+21:28:27 [train] ep82 step   1/19 | loss 0.0054 (pos 0.337/neg 0.002) | sup 242+/21025- | seedF1 0.497 | subgraph n=21,267 e=38,174 | lr 5.36e-05 | gpu 1284MB
+21:28:28 [train] ep82 step   6/19 | loss 0.0052 (pos 0.300/neg 0.002) | sup 259+/20839- | seedF1 0.466 | subgraph n=21,098 e=37,807 | lr 5.26e-05 | gpu 1284MB
+21:28:29 [train] ep82 step  11/19 | loss 0.0053 (pos 0.315/neg 0.002) | sup 256+/20974- | seedF1 0.498 | subgraph n=21,230 e=38,096 | lr 5.16e-05 | gpu 1284MB
+21:28:29 [train] ep82 step  16/19 | loss 0.0045 (pos 0.267/neg 0.002) | sup 238+/20986- | seedF1 0.501 | subgraph n=21,224 e=38,138 | lr 5.06e-05 | gpu 1284MB
+21:28:30 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:32 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:32 ┌────────────────────────────────────────────────────────────────────────────
+21:28:32 │ EPOCH  82/100  train_loss 0.0049 (pos 0.285 / neg 0.002)  seedF1 0.497  2.8s  (144426 seeds/s)  eta ~0.8min
+21:28:32 │ VAL  AUROC 0.8906 | AUPRC 0.4065 (base 0.0141) | F1 0.4802 (thr 0.853) | P 0.9291 R 0.3238 | MCC 0.5453
+21:28:32 │ best AUPRC 0.4152 @ ep81   patience 19/20
+21:28:32 └────────────────────────────────────────────────────────────────────────────
+21:28:32 [train] ep83 step   1/19 | loss 0.0051 (pos 0.288/neg 0.001) | sup 267+/21080- | seedF1 0.458 | subgraph n=21,347 e=38,366 | lr 4.98e-05 | gpu 1284MB
+21:28:32 [train] ep83 step   2/19 | loss 0.0047 (pos 0.275/neg 0.002) | sup 244+/20809- | seedF1 0.494 | subgraph n=21,053 e=37,716 | lr 4.96e-05 | gpu 1284MB
+21:28:33 [train] ep83 step   7/19 | loss 0.0049 (pos 0.298/neg 0.002) | sup 243+/21017- | seedF1 0.490 | subgraph n=21,260 e=38,232 | lr 4.87e-05 | gpu 1284MB
+21:28:33 [train] ep83 step  12/19 | loss 0.0048 (pos 0.272/neg 0.001) | sup 265+/20961- | seedF1 0.503 | subgraph n=21,226 e=38,084 | lr 4.77e-05 | gpu 1284MB
+21:28:34 [train] ep83 step  17/19 | loss 0.0045 (pos 0.252/neg 0.002) | sup 254+/21022- | seedF1 0.506 | subgraph n=21,276 e=38,192 | lr 4.68e-05 | gpu 1284MB
+21:28:34 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:36 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:36 ┌────────────────────────────────────────────────────────────────────────────
+21:28:36 │ EPOCH  83/100  train_loss 0.0048 (pos 0.284 / neg 0.001)  seedF1 0.506  2.9s  (141243 seeds/s)  eta ~0.8min
+21:28:36 │ VAL  AUROC 0.8884 | AUPRC 0.4014 (base 0.0141) | F1 0.4741 (thr 0.837) | P 0.9048 R 0.3212 | MCC 0.5358
+21:28:36 │ best AUPRC 0.4152 @ ep81   patience 18/20
+21:28:36 └────────────────────────────────────────────────────────────────────────────
+21:28:37 [train] ep84 step   1/19 | loss 0.0056 (pos 0.348/neg 0.001) | sup 256+/21052- | seedF1 0.509 | subgraph n=21,308 e=38,298 | lr 4.62e-05 | gpu 1284MB
+21:28:37 [train] ep84 step   3/19 | loss 0.0050 (pos 0.292/neg 0.001) | sup 253+/21003- | seedF1 0.494 | subgraph n=21,256 e=38,182 | lr 4.58e-05 | gpu 1284MB
+21:28:38 [train] ep84 step   8/19 | loss 0.0046 (pos 0.272/neg 0.001) | sup 244+/21009- | seedF1 0.498 | subgraph n=21,253 e=38,159 | lr 4.49e-05 | gpu 1284MB
+21:28:38 [train] ep84 step  13/19 | loss 0.0049 (pos 0.283/neg 0.002) | sup 249+/21011- | seedF1 0.511 | subgraph n=21,260 e=38,146 | lr 4.40e-05 | gpu 1284MB
+21:28:39 [train] ep84 step  18/19 | loss 0.0047 (pos 0.272/neg 0.002) | sup 244+/21080- | seedF1 0.512 | subgraph n=21,324 e=38,295 | lr 4.31e-05 | gpu 1284MB
+21:28:39 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:41 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:41 ┌────────────────────────────────────────────────────────────────────────────
+21:28:41 │ EPOCH  84/100  train_loss 0.0049 (pos 0.288 / neg 0.002)  seedF1 0.514  2.8s  (145920 seeds/s)  eta ~0.7min
+21:28:41 │ VAL  AUROC 0.8899 | AUPRC 0.4033 (base 0.0141) | F1 0.4768 (thr 0.874) | P 0.9837 R 0.3147 | MCC 0.5536
+21:28:41 │ best AUPRC 0.4152 @ ep81   patience 17/20
+21:28:41 └────────────────────────────────────────────────────────────────────────────
+21:28:41 [train] ep85 step   1/19 | loss 0.0046 (pos 0.256/neg 0.002) | sup 248+/20877- | seedF1 0.534 | subgraph n=21,125 e=37,931 | lr 4.27e-05 | gpu 1284MB
+21:28:42 [train] ep85 step   4/19 | loss 0.0048 (pos 0.270/neg 0.002) | sup 252+/20992- | seedF1 0.494 | subgraph n=21,244 e=38,156 | lr 4.22e-05 | gpu 1284MB
+21:28:42 [train] ep85 step   9/19 | loss 0.0048 (pos 0.291/neg 0.002) | sup 245+/21151- | seedF1 0.499 | subgraph n=21,396 e=38,496 | lr 4.13e-05 | gpu 1284MB
+21:28:43 [train] ep85 step  14/19 | loss 0.0051 (pos 0.316/neg 0.001) | sup 249+/20938- | seedF1 0.490 | subgraph n=21,187 e=38,090 | lr 4.05e-05 | gpu 1284MB
+21:28:44 [train] ep85 step  19/19 | loss 0.0053 (pos 0.300/neg 0.002) | sup 267+/20909- | seedF1 0.493 | subgraph n=21,176 e=37,979 | lr 3.96e-05 | gpu 1284MB
+21:28:44 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:46 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:46 ┌────────────────────────────────────────────────────────────────────────────
+21:28:46 │ EPOCH  85/100  train_loss 0.0049 (pos 0.288 / neg 0.002)  seedF1 0.493  2.8s  (145490 seeds/s)  eta ~0.7min
+21:28:46 │ VAL  AUROC 0.8871 | AUPRC 0.3987 (base 0.0141) | F1 0.4792 (thr 0.861) | P 0.9323 R 0.3225 | MCC 0.5452
+21:28:46 │ best AUPRC 0.4152 @ ep81   patience 16/20
+21:28:46 └────────────────────────────────────────────────────────────────────────────
+21:28:46 [train] ep86 step   1/19 | loss 0.0045 (pos 0.271/neg 0.002) | sup 234+/20971- | seedF1 0.509 | subgraph n=21,205 e=38,104 | lr 3.95e-05 | gpu 1284MB
+21:28:47 [train] ep86 step   5/19 | loss 0.0047 (pos 0.266/neg 0.002) | sup 257+/20986- | seedF1 0.475 | subgraph n=21,243 e=38,131 | lr 3.88e-05 | gpu 1284MB
+21:28:47 [train] ep86 step  10/19 | loss 0.0048 (pos 0.296/neg 0.001) | sup 242+/21000- | seedF1 0.478 | subgraph n=21,242 e=38,207 | lr 3.80e-05 | gpu 1284MB
+21:28:48 [train] ep86 step  15/19 | loss 0.0049 (pos 0.279/neg 0.002) | sup 259+/20914- | seedF1 0.483 | subgraph n=21,173 e=38,006 | lr 3.72e-05 | gpu 1284MB
+21:28:49 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:50 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:50 ┌────────────────────────────────────────────────────────────────────────────
+21:28:50 │ EPOCH  86/100  train_loss 0.0050 (pos 0.289 / neg 0.002)  seedF1 0.487  2.7s  (146770 seeds/s)  eta ~0.6min
+21:28:50 │ VAL  AUROC 0.8844 | AUPRC 0.4060 (base 0.0141) | F1 0.4836 (thr 0.855) | P 0.9331 R 0.3264 | MCC 0.5487
+21:28:50 │ best AUPRC 0.4152 @ ep81   patience 15/20
+21:28:50 └────────────────────────────────────────────────────────────────────────────
+21:28:51 [train] ep87 step   1/19 | loss 0.0052 (pos 0.307/neg 0.002) | sup 249+/21116- | seedF1 0.447 | subgraph n=21,365 e=38,392 | lr 3.64e-05 | gpu 1284MB
+21:28:51 [train] ep87 step   6/19 | loss 0.0051 (pos 0.281/neg 0.002) | sup 257+/20905- | seedF1 0.486 | subgraph n=21,162 e=37,972 | lr 3.56e-05 | gpu 1284MB
+21:28:52 [train] ep87 step  11/19 | loss 0.0046 (pos 0.259/neg 0.002) | sup 255+/21119- | seedF1 0.505 | subgraph n=21,374 e=38,446 | lr 3.48e-05 | gpu 1284MB
+21:28:53 [train] ep87 step  16/19 | loss 0.0048 (pos 0.285/neg 0.002) | sup 241+/21022- | seedF1 0.508 | subgraph n=21,263 e=38,233 | lr 3.41e-05 | gpu 1284MB
+21:28:53 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:28:55 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:28:55 ┌────────────────────────────────────────────────────────────────────────────
+21:28:55 │ EPOCH  87/100  train_loss 0.0050 (pos 0.285 / neg 0.002)  seedF1 0.508  2.8s  (143101 seeds/s)  eta ~0.6min
+21:28:55 │ VAL  AUROC 0.8859 | AUPRC 0.4036 (base 0.0141) | F1 0.4768 (thr 0.853) | P 0.9251 R 0.3212 | MCC 0.5419
+21:28:55 │ best AUPRC 0.4152 @ ep81   patience 14/20
+21:28:55 └────────────────────────────────────────────────────────────────────────────
+21:28:55 [train] ep88 step   1/19 | loss 0.0045 (pos 0.256/neg 0.002) | sup 243+/20898- | seedF1 0.500 | subgraph n=21,141 e=37,915 | lr 3.35e-05 | gpu 1284MB
+21:28:56 [train] ep88 step   2/19 | loss 0.0046 (pos 0.275/neg 0.002) | sup 244+/21072- | seedF1 0.478 | subgraph n=21,316 e=38,346 | lr 3.34e-05 | gpu 1284MB
+21:28:56 [train] ep88 step   7/19 | loss 0.0045 (pos 0.267/neg 0.002) | sup 242+/21067- | seedF1 0.491 | subgraph n=21,309 e=38,310 | lr 3.26e-05 | gpu 1284MB
+21:28:57 [train] ep88 step  12/19 | loss 0.0047 (pos 0.280/neg 0.002) | sup 243+/20956- | seedF1 0.503 | subgraph n=21,199 e=38,052 | lr 3.19e-05 | gpu 1284MB
+21:28:58 [train] ep88 step  17/19 | loss 0.0052 (pos 0.307/neg 0.001) | sup 260+/20971- | seedF1 0.505 | subgraph n=21,231 e=38,158 | lr 3.12e-05 | gpu 1284MB
+21:28:58 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:00 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:00 ┌────────────────────────────────────────────────────────────────────────────
+21:29:00 │ EPOCH  88/100  train_loss 0.0049 (pos 0.289 / neg 0.002)  seedF1 0.507  2.7s  (146718 seeds/s)  eta ~0.5min
+21:29:00 │ VAL  AUROC 0.8848 | AUPRC 0.4004 (base 0.0141) | F1 0.4824 (thr 0.868) | P 0.9686 R 0.3212 | MCC 0.5549
+21:29:00 │ best AUPRC 0.4152 @ ep81   patience 13/20
+21:29:00 └────────────────────────────────────────────────────────────────────────────
+21:29:00 [train] ep89 step   1/19 | loss 0.0048 (pos 0.271/neg 0.001) | sup 257+/20770- | seedF1 0.488 | subgraph n=21,027 e=37,646 | lr 3.08e-05 | gpu 1284MB
+21:29:00 [train] ep89 step   3/19 | loss 0.0050 (pos 0.290/neg 0.002) | sup 253+/21009- | seedF1 0.469 | subgraph n=21,262 e=38,166 | lr 3.05e-05 | gpu 1284MB
+21:29:01 [train] ep89 step   8/19 | loss 0.0053 (pos 0.305/neg 0.002) | sup 265+/21031- | seedF1 0.483 | subgraph n=21,296 e=38,318 | lr 2.99e-05 | gpu 1284MB
+21:29:02 [train] ep89 step  13/19 | loss 0.0052 (pos 0.305/neg 0.002) | sup 253+/20902- | seedF1 0.476 | subgraph n=21,155 e=37,915 | lr 2.92e-05 | gpu 1284MB
+21:29:03 [train] ep89 step  18/19 | loss 0.0054 (pos 0.300/neg 0.002) | sup 268+/20993- | seedF1 0.478 | subgraph n=21,261 e=38,154 | lr 2.86e-05 | gpu 1284MB
+21:29:03 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:05 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:05 ┌────────────────────────────────────────────────────────────────────────────
+21:29:05 │ EPOCH  89/100  train_loss 0.0050 (pos 0.287 / neg 0.002)  seedF1 0.476  2.8s  (145201 seeds/s)  eta ~0.5min
+21:29:05 │ VAL  AUROC 0.8856 | AUPRC 0.4034 (base 0.0141) | F1 0.4820 (thr 0.875) | P 0.9648 R 0.3212 | MCC 0.5538
+21:29:05 │ best AUPRC 0.4152 @ ep81   patience 12/20
+21:29:05 └────────────────────────────────────────────────────────────────────────────
+21:29:05 [train] ep90 step   1/19 | loss 0.0047 (pos 0.277/neg 0.002) | sup 241+/21025- | seedF1 0.479 | subgraph n=21,266 e=38,137 | lr 2.83e-05 | gpu 1284MB
+21:29:05 [train] ep90 step   4/19 | loss 0.0045 (pos 0.250/neg 0.002) | sup 259+/21067- | seedF1 0.483 | subgraph n=21,326 e=38,271 | lr 2.79e-05 | gpu 1284MB
+21:29:06 [train] ep90 step   9/19 | loss 0.0053 (pos 0.313/neg 0.002) | sup 255+/20908- | seedF1 0.477 | subgraph n=21,163 e=37,962 | lr 2.73e-05 | gpu 1284MB
+21:29:07 [train] ep90 step  14/19 | loss 0.0044 (pos 0.260/neg 0.001) | sup 241+/21057- | seedF1 0.479 | subgraph n=21,298 e=38,262 | lr 2.67e-05 | gpu 1284MB
+21:29:08 [train] ep90 step  19/19 | loss 0.0049 (pos 0.280/neg 0.002) | sup 248+/20749- | seedF1 0.481 | subgraph n=20,997 e=37,612 | lr 2.61e-05 | gpu 1284MB
+21:29:08 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:09 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:10 ┌────────────────────────────────────────────────────────────────────────────
+21:29:10 │ EPOCH  90/100  train_loss 0.0049 (pos 0.286 / neg 0.002)  seedF1 0.481  2.9s  (141459 seeds/s)  eta ~0.5min
+21:29:10 │ VAL  AUROC 0.8896 | AUPRC 0.4013 (base 0.0141) | F1 0.4785 (thr 0.867) | P 0.9608 R 0.3186 | MCC 0.5503
+21:29:10 │ best AUPRC 0.4152 @ ep81   patience 11/20
+21:29:10 └────────────────────────────────────────────────────────────────────────────
+21:29:10 [train] ep91 step   1/19 | loss 0.0054 (pos 0.323/neg 0.001) | sup 259+/20982- | seedF1 0.488 | subgraph n=21,241 e=38,132 | lr 2.60e-05 | gpu 1284MB
+21:29:10 [train] ep91 step   5/19 | loss 0.0048 (pos 0.287/neg 0.002) | sup 241+/20869- | seedF1 0.489 | subgraph n=21,110 e=37,890 | lr 2.56e-05 | gpu 1284MB
+21:29:11 [train] ep91 step  10/19 | loss 0.0053 (pos 0.295/neg 0.002) | sup 263+/20933- | seedF1 0.509 | subgraph n=21,196 e=38,023 | lr 2.50e-05 | gpu 1284MB
+21:29:12 [train] ep91 step  15/19 | loss 0.0050 (pos 0.294/neg 0.002) | sup 250+/20889- | seedF1 0.508 | subgraph n=21,139 e=37,909 | lr 2.45e-05 | gpu 1284MB
+21:29:12 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:14 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:14 ┌────────────────────────────────────────────────────────────────────────────
+21:29:14 │ EPOCH  91/100  train_loss 0.0050 (pos 0.287 / neg 0.002)  seedF1 0.498  2.8s  (143374 seeds/s)  eta ~0.4min
+21:29:14 │ VAL  AUROC 0.8878 | AUPRC 0.4085 (base 0.0141) | F1 0.4834 (thr 0.871) | P 0.9763 R 0.3212 | MCC 0.5571
+21:29:14 │ best AUPRC 0.4152 @ ep81   patience 10/20
+21:29:14 └────────────────────────────────────────────────────────────────────────────
+21:29:14 [train] ep92 step   1/19 | loss 0.0053 (pos 0.310/neg 0.002) | sup 253+/20832- | seedF1 0.484 | subgraph n=21,085 e=37,861 | lr 2.39e-05 | gpu 1284MB
+21:29:15 [train] ep92 step   6/19 | loss 0.0053 (pos 0.298/neg 0.002) | sup 271+/20977- | seedF1 0.476 | subgraph n=21,248 e=38,113 | lr 2.34e-05 | gpu 1284MB
+21:29:16 [train] ep92 step  11/19 | loss 0.0052 (pos 0.305/neg 0.002) | sup 261+/21051- | seedF1 0.491 | subgraph n=21,312 e=38,370 | lr 2.29e-05 | gpu 1284MB
+21:29:17 [train] ep92 step  16/19 | loss 0.0050 (pos 0.286/neg 0.002) | sup 257+/20997- | seedF1 0.485 | subgraph n=21,254 e=38,136 | lr 2.24e-05 | gpu 1284MB
+21:29:17 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:19 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:19 ┌────────────────────────────────────────────────────────────────────────────
+21:29:19 │ EPOCH  92/100  train_loss 0.0049 (pos 0.286 / neg 0.002)  seedF1 0.484  2.9s  (137403 seeds/s)  eta ~0.4min
+21:29:19 │ VAL  AUROC 0.8889 | AUPRC 0.4113 (base 0.0141) | F1 0.4850 (thr 0.860) | P 0.9436 R 0.3264 | MCC 0.5519
+21:29:19 │ best AUPRC 0.4152 @ ep81   patience 9/20
+21:29:19 └────────────────────────────────────────────────────────────────────────────
+21:29:19 [train] ep93 step   1/19 | loss 0.0054 (pos 0.301/neg 0.002) | sup 271+/21055- | seedF1 0.494 | subgraph n=21,326 e=38,331 | lr 2.21e-05 | gpu 1284MB
+21:29:19 [train] ep93 step   2/19 | loss 0.0054 (pos 0.317/neg 0.002) | sup 253+/21003- | seedF1 0.466 | subgraph n=21,256 e=38,166 | lr 2.20e-05 | gpu 1284MB
+21:29:20 [train] ep93 step   7/19 | loss 0.0053 (pos 0.298/neg 0.002) | sup 268+/21002- | seedF1 0.491 | subgraph n=21,270 e=38,196 | lr 2.15e-05 | gpu 1284MB
+21:29:21 [train] ep93 step  12/19 | loss 0.0046 (pos 0.259/neg 0.002) | sup 244+/20828- | seedF1 0.488 | subgraph n=21,072 e=37,804 | lr 2.11e-05 | gpu 1284MB
+21:29:22 [train] ep93 step  17/19 | loss 0.0048 (pos 0.271/neg 0.002) | sup 257+/20935- | seedF1 0.494 | subgraph n=21,192 e=38,032 | lr 2.07e-05 | gpu 1284MB
+21:29:22 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:24 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:24 ┌────────────────────────────────────────────────────────────────────────────
+21:29:24 │ EPOCH  93/100  train_loss 0.0051 (pos 0.296 / neg 0.002)  seedF1 0.494  2.8s  (145655 seeds/s)  eta ~0.3min
+21:29:24 │ VAL  AUROC 0.8865 | AUPRC 0.4068 (base 0.0141) | F1 0.4828 (thr 0.846) | P 0.9164 R 0.3277 | MCC 0.5448
+21:29:24 │ best AUPRC 0.4152 @ ep81   patience 8/20
+21:29:24 └────────────────────────────────────────────────────────────────────────────
+21:29:24 [train] ep94 step   1/19 | loss 0.0046 (pos 0.260/neg 0.001) | sup 255+/21041- | seedF1 0.564 | subgraph n=21,296 e=38,274 | lr 2.04e-05 | gpu 1284MB
+21:29:24 [train] ep94 step   3/19 | loss 0.0047 (pos 0.264/neg 0.002) | sup 251+/20944- | seedF1 0.499 | subgraph n=21,195 e=38,083 | lr 2.02e-05 | gpu 1284MB
+21:29:25 [train] ep94 step   8/19 | loss 0.0047 (pos 0.270/neg 0.002) | sup 248+/21008- | seedF1 0.498 | subgraph n=21,256 e=38,185 | lr 1.99e-05 | gpu 1284MB
+21:29:26 [train] ep94 step  13/19 | loss 0.0046 (pos 0.256/neg 0.002) | sup 257+/20999- | seedF1 0.503 | subgraph n=21,256 e=38,220 | lr 1.95e-05 | gpu 1284MB
+21:29:26 [train] ep94 step  18/19 | loss 0.0052 (pos 0.309/neg 0.001) | sup 254+/20919- | seedF1 0.495 | subgraph n=21,173 e=38,020 | lr 1.91e-05 | gpu 1284MB
+21:29:27 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:28 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:29 ┌────────────────────────────────────────────────────────────────────────────
+21:29:29 │ EPOCH  94/100  train_loss 0.0048 (pos 0.277 / neg 0.002)  seedF1 0.496  2.8s  (144474 seeds/s)  eta ~0.3min
+21:29:29 │ VAL  AUROC 0.8874 | AUPRC 0.4049 (base 0.0141) | F1 0.4738 (thr 0.865) | P 0.9349 R 0.3173 | MCC 0.5415
+21:29:29 │ best AUPRC 0.4152 @ ep81   patience 7/20
+21:29:29 └────────────────────────────────────────────────────────────────────────────
+21:29:29 [train] ep95 step   1/19 | loss 0.0050 (pos 0.301/neg 0.002) | sup 249+/20980- | seedF1 0.503 | subgraph n=21,229 e=38,110 | lr 1.90e-05 | gpu 1284MB
+21:29:29 [train] ep95 step   4/19 | loss 0.0052 (pos 0.295/neg 0.002) | sup 263+/20955- | seedF1 0.502 | subgraph n=21,218 e=38,131 | lr 1.88e-05 | gpu 1284MB
+21:29:30 [train] ep95 step   9/19 | loss 0.0049 (pos 0.287/neg 0.002) | sup 244+/21012- | seedF1 0.497 | subgraph n=21,256 e=38,207 | lr 1.84e-05 | gpu 1284MB
+21:29:31 [train] ep95 step  14/19 | loss 0.0051 (pos 0.272/neg 0.002) | sup 267+/20811- | seedF1 0.491 | subgraph n=21,078 e=37,798 | lr 1.81e-05 | gpu 1284MB
+21:29:31 [train] ep95 step  19/19 | loss 0.0049 (pos 0.290/neg 0.002) | sup 244+/20880- | seedF1 0.488 | subgraph n=21,124 e=37,890 | lr 1.78e-05 | gpu 1284MB
+21:29:31 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:33 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:33 ┌────────────────────────────────────────────────────────────────────────────
+21:29:33 │ EPOCH  95/100  train_loss 0.0050 (pos 0.289 / neg 0.002)  seedF1 0.488  2.8s  (145786 seeds/s)  eta ~0.2min
+21:29:33 │ VAL  AUROC 0.8899 | AUPRC 0.4098 (base 0.0141) | F1 0.4765 (thr 0.872) | P 0.9681 R 0.3160 | MCC 0.5502
+21:29:33 │ best AUPRC 0.4152 @ ep81   patience 6/20
+21:29:33 └────────────────────────────────────────────────────────────────────────────
+21:29:33 [train] ep96 step   1/19 | loss 0.0047 (pos 0.274/neg 0.002) | sup 246+/21060- | seedF1 0.491 | subgraph n=21,306 e=38,308 | lr 1.78e-05 | gpu 1284MB
+21:29:34 [train] ep96 step   5/19 | loss 0.0050 (pos 0.281/neg 0.002) | sup 259+/20979- | seedF1 0.496 | subgraph n=21,238 e=38,091 | lr 1.75e-05 | gpu 1284MB
+21:29:35 [train] ep96 step  10/19 | loss 0.0047 (pos 0.279/neg 0.002) | sup 245+/20955- | seedF1 0.504 | subgraph n=21,200 e=38,135 | lr 1.73e-05 | gpu 1284MB
+21:29:35 [train] ep96 step  15/19 | loss 0.0051 (pos 0.294/neg 0.002) | sup 251+/20810- | seedF1 0.504 | subgraph n=21,061 e=37,763 | lr 1.70e-05 | gpu 1284MB
+21:29:36 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:38 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:38 ┌────────────────────────────────────────────────────────────────────────────
+21:29:38 │ EPOCH  96/100  train_loss 0.0049 (pos 0.287 / neg 0.002)  seedF1 0.498  2.8s  (145955 seeds/s)  eta ~0.2min
+21:29:38 │ VAL  AUROC 0.8892 | AUPRC 0.4053 (base 0.0141) | F1 0.4794 (thr 0.884) | P 0.9799 R 0.3173 | MCC 0.5548
+21:29:38 │ best AUPRC 0.4152 @ ep81   patience 5/20
+21:29:38 └────────────────────────────────────────────────────────────────────────────
+21:29:38 [train] ep97 step   1/19 | loss 0.0050 (pos 0.289/neg 0.002) | sup 260+/20984- | seedF1 0.420 | subgraph n=21,244 e=38,167 | lr 1.68e-05 | gpu 1284MB
+21:29:39 [train] ep97 step   6/19 | loss 0.0052 (pos 0.295/neg 0.001) | sup 269+/20904- | seedF1 0.470 | subgraph n=21,173 e=37,982 | lr 1.65e-05 | gpu 1284MB
+21:29:39 [train] ep97 step  11/19 | loss 0.0049 (pos 0.295/neg 0.002) | sup 241+/20988- | seedF1 0.486 | subgraph n=21,229 e=38,137 | lr 1.63e-05 | gpu 1284MB
+21:29:40 [train] ep97 step  16/19 | loss 0.0048 (pos 0.283/neg 0.002) | sup 250+/21004- | seedF1 0.485 | subgraph n=21,254 e=38,159 | lr 1.61e-05 | gpu 1284MB
+21:29:41 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:43 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:43 ┌────────────────────────────────────────────────────────────────────────────
+21:29:43 │ EPOCH  97/100  train_loss 0.0050 (pos 0.292 / neg 0.002)  seedF1 0.488  2.8s  (146328 seeds/s)  eta ~0.1min
+21:29:43 │ VAL  AUROC 0.8879 | AUPRC 0.4060 (base 0.0141) | F1 0.4847 (thr 0.849) | P 0.9200 R 0.3290 | MCC 0.5470
+21:29:43 │ best AUPRC 0.4152 @ ep81   patience 4/20
+21:29:43 └────────────────────────────────────────────────────────────────────────────
+21:29:43 [train] ep98 step   1/19 | loss 0.0053 (pos 0.303/neg 0.002) | sup 260+/21022- | seedF1 0.552 | subgraph n=21,282 e=38,245 | lr 1.60e-05 | gpu 1284MB
+21:29:43 [train] ep98 step   2/19 | loss 0.0048 (pos 0.270/neg 0.002) | sup 258+/20966- | seedF1 0.578 | subgraph n=21,224 e=38,137 | lr 1.59e-05 | gpu 1284MB
+21:29:44 [train] ep98 step   7/19 | loss 0.0047 (pos 0.258/neg 0.002) | sup 254+/20885- | seedF1 0.516 | subgraph n=21,139 e=37,916 | lr 1.58e-05 | gpu 1284MB
+21:29:44 [train] ep98 step  12/19 | loss 0.0050 (pos 0.293/neg 0.002) | sup 249+/21114- | seedF1 0.500 | subgraph n=21,363 e=38,395 | lr 1.56e-05 | gpu 1284MB
+21:29:45 [train] ep98 step  17/19 | loss 0.0056 (pos 0.317/neg 0.002) | sup 269+/20945- | seedF1 0.501 | subgraph n=21,214 e=38,121 | lr 1.55e-05 | gpu 1284MB
+21:29:45 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:47 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:47 ┌────────────────────────────────────────────────────────────────────────────
+21:29:47 │ EPOCH  98/100  train_loss 0.0051 (pos 0.294 / neg 0.002)  seedF1 0.503  2.8s  (142207 seeds/s)  eta ~0.1min
+21:29:47 │ VAL  AUROC 0.8881 | AUPRC 0.4116 (base 0.0141) | F1 0.4737 (thr 0.867) | P 0.9455 R 0.3160 | MCC 0.5436
+21:29:47 │ best AUPRC 0.4152 @ ep81   patience 3/20
+21:29:47 └────────────────────────────────────────────────────────────────────────────
+21:29:48 [train] ep99 step   1/19 | loss 0.0041 (pos 0.232/neg 0.002) | sup 230+/20872- | seedF1 0.482 | subgraph n=21,102 e=37,917 | lr 1.54e-05 | gpu 1284MB
+21:29:48 [train] ep99 step   3/19 | loss 0.0053 (pos 0.308/neg 0.002) | sup 253+/20985- | seedF1 0.471 | subgraph n=21,238 e=38,164 | lr 1.54e-05 | gpu 1284MB
+21:29:49 [train] ep99 step   8/19 | loss 0.0048 (pos 0.255/neg 0.002) | sup 276+/21023- | seedF1 0.475 | subgraph n=21,299 e=38,273 | lr 1.53e-05 | gpu 1284MB
+21:29:49 [train] ep99 step  13/19 | loss 0.0049 (pos 0.281/neg 0.002) | sup 247+/20935- | seedF1 0.470 | subgraph n=21,182 e=38,003 | lr 1.52e-05 | gpu 1284MB
+21:29:50 [train] ep99 step  18/19 | loss 0.0055 (pos 0.317/neg 0.002) | sup 266+/20820- | seedF1 0.465 | subgraph n=21,086 e=37,792 | lr 1.51e-05 | gpu 1284MB
+21:29:50 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:52 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:52 ┌────────────────────────────────────────────────────────────────────────────
+21:29:52 │ EPOCH  99/100  train_loss 0.0050 (pos 0.281 / neg 0.002)  seedF1 0.472  2.8s  (145874 seeds/s)  eta ~0.0min
+21:29:52 │ VAL  AUROC 0.8889 | AUPRC 0.4052 (base 0.0141) | F1 0.4826 (thr 0.862) | P 0.9363 R 0.3251 | MCC 0.5486
+21:29:52 │ best AUPRC 0.4152 @ ep81   patience 2/20
+21:29:52 └────────────────────────────────────────────────────────────────────────────
+21:29:52 [train] ep100 step   1/19 | loss 0.0054 (pos 0.308/neg 0.002) | sup 263+/20904- | seedF1 0.467 | subgraph n=21,167 e=38,009 | lr 1.51e-05 | gpu 1284MB
+21:29:53 [train] ep100 step   4/19 | loss 0.0049 (pos 0.278/neg 0.002) | sup 256+/20836- | seedF1 0.464 | subgraph n=21,092 e=37,874 | lr 1.51e-05 | gpu 1284MB
+21:29:53 [train] ep100 step   9/19 | loss 0.0048 (pos 0.290/neg 0.002) | sup 242+/20887- | seedF1 0.476 | subgraph n=21,129 e=37,934 | lr 1.50e-05 | gpu 1284MB
+21:29:54 [train] ep100 step  14/19 | loss 0.0052 (pos 0.286/neg 0.002) | sup 276+/20967- | seedF1 0.483 | subgraph n=21,243 e=38,213 | lr 1.50e-05 | gpu 1284MB
+21:29:55 [train] ep100 step  19/19 | loss 0.0052 (pos 0.301/neg 0.002) | sup 258+/21019- | seedF1 0.490 | subgraph n=21,277 e=38,211 | lr 1.50e-05 | gpu 1284MB
+21:29:55 [warn] frontier cap triggered 171x while sampling this epoch — train subgraphs are randomly truncated; raise sampling.max_frontier or lower fanouts/batch_seeds
+21:29:57 [warn] frontier cap triggered 322x during this eval — eval subgraphs are randomly truncated; raise sampling.max_frontier or lower eval_batch_seeds
+21:29:57 ┌────────────────────────────────────────────────────────────────────────────
+21:29:57 │ EPOCH 100/100  train_loss 0.0049 (pos 0.286 / neg 0.002)  seedF1 0.490  2.8s  (143696 seeds/s)  eta ~0.0min
+21:29:57 │ VAL  AUROC 0.8890 | AUPRC 0.4063 (base 0.0141) | F1 0.4819 (thr 0.851) | P 0.9004 R 0.3290 | MCC 0.5409
+21:29:57 │ best AUPRC 0.4152 @ ep81   patience 1/20
+21:29:57 └────────────────────────────────────────────────────────────────────────────
+21:29:57 [eval] loaded checkpoint runs\20260809_212153_rewire_retrain\best.pt (epoch 81)
+21:29:59 ── VALIDATION ────────────────────────────────────────────────────
+  events=54,356  positives=769  pos_rate=1.41%
+  ranking:   AUROC=0.8922   AUPRC=0.4130   (baseline AP=0.0141, lift x29.2)
+  @thr=0.837:  F1=0.4820   P=0.8912   R=0.3303   MCC=0.5392
+  @thr=0.50:  F1=0.2756
+  confusion: TN=53,556  FP=31  FN=515  TP=254
+  triage:    precision@K(=n_pos)=0.3706  (lift x26.2 over random)
+──────────────────────────────────────────────────────────────────
+21:30:02 ── TEST ──────────────────────────────────────────────────────────
+  events=60,664  positives=779  pos_rate=1.28%
+  ranking:   AUROC=0.8969   AUPRC=0.4845   (baseline AP=0.0128, lift x37.7)
+  @thr=0.837:  F1=0.5549   P=0.9094   R=0.3992   MCC=0.5996
+  @thr=0.50:  F1=0.3040
+  confusion: TN=59,854  FP=31  FN=468  TP=311
+  triage:    precision@K(=n_pos)=0.4390  (lift x34.2 over random)
+──────────────────────────────────────────────────────────────────
+21:30:02 [eval] mean attention per edge, per provenance relation (what the model leans on, normalised for edge volume):
+21:30:02 [eval]   NET_TRIGGER       18.3%  #######
+21:30:02 [eval]   CONFIG_TRIGGER    18.0%  #######
+21:30:02 [eval]   PROCESS_CHILD     16.4%  ######
+21:30:02 [eval]   HOST_SEQUENCE     16.2%  ######
+21:30:02 [eval]   USER_SEQUENCE     16.0%  ######
+21:30:02 [eval]   SESSION_ACTION    15.1%  ######
+21:30:02 ── TEST (alt operating point: recall) ────────────────────────────
+  events=60,664  positives=779  pos_rate=1.28%
+  ranking:   AUROC=0.8969   AUPRC=0.4845   (baseline AP=0.0128, lift x37.7)
+  @thr=0.178:  F1=0.0690   P=0.0359   R=0.8703   MCC=0.1377
+  @thr=0.50:  F1=0.3040
+  confusion: TN=41,678  FP=18,207  FN=101  TP=678
+  triage:    precision@K(=n_pos)=0.4390  (lift x34.2 over random)
+──────────────────────────────────────────────────────────────────
+21:30:02 [eval] report -> runs\20260809_212153_rewire_retrain\eval_report.json
+21:30:02 [ctrl] done. Arms to compare: intact-trained RGAT (canonical run), rewired-trained RGAT (this run), features-only MLP baseline.
