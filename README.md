@@ -233,4 +233,15 @@ tools/train_rewired.py              retraining control: train from scratch on th
                                     within-split rewired graph (ablation done right)
 tests/                              focal loss, RGAT, sampler, generator, pipeline
 ```
+### Next steps
 
+To make it easier to understand where the model is working correctly and where failing I will build a result explorer that allows users to select incidents and display events it correctly identified, misclassified, or missed. 
+
+<img width="1841" height="934" alt="image" src="https://github.com/user-attachments/assets/b29346c7-0e60-4f4e-ae35-e9e953825488" />
+
+<img width="1213" height="499" alt="image" src="https://github.com/user-attachments/assets/16815146-0fff-481f-a77b-03d9ca9572e8" />
+
+<img width="1255" height="840" alt="image" src="https://github.com/user-attachments/assets/286b2dd1-bd35-4cd0-999e-3815a398c938" />
+
+If I succeed at improving the quality of data and it in turn leads to better results, eventually I will explore a few hybrid options to see if it would help with the edge cases it struggles to identify consistently.
+Before adding new elements or changing the design drastically, I would like to verify and confirm whether the missed events are due to model design or data engineering issues. 
