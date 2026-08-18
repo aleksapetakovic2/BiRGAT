@@ -109,11 +109,15 @@ def make_handler(runs_dir: str):
                     if not RUN_NAME_RE.match(name):
                         return self._not_found("invalid run name")
                     fpath = os.path.join(runs_dir, name, "viz_data.json")
-                    if not os.path.isfile(fpath):
+                    runs_root_real = os.path.realpath(runs_dir)
+                    fpath_real = os.path.realpath(fpath)
+                    if os.path.commonpath([runs_root_real, fpath_real]) != runs_root_real:
+                        return self._not_found("invalid run name")
+                    if not os.path.isfile(fpath_real):
                         return self._not_found(
                             f"no viz_data.json for '{name}' — run "
                             f"tools/export_predictions.py on it first")
-                    with open(fpath, "rb") as f:
+                    with open(fpath_real, "rb") as f:
                         self._send(200, f.read(),
                                    "application/json; charset=utf-8")
                 else:
