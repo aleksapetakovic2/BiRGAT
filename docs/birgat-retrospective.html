@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BiRGAT</title>
+<style>
+  :root{
+    --bg:#F4F6F9; --surface:#FFFFFF; --surface-2:#ECEFF4;
+    --ink:#16202C; --ink-soft:#3D4A59; --muted:#68747F;
+    --line:#D9DEE5; --accent:#B87A15; --accent-soft:#F0DDB8;
+    --cyan:#2A6F8E; --good:#2F855A; --bad:#C0392B; --chip:#E9EDF2;
+    --sans:-apple-system,"Segoe UI","Helvetica Neue",Roboto,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono","Cascadia Code","Roboto Mono",Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0C1219; --surface:#121A24; --surface-2:#18222E;
+      --ink:#DCE4EE; --ink-soft:#B0BCC9; --muted:#8A97A5;
+      --line:#24303E; --accent:#E5A83B; --accent-soft:#3A2E14;
+      --cyan:#4FB3C8; --good:#4CC38A; --bad:#E5564F; --chip:#1B2530;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0C1219; --surface:#121A24; --surface-2:#18222E;
+    --ink:#DCE4EE; --ink-soft:#B0BCC9; --muted:#8A97A5;
+    --line:#24303E; --accent:#E5A83B; --accent-soft:#3A2E14;
+    --cyan:#4FB3C8; --good:#4CC38A; --bad:#E5564F; --chip:#1B2530;
+  }
+
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--sans);font-size:15.5px;line-height:1.62;
+    -webkit-font-smoothing:antialiased}
+  ::selection{background:var(--accent-soft)}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 24px}
+  main{padding:8px 0 96px}
+
+  /* ---------- header / hero ---------- */
+  header.hero{border-bottom:1px solid var(--line);padding:56px 0 40px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--accent);margin:0 0 18px}
+  h1{font-size:clamp(38px,6vw,58px);line-height:1.02;margin:0 0 6px;
+    font-weight:800;letter-spacing:-.02em;text-wrap:balance}
+  .tagline{font-family:var(--mono);font-size:13.5px;color:var(--muted);margin:0 0 22px}
+  .lede{max-width:62ch;color:var(--ink-soft);font-size:17px;margin:0 0 30px}
+  .lede b{color:var(--ink)}
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;
+    padding:16px 18px}
+  .stat .v{font-family:var(--mono);font-size:26px;font-weight:700;
+    font-variant-numeric:tabular-nums;color:var(--ink)}
+  .stat .v em{font-style:normal;color:var(--accent)}
+  .stat .k{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);margin-top:4px}
+
+  /* ---------- sections ---------- */
+  section{margin-top:72px}
+  .sec-eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.2em;
+    text-transform:uppercase;color:var(--cyan);margin:0 0 10px}
+  h2{font-size:clamp(24px,3.4vw,32px);line-height:1.12;margin:0 0 16px;
+    font-weight:750;letter-spacing:-.015em;text-wrap:balance}
+  h3{font-size:18.5px;margin:34px 0 10px;font-weight:700;letter-spacing:-.01em}
+  p{margin:0 0 14px;color:var(--ink-soft);max-width:70ch}
+  p b,strong{color:var(--ink);font-weight:650}
+  .callout{border-left:3px solid var(--accent);background:var(--surface);
+    border-radius:0 8px 8px 0;padding:14px 18px;margin:22px 0;max-width:70ch}
+  .callout p{margin:0}
+  code{font-family:var(--mono);font-size:.86em;background:var(--chip);
+    border-radius:4px;padding:1px 6px;color:var(--ink)}
+  ul{margin:0 0 14px;padding-left:22px;color:var(--ink-soft)}
+  ul li{margin:6px 0;max-width:68ch}
+  ul li b{color:var(--ink)}
+
+  /* ---------- figures ---------- */
+  figure{margin:26px 0;background:var(--surface);border:1px solid var(--line);
+    border-radius:10px;padding:22px 22px 16px;overflow-x:auto}
+  figure svg{max-width:100%;height:auto;display:block;margin:0 auto}
+  figcaption{font-size:13px;color:var(--muted);margin-top:14px;line-height:1.5;
+    border-top:1px solid var(--line);padding-top:12px;max-width:78ch}
+  figcaption b{color:var(--ink-soft)}
+
+  /* ---------- tables ---------- */
+  .tbl{overflow-x:auto;margin:22px 0;border:1px solid var(--line);border-radius:10px}
+  table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:560px}
+  th,td{padding:10px 14px;text-align:right;border-bottom:1px solid var(--line);
+    font-variant-numeric:tabular-nums}
+  th:first-child,td:first-child{text-align:left}
+  thead th{font-family:var(--mono);font-size:11px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);background:var(--surface-2)}
+  tbody tr:last-child td{border-bottom:none}
+  td.hl{color:var(--accent);font-weight:700}
+  td.dim{color:var(--muted)}
+  tr.spot td{background:var(--surface-2)}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);margin-top:80px;padding:28px 0 0}
+  footer .wrap{padding-bottom:8px}
+  footer p{font-size:13px;color:var(--muted)}
+  .pill{display:inline-block;font-family:var(--mono);font-size:11px;
+    padding:2px 9px;border-radius:999px;border:1px solid var(--line);
+    color:var(--muted);background:var(--surface)}
+  .pill.a{color:var(--accent);border-color:var(--accent)}
+  @media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Project retrospective · personal notes</p>
+    <h1>BiRGAT</h1>
+    <p class="tagline">Bidirectional Relational Graph Attention · Sentinel incident detection</p>
+    <p class="lede">A graph neural network that classifies <b>events, not entities</b>,
+      as part-of-incident vs benign — so it learns the <b>shape of an attack chain</b>
+      instead of memorising that a specific IP or host is &ldquo;bad.&rdquo; Trained on a
+      synthetic Sentinel-like event stream, evaluated honestly, then fused with
+      entity-behaviour channels to reach high recall at a fraction of the analyst cost.</p>
+    <div class="stats">
+      <div class="stat"><div class="v">0.98</div><div class="k">test AUROC · RGAT alone</div></div>
+      <div class="stat"><div class="v"><em>96%</em> recall</div><div class="k">at 2% flagged · fused</div></div>
+      <div class="stat"><div class="v"><em>5&times;</em> cheaper</div><div class="k">flags vs RGAT baseline</div></div>
+      <div class="stat"><div class="v">0 leaks</div><div class="k">feature audit passed</div></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ============ 1. THE IDEA ============ -->
+  <section id="idea">
+    <p class="sec-eyebrow">01 · The core idea</p>
+    <h2>Why events as nodes, not entities</h2>
+    <p>Entity graphs (IP / host / account as nodes) push a model toward memorisation:
+      if port 8443 appears in three incidents, the easiest rule is
+      &ldquo;8443 = malicious forever.&rdquo; With <b>events as nodes</b>, the same port, host
+      and account appear in thousands of benign events too, so the only signal left is
+      the <b>topology and timing of the chain</b>. The design enforces this three ways:
+      node features carry <b>no unique identifiers</b> (only shared-vocabulary categories),
+      a <b>leakage audit</b> aborts training if any single feature nearly separates the
+      classes, and benign traffic deliberately contains <b>attack-shaped hard negatives</b>.</p>
+
+    <figure>
+      <svg viewBox="0 0 760 250" role="img"
+           aria-label="Entity graphs memorise entities; event graphs learn chain shape">
+        <defs>
+          <marker id="m1" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <!-- LEFT: entity graph -->
+        <g>
+          <text x="20" y="30" font-size="12" letter-spacing="2" fill="var(--muted)"
+                font-family="ui-monospace,Menlo,monospace">ENTITY GRAPH</text>
+          <circle cx="90" cy="110" r="26" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="90" y="114" font-size="11" text-anchor="middle" fill="currentColor">Host</text>
+          <circle cx="250" cy="80" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="250" y="84" font-size="10" text-anchor="middle" fill="currentColor">IP :8443</text>
+          <circle cx="250" cy="160" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="250" y="164" font-size="10" text-anchor="middle" fill="currentColor">Acct</text>
+          <line x1="116" y1="102" x2="226" y2="86" stroke="currentColor" stroke-width="1.3"/>
+          <line x1="116" y1="120" x2="227" y2="152" stroke="currentColor" stroke-width="1.3"/>
+          <text x="60" y="210" font-size="11.5" fill="var(--bad)">IP in 3 incidents &#8594; &ldquo;:8443 = malicious&rdquo;</text>
+          <text x="60" y="228" font-size="11" fill="var(--muted)">memorises the entity, not the behaviour</text>
+        </g>
+        <line x1="380" y1="40" x2="380" y2="230" stroke="var(--line)" stroke-width="1"/>
+        <!-- RIGHT: event graph -->
+        <g>
+          <text x="420" y="30" font-size="12" letter-spacing="2" fill="var(--muted)"
+                font-family="ui-monospace,Menlo,monospace">EVENT GRAPH (this project)</text>
+          <g fill="none" stroke="currentColor" stroke-width="1.4">
+            <circle cx="440" cy="120" r="9"/>
+            <circle cx="490" cy="95"  r="9"/>
+            <circle cx="540" cy="120" r="9"/>
+            <circle cx="590" cy="95"  r="9"/>
+            <circle cx="640" cy="120" r="9"/>
+          </g>
+          <g stroke="var(--accent)" stroke-width="1.6" fill="none">
+            <line x1="449" y1="116" x2="481" y2="99"  marker-end="url(#m1)"/>
+            <line x1="499" y1="99"  x2="531" y2="116" marker-end="url(#m1)"/>
+            <line x1="549" y1="116" x2="581" y2="99"  marker-end="url(#m1)"/>
+            <line x1="599" y1="99"  x2="631" y2="116" marker-end="url(#m1)"/>
+          </g>
+          <text x="420" y="160" font-size="11" fill="var(--muted)">same port/host appear in benign chains too;</text>
+          <text x="420" y="178" font-size="11.5" fill="var(--good)">only the incident&#8217;s chain shape differs &#8594; learnable</text>
+        </g>
+      </svg>
+      <figcaption><b>The contrast that drives the design.</b> An entity graph lets the model
+        key off the entity itself (left). An event graph forces it to read the provenance
+        chain (right, highlighted), because every identifier is shared with benign traffic.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 2. HOW IT WORKS ============ -->
+  <section id="model">
+    <p class="sec-eyebrow">02 · How it works</p>
+    <h2>A provenance graph, sampled in both time directions</h2>
+    <p>Each event is a node. Six typed, directed, time-stamped relations connect events
+      the way the future KQL <code>make-graph</code> stage will: process lineage, session
+      actions, host/user sequences, network correlation, and config-spawns-process. The
+      model is a <b>relational Graph Attention Network</b> (per-relation projections and
+      attention, temporal edge-feature bias) trained with focal loss over whole sampled
+      subgraphs. Crucially, sampling is <b>bidirectional</b>: a seed event aggregates messages
+      from its causal past <em>and</em> its consequences downstream.</p>
+
+    <figure>
+      <svg viewBox="0 0 760 200" role="img"
+           aria-label="A short attack chain of five events joined by labelled provenance edges">
+        <defs>
+          <marker id="m2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 z" fill="currentColor"/>
+          </marker>
+          <marker id="m2b" markerWidth="8" markerHeight="8" refX="1" refY="3" orient="auto">
+            <path d="M6,0 L0,3 L6,6 z" fill="var(--cyan)"/>
+          </marker>
+        </defs>
+        <g font-family="ui-monospace,Menlo,monospace">
+          <!-- nodes -->
+          <g>
+            <circle cx="70"  cy="110" r="20" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="230" cy="110" r="20" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="390" cy="110" r="20" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="550" cy="110" r="20" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+            <circle cx="700" cy="110" r="20" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+          </g>
+          <g font-size="9.5" text-anchor="middle" fill="var(--ink)">
+            <text x="70"  y="113">SignIn</text>
+            <text x="230" y="107">Process</text><text x="230" y="118">Create</text>
+            <text x="390" y="107">Process</text><text x="390" y="118">Create</text>
+            <text x="550" y="107">Network</text><text x="550" y="118">Conn</text>
+            <text x="700" y="107">File</text><text x="700" y="118">Activity</text>
+          </g>
+          <!-- forward edges -->
+          <g stroke="currentColor" stroke-width="1.4">
+            <line x1="92"  y1="104" x2="206" y2="104" marker-end="url(#m2)"/>
+            <line x1="252" y1="104" x2="366" y2="104" marker-end="url(#m2)"/>
+            <line x1="412" y1="104" x2="526" y2="104" marker-end="url(#m2)"/>
+            <line x1="572" y1="104" x2="676" y2="104" marker-end="url(#m2)"/>
+          </g>
+          <!-- reversed future edges (bidirectional) -->
+          <g stroke="var(--cyan)" stroke-width="1.2" stroke-dasharray="4 3">
+            <line x1="206" y1="122" x2="92"  y2="122" marker-end="url(#m2b)"/>
+            <line x1="526" y1="122" x2="412" y2="122" marker-end="url(#m2b)"/>
+          </g>
+          <g font-size="9" text-anchor="middle" fill="var(--muted)">
+            <text x="149" y="96">SESSION_ACTION</text>
+            <text x="309" y="96">PROCESS_CHILD</text>
+            <text x="469" y="96">HOST_SEQUENCE</text>
+            <text x="624" y="96">NET_TRIGGER</text>
+            <text x="149" y="138" fill="var(--cyan)">future msg.</text>
+            <text x="469" y="138" fill="var(--cyan)">future msg.</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>A fragment of an incident chain.</b> Solid arrows are the forward
+        provenance edges; dashed cyan arrows are the same edges emitted in reverse so a
+        seed also hears from what it <em>led to</em>. This is why chain-start events (phishing
+        click, first beacon) — which have no malicious past — are still detectable.</figcaption>
+    </figure>
+
+    <p>The six relations: <code>PROCESS_CHILD</code> (parent&#8594;child process),
+      <code>SESSION_ACTION</code> (sign-in&#8594;its actions), <code>HOST_SEQUENCE</code> and
+      <code>USER_SEQUENCE</code> (consecutive events on a host / by an account),
+      <code>NET_TRIGGER</code> (a connection&#8594;activity it triggers on the destination host),
+      and <code>CONFIG_TRIGGER</code> (a registry/service change&#8594;the process it later spawns).</p>
+
+    <div class="callout"><p><b>Anti-cheat guarantees.</b> A leakage audit computes the
+      single-feature AUC of every feature on the train split and aborts if any approaches
+      0.95 (top feature measured 0.60). A features-only MLP baseline and an edge-rewire
+      ablation confirm the gain really comes from the graph, not from leaked features.</p></div>
+  </section>
+
+  <!-- ============ 3. SEEING IT ============ -->
+  <section id="viz">
+    <p class="sec-eyebrow">03 · Seeing the results</p>
+    <h2>A localhost explorer for &ldquo;which events flared up&rdquo;</h2>
+    <p>Because the point is to inspect <em>which events</em> the model flags, the run ships
+      with a small stdlib-only dashboard. <code>tools/export_predictions.py</code> re-runs the
+      exact training-time evaluation and joins each held-out test event with its incident
+      metadata; <code>tools/serve_viz.py</code> serves it. The dashboard shows a score-vs-time
+      timeline (flares above the threshold), per-template catch, per-incident chains with
+      provenance edges, and a score-source switcher to compare the RGAT against each fusion
+      operating point. Everything recomputes as you drag the threshold.</p>
+    <p><code>python tools/export_predictions.py runs/&lt;run&gt;</code> &nbsp;then&nbsp;
+      <code>python tools/serve_viz.py</code> &nbsp;&#8594;&nbsp; <code>http://localhost:8123</code></p>
+  </section>
+
+  <!-- ============ 4. BLIND SPOTS ============ -->
+  <section id="blindspots">
+    <p class="sec-eyebrow">04 · Honest weaknesses</p>
+    <h2>The blind spots: beacon and valid-account abuse</h2>
+    <p>The RGAT works, but error analysis pinned its residual misses to two deliberately-hard
+      templates. At the precision-focused (F1) operating point, <b>valid-account abuse is
+      missed 93% of the time and beaconing 76%</b>, while exploit-web and service-lateral are
+      nearly perfect. Both hard templates overlap benign traffic by design — service accounts
+      genuinely beacon and move gigabytes; admins genuinely use valid accounts laterally.</p>
+
+    <figure>
+      <svg viewBox="0 0 660 220" role="img"
+           aria-label="Bar chart of miss rate per attack template; valid-account 93 percent and beacon 76 percent are the worst">
+        <g font-family="ui-monospace,Menlo,monospace" font-size="11">
+          <!-- bars -->
+          <g>
+            <text x="10" y="34"  fill="currentColor">T3 valid_account</text>
+            <rect x="180" y="22" width="390" height="18" fill="var(--bad)"/>
+            <text x="578" y="35" fill="var(--bad)" font-weight="700">93%</text>
+
+            <text x="10" y="72"  fill="currentColor">T4 beacon_persist</text>
+            <rect x="180" y="60" width="319" height="18" fill="var(--bad)" opacity="0.8"/>
+            <text x="507" y="73" fill="var(--bad)" font-weight="700">76%</text>
+
+            <text x="10" y="110" fill="currentColor">T1 phishing</text>
+            <rect x="180" y="98" width="134" height="18" fill="var(--cyan)"/>
+            <text x="322" y="111" fill="var(--muted)">32%</text>
+
+            <text x="10" y="148" fill="currentColor">T2 exploit_web</text>
+            <rect x="180" y="136" width="63" height="18" fill="var(--cyan)" opacity="0.7"/>
+            <text x="251" y="149" fill="var(--muted)">15%</text>
+
+            <text x="10" y="186" fill="currentColor">T5 service_lateral</text>
+            <rect x="180" y="174" width="42" height="18" fill="var(--cyan)" opacity="0.5"/>
+            <text x="230" y="187" fill="var(--muted)">10%</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Per-template miss rate at the F1 operating point (full run).</b>
+        The two engineered-to-overlap templates dominate the errors; the other three are
+        largely solved by topology alone.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 5. ENTITY GO/NO-GO ============ -->
+  <section id="entity">
+    <p class="sec-eyebrow">05 · The entity question</p>
+    <h2>Does entity behaviour carry signal &mdash; without memorising?</h2>
+    <p>The blind templates are distinguishable by <b>entity-level behaviour over time</b>
+      (an account behaving against its own baseline, a host beaconing on a clock), which no
+      single event can see. The fear was that an entity model just reintroduces the
+      memorisation trap. The go/no-go tested it directly: build <b>behavioural</b> entity
+      windows (cadence, fan-out, event mix, burstiness &mdash; no identity) and score every
+      window with a model that <b>never saw that entity</b>. Signal generalises strongly to
+      completely unseen entities, so it is behaviour, not identity.</p>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>window</th><th>host AUPRC (unseen)</th><th>user AUPRC (unseen)</th><th>lift vs baseline</th></tr></thead>
+        <tbody>
+          <tr><td>1 h</td><td>0.50</td><td>0.56</td><td class="dim">&times;19&ndash;25</td></tr>
+          <tr><td>2 h</td><td>0.63</td><td>0.66</td><td class="dim">&times;25&ndash;29</td></tr>
+          <tr><td>4 h</td><td>0.70</td><td>0.70</td><td class="dim">&times;27&ndash;30</td></tr>
+          <tr class="spot"><td><b>8 h</b></td><td class="hl">0.78</td><td class="hl">0.86</td><td class="hl">&times;27&ndash;37</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============ 6. FUSION ============ -->
+  <section id="fusion">
+    <p class="sec-eyebrow">06 · The hybrid</p>
+    <h2>Fusing event scores with entity behaviour</h2>
+    <p>Three channels feed a thin combiner: the RGAT event score, a multi-scale
+      <b>aggregate</b> entity branch, and a <b>sequence</b> branch. The long-window aggregate
+      (<code>agg480</code>) is the <b>beacon lever</b>; the sequence branch is the
+      <b>valid-account lever</b>. Combiners are fit on validation only, never on test.</p>
+
+    <figure>
+      <svg viewBox="0 0 760 250" role="img"
+           aria-label="Data flow from events through three channels into a combiner producing flagged events">
+        <defs>
+          <marker id="m3" markerWidth="9" markerHeight="9" refX="7" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g font-family="ui-monospace,Menlo,monospace">
+          <!-- source -->
+          <rect x="20" y="100" width="120" height="50" rx="7" fill="none" stroke="currentColor" stroke-width="1.5"/>
+          <text x="80" y="121" font-size="11.5" text-anchor="middle" fill="currentColor">events</text>
+          <text x="80" y="137" font-size="9.5" text-anchor="middle" fill="var(--muted)">provenance graph</text>
+          <!-- channels -->
+          <rect x="250" y="20"  width="200" height="52" rx="7" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="350" y="42" font-size="11.5" text-anchor="middle" fill="currentColor">RGAT event score</text>
+          <text x="350" y="58" font-size="9.5" text-anchor="middle" fill="var(--muted)">topology, bidirectional</text>
+
+          <rect x="250" y="99"  width="200" height="52" rx="7" fill="none" stroke="currentColor" stroke-width="1.3"/>
+          <text x="350" y="121" font-size="11.5" text-anchor="middle" fill="currentColor">aggregate entity branch</text>
+          <text x="350" y="137" font-size="9.5" text-anchor="middle" fill="var(--accent)">agg480 = beacon lever</text>
+
+          <rect x="250" y="178" width="200" height="52" rx="7" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+          <text x="350" y="200" font-size="11.5" text-anchor="middle" fill="currentColor">sequence branch</text>
+          <text x="350" y="216" font-size="9.5" text-anchor="middle" fill="var(--accent)">seq = valid-account lever</text>
+          <!-- combiner -->
+          <rect x="530" y="100" width="110" height="50" rx="7" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.8"/>
+          <text x="585" y="121" font-size="11.5" text-anchor="middle" fill="currentColor">combiner</text>
+          <text x="585" y="137" font-size="9.5" text-anchor="middle" fill="var(--muted)">fit on val only</text>
+          <!-- output -->
+          <rect x="690" y="100" width="52" height="50" rx="7" fill="none" stroke="var(--good)" stroke-width="1.6"/>
+          <text x="716" y="121" font-size="10" text-anchor="middle" fill="var(--good)">flag</text>
+          <text x="716" y="136" font-size="10" text-anchor="middle" fill="var(--good)">events</text>
+          <!-- edges -->
+          <g stroke="currentColor" stroke-width="1.3" fill="none">
+            <path d="M140,115 C190,110 210,46 248,46"  marker-end="url(#m3)"/>
+            <path d="M140,125 L248,125" marker-end="url(#m3)"/>
+            <path d="M140,135 C190,140 210,204 248,204" marker-end="url(#m3)"/>
+            <path d="M450,46  C490,46 505,110 528,118" marker-end="url(#m3)"/>
+            <path d="M450,125 L528,125" marker-end="url(#m3)"/>
+            <path d="M450,204 C490,204 505,140 528,132" marker-end="url(#m3)"/>
+            <path d="M640,125 L688,125" marker-end="url(#m3)"/>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>Fusion data flow.</b> Each channel contributes a different slice of the
+        signal; the combiner merges them into one operating score. Highlighted boxes mark the
+        two levers that target the blind templates.</figcaption>
+    </figure>
+
+    <figure>
+      <svg viewBox="0 0 660 350" role="img"
+           aria-label="Line chart of recall versus percent of events flagged; the fusion curve is far above the RGAT curve">
+        <g font-family="ui-monospace,Menlo,monospace">
+          <!-- grid + axes -->
+          <g stroke="var(--line)" stroke-width="1">
+            <line x1="60" y1="244" x2="620" y2="244"/><line x1="60" y1="188" x2="620" y2="188"/>
+            <line x1="60" y1="132" x2="620" y2="132"/><line x1="60" y1="76"  x2="620" y2="76"/>
+            <line x1="60" y1="20"  x2="620" y2="20"/>
+          </g>
+          <g font-size="10" fill="var(--muted)" text-anchor="end">
+            <text x="52" y="304">0.5</text><text x="52" y="248">0.6</text><text x="52" y="192">0.7</text>
+            <text x="52" y="136">0.8</text><text x="52" y="80">0.9</text><text x="52" y="24">1.0</text>
+          </g>
+          <g font-size="10" fill="var(--muted)" text-anchor="middle">
+            <text x="60" y="322">0</text><text x="184" y="322">2</text><text x="309" y="322">4</text>
+            <text x="433" y="322">6</text><text x="558" y="322">8</text>
+            <text x="340" y="342">&#37; of events flagged (investigation cost)</text>
+          </g>
+          <text x="26" y="160" font-size="10" fill="var(--muted)" transform="rotate(-90 26 160)" text-anchor="middle">recall</text>
+          <!-- RGAT curve -->
+          <polyline points="141,203 153,194 184,167 247,134 583,59"
+                    fill="none" stroke="var(--muted)" stroke-width="2"/>
+          <circle cx="583" cy="59" r="4" fill="var(--muted)"/>
+          <!-- fusion curve -->
+          <polyline points="141,98 153,71 166,50 184,40 247,30"
+                    fill="none" stroke="var(--accent)" stroke-width="2.6"/>
+          <circle cx="184" cy="40" r="4.5" fill="var(--accent)"/>
+          <!-- labels -->
+          <text x="200" y="30" font-size="11.5" fill="var(--accent)" font-weight="700">fusion: 96% recall @ 2% flagged</text>
+          <text x="470" y="48" font-size="11" fill="var(--muted)">RGAT needs 8.4% for 93%</text>
+        </g>
+      </svg>
+      <figcaption><b>Recall vs investigation cost.</b> For any flag budget, the fusion catches
+        far more of the incident. At 2% flagged the fusion reaches 96% recall while the RGAT
+        is still at ~74%; the RGAT must flag 8.4% of all events to reach 93%.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 7. SEQUENCE MODEL & VA LIFT ============ -->
+  <section id="sequence">
+    <p class="sec-eyebrow">07 · Fixing valid-account</p>
+    <h2>The sequence model lifts the hardest template</h2>
+    <p>An earlier read claimed valid-account was an irreducible floor. That was a comparison
+      artifact &mdash; it had compared at <em>matched recall</em>, where the fusion&rsquo;s budget is so
+      tight that valid-account is sacrificed first. The honest comparison is at a
+      <b>matched flag budget</b>, and there the sequence branch wins: it separates valid-account
+      from benign at <b>AUC 0.98</b> (the best channel), because valid-account abuse is an
+      <em>ordered</em> chain. The sequence model is a <b>bidirectional GRU with attention pooling</b>,
+      trained with focal loss, so it can focus on the suspicious sub-sequence instead of
+      averaging it away.</p>
+
+    <figure>
+      <svg viewBox="0 0 660 250" role="img"
+           aria-label="Grouped bars at a 2 percent flag budget: fusion beats RGAT on both valid-account and beacon recall">
+        <g font-family="ui-monospace,Menlo,monospace">
+          <line x1="60" y1="200" x2="620" y2="200" stroke="var(--line)" stroke-width="1"/>
+          <!-- VA group -->
+          <text x="180" y="228" font-size="11.5" text-anchor="middle" fill="currentColor">valid-account</text>
+          <rect x="120" y="152" width="52" height="48"  fill="var(--muted)"/>
+          <rect x="180" y="54"  width="52" height="146" fill="var(--accent)"/>
+          <text x="146" y="146" font-size="10.5" text-anchor="middle" fill="var(--muted)">30%</text>
+          <text x="206" y="48"  font-size="11" text-anchor="middle" fill="var(--accent)" font-weight="700">91%</text>
+          <!-- beacon group -->
+          <text x="450" y="228" font-size="11.5" text-anchor="middle" fill="currentColor">beacon</text>
+          <rect x="390" y="125" width="52" height="75"  fill="var(--muted)"/>
+          <rect x="450" y="58"  width="52" height="142" fill="var(--accent)"/>
+          <text x="416" y="119" font-size="10.5" text-anchor="middle" fill="var(--muted)">47%</text>
+          <text x="476" y="52"  font-size="11" text-anchor="middle" fill="var(--accent)" font-weight="700">89%</text>
+          <!-- legend -->
+          <g font-size="10.5">
+            <rect x="250" y="18" width="12" height="12" fill="var(--muted)"/>
+            <text x="268" y="28" fill="var(--muted)">RGAT @ 2% flagged</text>
+            <rect x="400" y="18" width="12" height="12" fill="var(--accent)"/>
+            <text x="418" y="28" fill="currentColor">fusion @ 2% flagged</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption><b>At the same 2% flag budget</b> the fusion catches 91% of valid-account
+        events (RGAT: 30%) and 89% of beacon (RGAT: 47%). Ablation isolates the lever: remove
+        the sequence channel and valid-account drops 91% &#8594; 67%.</figcaption>
+    </figure>
+
+    <div class="tbl">
+      <table>
+        <thead><tr><th>operating point</th><th>recall</th><th>flagged</th><th>valid-acct</th><th>beacon</th></tr></thead>
+        <tbody>
+          <tr><td>RGAT-only</td><td>93.1%</td><td class="dim">8.4%</td><td>86.5%</td><td>80.6%</td></tr>
+          <tr class="spot"><td><b>balanced</b> (recommended)</td><td>94.6%</td><td class="hl">1.7%</td><td class="hl">86.5%</td><td>84.5%</td></tr>
+          <tr><td>balanced &middot; higher recall</td><td>97.3%</td><td>2.7%</td><td class="hl">93.7%</td><td>90.3%</td></tr>
+          <tr><td>max-efficiency (+agg480)</td><td>94.7%</td><td class="hl">1.6%</td><td>81.7%</td><td class="hl">90.3%</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The <b>balanced</b> point matches the RGAT&rsquo;s valid-account recall (86.5%) at ~5&times;
+      less flagging, with better beacon too. Its higher-recall sibling <b>exceeds</b> the RGAT
+      on valid-account (93.7% vs 86.5%) at 2.7% flagged. Max-efficiency buys more beacon at the
+      cost of some valid-account. All thresholds were tuned on validation only.</p>
+  </section>
+
+  <!-- ============ 8. NEXT: REAL DATA / AUTOMATION ============ -->
+  <section id="next">
+    <p class="sec-eyebrow">08 · Where it goes next</p>
+    <h2>Toward real Sentinel data &amp; automation</h2>
+    <p>The model is trained on synthetic data, so real-data transfer is unproven until tested
+      &mdash; that is the next milestone. The intended automation path is <b>near-real-time,
+      retrospective</b>: when a Sentinel incident fires (alerts carry <code>startTime</code>/
+      <code>endTime</code>), fetch the surrounding hours of events, build the provenance graph,
+      and score it with the trained model. Because the window is already complete, the
+      bidirectional context is fully available &mdash; this sidesteps the &ldquo;not for streaming
+      triage&rdquo; caveat in the README.</p>
+
+    <figure>
+      <svg viewBox="0 0 780 150" role="img"
+           aria-label="Automation flow from incident firing to flagged events">
+        <defs>
+          <marker id="m4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L6,3 L0,6 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g font-family="ui-monospace,Menlo,monospace" text-anchor="middle">
+          <rect x="10"  y="45" width="130" height="60" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="75" y="70" font-size="11" fill="currentColor">incident fires</text>
+          <text x="75" y="86" font-size="9" fill="var(--muted)">alert start/end</text>
+
+          <rect x="170" y="45" width="140" height="60" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="240" y="66" font-size="11" fill="currentColor">fetch events</text>
+          <text x="240" y="82" font-size="9" fill="var(--muted)">[start&#8722;buf, end+buf]</text>
+
+          <rect x="340" y="45" width="140" height="60" rx="7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+          <text x="410" y="66" font-size="11" fill="currentColor">build graph</text>
+          <text x="410" y="82" font-size="9" fill="var(--muted)">6 relations</text>
+
+          <rect x="510" y="45" width="140" height="60" rx="7" fill="none" stroke="var(--accent)" stroke-width="1.6"/>
+          <text x="580" y="66" font-size="11" fill="currentColor">run RGAT</text>
+          <text x="580" y="82" font-size="9" fill="var(--muted)">bidirectional</text>
+
+          <rect x="680" y="45" width="90" height="60" rx="7" fill="none" stroke="var(--good)" stroke-width="1.6"/>
+          <text x="725" y="70" font-size="11" fill="var(--good)">flag</text>
+          <text x="725" y="86" font-size="9" fill="var(--good)">events</text>
+
+          <g stroke="currentColor" stroke-width="1.3">
+            <line x1="140" y1="75" x2="166" y2="75" marker-end="url(#m4)"/>
+            <line x1="310" y1="75" x2="336" y2="75" marker-end="url(#m4)"/>
+            <line x1="480" y1="75" x2="506" y2="75" marker-end="url(#m4)"/>
+            <line x1="650" y1="75" x2="676" y2="75" marker-end="url(#m4)"/>
+          </g>
+          <text x="390" y="132" font-size="10" fill="var(--muted)">window is retrospective &#8594; each event&#8217;s future is present, bidirectional sampling valid</text>
+        </g>
+      </svg>
+      <figcaption><b>Near-real-time automation flow.</b> Inference-only &mdash; reuse the trained
+        model, no retraining. Design considerations: buffer sizing, entity branches wanting
+        longer lookback than the incident window, and recalibrating the threshold on real data.</figcaption>
+    </figure>
+
+    <h3>Open considerations</h3>
+    <ul>
+      <li><b>Synthetic &rarr; real transfer is unvalidated.</b> Treat early real-data results as calibration, not production truth.</li>
+      <li><b>Real data needs labels for evaluation.</b> Inference/demo mode needs none; metrics need incident-membership labels (keep alert rows out of features to avoid leaking the detection itself).</li>
+      <li><b>A real-data loader is the missing code half</b> &mdash; mapping exported Sentinel tables to the schema and building the six edge relations (<code>docs/kql_contract.md</code>).</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p><span class="pill a">analysis-only probes</span> &nbsp;
+        <span class="pill">entity_probe.py</span> <span class="pill">fusion_probe.py</span>
+        <span class="pill">sequence_probe.py</span> <span class="pill">dump_scores.py</span>
+        <span class="pill">score_search.py</span> <span class="pill">serve_viz.py</span></p>
+      <p>Personal retrospective &middot; numbers from the full 28-day run
+        (<code>20260809_211146_full_production</code>) &middot; all thresholds tuned on validation, never on test.</p>
+    </div>
+  </footer>
+
+</main>
+</body>
+</html>
