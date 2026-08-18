@@ -324,15 +324,17 @@ budget on high-confidence events, and valid-account events score low on **both**
 channels. That is a deliberate, tunable trade — not a bug — as the sequence
 branch shows.
 
-### Sequence branch: ordering for valid-account, without the trade
+### Sequence branch: ordering for valid-account
 
 The window-aggregate branch loses event ORDER, which is exactly what separates a
 remote-sign-in → encoded-process → discovery → exfil chain from ordinary admin
-work. `tools/sequence_probe.py` runs a small GRU over each entity's *ordered*
-event stream (same temporal-honest protocol). It is a better window classifier
-than aggregates (host AUPRC 0.87 vs ~0.70) and — uniquely — does **not**
-sacrifice valid-account. It is weaker on beacon than the long-window aggregate,
-so the two branches are complementary, not interchangeable.
+work. `tools/sequence_probe.py` runs a **bidirectional GRU with attention
+pooling** over each entity's *ordered* event stream (same temporal-honest
+protocol), trained with focal loss. Attention lets it focus on the suspicious
+sub-sequence instead of averaging it away. It is a strong window classifier
+(host AUPRC ~0.91, stable across seeds) and — unlike the long-window aggregate —
+does not sacrifice valid-account. It is weaker on beacon than the long-window
+aggregate, so the two branches are complementary, not interchangeable.
 
 Fusing the RGAT score with the aggregate + sequence channels
 (`tools/dump_scores.py` persists channel scores once; `tools/score_search.py`
@@ -342,22 +344,24 @@ recall at overall recall 0.93):
 | operating point | combiner | AUPRC | flags @ R=0.93 | valid-account | beacon |
 |---|---|---:|---:|---:|---:|
 | RGAT-only | — | 0.76 | 8.4% | 86.5% | 80.6% |
-| max efficiency | agg120+agg480+seq, GBM | 0.95 | 1.5% | 75% (−11) | 87% (+7) |
-| **balanced (recommended)** | agg480+seq, GBM | 0.94 | 1.5% | 82% (−5) | 85% (+4) |
-| valid-account-preserving | seq-only, logistic | 0.84 | 3.9% | 86% (≈RGAT) | 82% (+1) |
+| max efficiency | agg120+agg480+seq, GBM | 0.95 | 1.5% | 77% (−10) | 83% (+3) |
+| **balanced (recommended)** | agg120+seq, GBM | 0.93 | 1.6% | 82% (−4) | 81% (≈RGAT) |
+| valid-account-preserving | agg120+seq, logistic | 0.92 | 2.1% | 86% (≈RGAT) | 75% (−6) |
 
-So: **90–95% recall at ~1.5% flagged** (vs the RGAT's 8.4%), beacon fixed, and
-valid-account either mostly preserved (balanced point, −5 points) or traded for
-maximum efficiency (−11 points). The lever is clean: the **agg480** (long-window)
-channel is what fixes beacon but costs valid-account; the **seq** channel is what
-preserves valid-account. Drop agg480 and you keep valid-account at its RGAT level
-at the price of a higher flag budget (3.9%); keep it and you get max efficiency.
-The `agg480+seq` GBM point is the sweet spot — nearly max efficiency with far
-less valid-account regression. (A plain logistic combiner avoids the GBM's mild
-overfit/selection but does not by itself preserve valid-account — that is set by
-the channel mix, not the combiner family.) Valid-account never exceeds its RGAT
-level under tight flag budgets — it is the genuinely-ambiguous,
-engineered-to-overlap template, and lifting it further is the open problem.
+So: **90–95% recall at ~1.5–2% flagged** (vs the RGAT's 8.4%). The lever is
+clean and now well-characterised: the **agg480** (long-window) channel is what
+boosts beacon but costs valid-account; the **seq** channel is what preserves
+valid-account. The **balanced** `agg120+seq` GBM point is the sweet spot — ~5×
+more efficient than the RGAT while keeping *both* valid-account and beacon near
+their RGAT levels. If valid-account matters most, the logistic
+`agg120+seq` point holds it at its RGAT level (86%) at 2.1% flagged, at the cost
+of beacon dropping below RGAT. No single operating point beats RGAT on *both*
+valid-account and beacon simultaneously while staying this cheap — the
+beacon/valid-account trade-off is real, because the two templates lean on
+different entity signals. Valid-account never exceeds its RGAT level under tight
+flag budgets: it is the genuinely-ambiguous, engineered-to-overlap template, and
+lifting it further (e.g. richer sequence features or a template-aware combiner)
+is the open problem.
 
 **Architecture this implies** (drop-in, no RGAT retraining): keep the RGAT event
 scorer; add entity behavioural branches (host + user, aggregate + sequence,
@@ -410,7 +414,8 @@ tests/                              focal loss, RGAT, sampler, generator, pipeli
 ```
 ### Next steps
 
-To make it easier to understand where the model is working correctly and where failing I will build a result explorer that allows users to select incidents and display events it correctly identified, misclassified, or missed. The following images might be outdated:
+To make it easier to understand where the model is working correctly and where failing I will build a result explorer that allows users to select incidents and display events it correctly identified, misclassified, or missed. 
+The following images might be outdated:
 
 <img width="1840" height="784" alt="image" src="https://github.com/user-attachments/assets/86ced672-5431-44e9-af34-971a4a671af1" />
 

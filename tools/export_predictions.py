@@ -239,6 +239,40 @@ def main() -> int:
     print("[viz] writing per-event descriptions ...")
     events["d"] = [describe_event(int(i), c, tab) for i in te_idx]
 
+    # ------------------------------------------------- fusion scores (optional)
+    # if tools/dump_scores.py has persisted channel scores + fitted combiners for
+    # this run, embed the per-event fused scores so the dashboard can switch
+    # between the RGAT-only score and each fusion operating point.
+    fusion_models = []
+    scores_npz = os.path.join(run, "scores.npz")
+    if os.path.exists(scores_npz):
+        sc = np.load(scores_npz)
+        recipes = [
+            ("balanced", "fuse_balanced",
+             "event×entity fusion · balanced (agg120+seq, GBM)"),
+            ("maxeff", "fuse_maxeff",
+             "event×entity fusion · max-efficiency (agg120+agg480+seq, GBM)"),
+            ("vapreserve", "fuse_vapreserve",
+             "event×entity fusion · valid-account-preserving (agg120+seq, logistic)"),
+        ]
+        for key, arr, label in recipes:
+            if f"{arr}_te" not in sc.files:
+                continue
+            fte = sc[f"{arr}_te"]
+            if len(fte) != len(te_idx):
+                print(f"[viz] WARNING: scores.npz {arr} length mismatch — skipping")
+                continue
+            events[f"s_{key}"] = np.round(fte.astype(np.float64), 5).tolist()
+            fusion_models.append({
+                "key": key, "label": label,
+                "threshold": float(sc[f"{arr}_thr"]) if f"{arr}_thr" in sc.files else 0.5,
+                "recall_threshold": float(sc[f"{arr}_rthr"]) if f"{arr}_rthr" in sc.files else None,
+            })
+        if fusion_models:
+            print(f"[viz] merged fusion score channels: {[m['key'] for m in fusion_models]}")
+    else:
+        print("[viz] no scores.npz — RGAT-only (run tools/dump_scores.py for fusion)")
+
     # ------------------------------------------------- per-incident summary
     te_set = set(te_idx.tolist())
     incidents = []
@@ -301,6 +335,7 @@ def main() -> int:
             "relation_attention": {r: float(w) for r, w in zip(RELATIONS, rel_imp)},
             "eval_report": eval_report,
             "test_metrics_at_export": test_m.to_dict(),
+            "fusion_models": fusion_models,
         },
         "vocab": {
             "etypes": EVENT_TYPES,

@@ -58,8 +58,11 @@ def main() -> int:
     d = np.load(args.npz)
     y_va, y_te = d["y_va"], d["y_te"]; tpl = d["tpl_te"]
     p_va, p_te = d["p_va"], d["p_te"]
+    # base channels only: drop labels/template, the already-fitted fuse_* combiners,
+    # and the redundant aggmax (max of the agg scales)
     chan = sorted({k[:-3] for k in d.files
-                   if k.endswith("_te") and k[:-3] not in ("p", "y", "tpl")})
+                   if k.endswith("_te") and k[:-3] not in ("p", "y", "tpl")
+                   and not k.startswith("fuse") and k[:-3] != "aggmax"})
     print(f"[search] channels: {chan}")
     print(f"[search] test events={len(y_te):,} positives={int(y_te.sum())}")
 

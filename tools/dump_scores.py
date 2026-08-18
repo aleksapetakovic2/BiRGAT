@@ -35,6 +35,8 @@ def main() -> int:
     ap.add_argument("--seq-scales", default="240")
     ap.add_argument("--maxlen", type=int, default=80)
     ap.add_argument("--epochs", type=int, default=14)
+    ap.add_argument("--seq-version", default="v2", choices=["v1", "v2"],
+                    help="seq model: v1 mean+max GRU | v2 biGRU+attention")
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--out", default=None)
@@ -109,12 +111,64 @@ def main() -> int:
                 tab, entity, w, args.maxlen)
             ws = temporal_split((np.arange(n_win) + 0.5) * w, cfg.graph)
             sc, ap_s = train_sequence_model(seqs, lab, ws[win_id], X_t, cfg,
-                                            device, args.seed, epochs=args.epochs)
+                                            device, args.seed, epochs=args.epochs,
+                                            version=args.seq_version)
             grids[entity] = (sc, ent_id, win_id)
-            print(f"[dump] seq@{int(w)}[{entity}] AUPRC={ap_s:.4f}")
+            print(f"[dump] seq@{int(w)}[{entity}] ({args.seq_version}) AUPRC={ap_s:.4f}")
         node = node_from_grids(grids, w)
         channels[f"seq{int(w)}_va"] = node[va_idx]
         channels[f"seq{int(w)}_te"] = node[te_idx]
+
+    # ---------------- fitted fusion combiners (fit on VALIDATION only)
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.metrics import precision_recall_curve
+    from eprgat.metrics import search_threshold
+
+    y_va = y_all[va_idx]
+
+    def _val_f1_thr(sv):
+        prec, rec, thr = precision_recall_curve(y_va, sv)
+        f1 = np.where(prec + rec > 0, 2 * prec * rec / np.maximum(prec + rec, 1e-12), 0)
+        f1 = f1[:-1]
+        return float(thr[int(np.argmax(f1))]) if len(f1) else 0.5
+
+    def _val_recall_thr(sv, min_recall=0.90):
+        return float(search_threshold(y_va, sv, policy="recall", min_recall=min_recall))
+
+    def _feats(cols, split):
+        return np.stack([channels[f"{c}_{split}"] for c in cols], 1)
+
+    def _fit_combo(kind, cols):
+        fv, ft = _feats(cols, "va"), _feats(cols, "te")
+        if kind == "gbm":
+            m = HistGradientBoostingClassifier(
+                max_iter=200, learning_rate=0.05, max_depth=3, min_samples_leaf=25,
+                class_weight="balanced", random_state=0)
+        else:
+            m = LogisticRegression(class_weight="balanced")
+        m.fit(fv, y_va)
+        return m.predict_proba(fv)[:, 1], m.predict_proba(ft)[:, 1]
+
+    have = lambda c: (f"{c}_va" in channels)
+    recipes = []
+    # balanced: preserves both valid-account and beacon near RGAT level
+    if have("agg120") and have("seq240"):
+        recipes.append(("fuse_balanced", "gbm", ["p", "agg120", "seq240"]))
+    # max-efficiency: adds the long-window agg to boost beacon, at valid-account cost
+    if have("agg120") and have("agg480") and have("seq240"):
+        recipes.append(("fuse_maxeff", "gbm", ["p", "agg120", "agg480", "seq240"]))
+    # valid-account-preserving: logistic keeps valid-account at its RGAT level
+    if have("agg120") and have("seq240"):
+        recipes.append(("fuse_vapreserve", "log", ["p", "agg120", "seq240"]))
+    for name, kind, cols in recipes:
+        sv, st = _fit_combo(kind, cols)
+        channels[f"{name}_va"], channels[f"{name}_te"] = sv, st
+        channels[f"{name}_thr"] = np.array(_val_f1_thr(sv))
+        channels[f"{name}_rthr"] = np.array(_val_recall_thr(sv))
+        print(f"[dump] {name} ({kind},{'+'.join(cols)}) val-f1-thr="
+              f"{channels[f'{name}_thr']:.3f}  val-recall-thr="
+              f"{channels[f'{name}_rthr']:.3f}")
 
     # ---------------- labels + template for the test events
     # template comes from viz_data if present, else -1
@@ -126,7 +180,7 @@ def main() -> int:
         tpl_te = np.full(len(te_idx), -1)
 
     save = {**channels,
-            "y_va": y_all[va_idx], "y_te": y_all[te_idx],
+            "y_va": y_va, "y_te": y_all[te_idx],
             "tpl_te": tpl_te}
     np.savez_compressed(out, **save)
     print(f"[dump] wrote {out}  channels={[k for k in channels if k.endswith('_te')]}")

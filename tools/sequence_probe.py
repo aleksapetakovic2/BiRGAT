@@ -91,6 +91,36 @@ def make_model(feat_dim, hidden, device):
     return SeqModel().to(device)
 
 
+def make_model_v2(feat_dim, hidden, device):
+    """Sharper variant: bidirectional GRU + learned attention pooling.
+
+    Attention lets the model focus on the suspicious subsequence (e.g. the
+    remote-sign-in -> encoded-process -> exfil chain for valid-account abuse)
+    instead of averaging it away; the bi-GRU gives each step both its past and
+    its consequences."""
+    import torch.nn as nn
+
+    class SeqModelV2(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.gru = nn.GRU(feat_dim, hidden, batch_first=True, bidirectional=True)
+            self.attn = nn.Sequential(
+                nn.Linear(hidden * 2, hidden), nn.Tanh(), nn.Linear(hidden, 1))
+            self.head = nn.Sequential(
+                nn.Linear(hidden * 2, 32), nn.ReLU(), nn.Dropout(0.2),
+                nn.Linear(32, 1))
+
+        def forward(self, x, mask):           # x (B,L,F), mask (B,L)
+            h, _ = self.gru(x)                # (B,L,2H)
+            a = self.attn(h).squeeze(-1)      # (B,L)
+            a = a.masked_fill(~mask, -1e9)
+            w = torch.softmax(a, dim=1)       # (B,L)
+            ctx = (h * w.unsqueeze(-1)).sum(1)  # (B,2H)
+            return self.head(ctx).squeeze(-1)
+
+    return SeqModelV2().to(device)
+
+
 def collate(seqs, X, device):
     import torch
     L = max(len(s) for s in seqs)
@@ -104,7 +134,10 @@ def collate(seqs, X, device):
 
 
 def train_sequence_model(seqs, label, wsplit_win, X, cfg, device, seed,
-                         epochs=14, hidden=48, batch=64, neg_mult=4):
+                         epochs=14, hidden=48, batch=64, neg_mult=4,
+                         version="v2", focal=True):
+    """version: 'v1' mean+max GRU | 'v2' biGRU + attention pooling.
+    focal: use focal loss (sharper separation) instead of pos-weighted BCE."""
     import torch
     from sklearn.metrics import average_precision_score
     torch.manual_seed(seed)
@@ -113,11 +146,16 @@ def train_sequence_model(seqs, label, wsplit_win, X, cfg, device, seed,
     neg_idx = np.where(tr & (label == 0))[0]
     if len(pos_idx) == 0:
         return np.full(len(label), label.mean()), float("nan")
-    model = make_model(X.shape[1], hidden, device)
-    pw = torch.tensor([(label[tr] == 0).sum() / max(1, (label[tr] == 1).sum())],
-                      device=device)
+    mk = make_model_v2 if version == "v2" else make_model
+    model = mk(X.shape[1], hidden, device)
     opt = torch.optim.AdamW(model.parameters(), lr=2e-3, weight_decay=1e-3)
-    lossf = torch.nn.BCEWithLogitsLoss(pos_weight=pw)
+    if focal:
+        from eprgat.losses import FocalLoss
+        lossf = FocalLoss(gamma=2.0, alpha=0.75)
+    else:
+        pw = torch.tensor([(label[tr] == 0).sum() / max(1, (label[tr] == 1).sum())],
+                          device=device)
+        lossf = torch.nn.BCEWithLogitsLoss(pos_weight=pw)
     rng = np.random.default_rng(seed)
     model.train()
     for ep in range(epochs):
@@ -162,6 +200,10 @@ def main() -> int:
     ap.add_argument("--window", type=float, default=240.0)
     ap.add_argument("--maxlen", type=int, default=80)
     ap.add_argument("--epochs", type=int, default=14)
+    ap.add_argument("--version", default="v2", choices=["v1", "v2"],
+                    help="seq model: v1 mean+max GRU | v2 biGRU+attention")
+    ap.add_argument("--no-focal", action="store_true",
+                    help="use pos-weighted BCE instead of focal loss")
     ap.add_argument("--device", default="cpu")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--viz", default=None)
@@ -210,7 +252,8 @@ def main() -> int:
         ws = temporal_split((np.arange(n_win) + 0.5) * args.window, cfg.graph)
         sc, ap_seq = train_sequence_model(seqs, lab, ws[win_id],
                                           torch.from_numpy(X.astype(np.float32)),
-                                          cfg, device, args.seed, epochs=args.epochs)
+                                          cfg, device, args.seed, epochs=args.epochs,
+                                          version=args.version, focal=not args.no_focal)
         print(f"[seq] entity[{entity}] sequence temporal AUPRC={ap_seq:.4f} "
               f"(base {lab.mean():.4f}, {len(seqs):,} windows, {int(lab.sum())} pos)")
         seq_scores[entity] = (sc, ent_id, win_id, n_win)
