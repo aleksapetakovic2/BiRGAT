@@ -94,6 +94,8 @@
   <h1>BiRGAT <span class="dim">· test-result explorer</span></h1>
   <label class="muted" for="runSel" style="font-size:12px">run</label>
   <select id="runSel"></select>
+  <label class="muted" for="modelSel" style="font-size:12px">score</label>
+  <select id="modelSel"></select>
   <span id="runInfo" class="muted mono" style="font-size:12px"></span>
   <span style="flex:1"></span>
   <span class="muted" id="opPoint"></span>
@@ -109,6 +111,7 @@
 /* ============================ state ============================ */
 const S = {
   runs: [], run: null, data: null,
+  scoreKey: "p",            // active score array: "p" (RGAT) or "s_balanced"/...
   thr: 0.5,                 // active operating threshold
   thrMode: "primary",       // primary | recall | custom
   flaggedFilter: "all",     // all | tp | fp
@@ -119,6 +122,20 @@ const S = {
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"']/g, c =>
   ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* active score array for the selected model */
+const P = () => S.data.events[S.scoreKey];
+/* list of selectable score sources: RGAT-only + any fused channels present */
+function scoreSources(){
+  const m = S.data.meta;
+  const srcs = [{key:"p", label:"RGAT-only (per-event)", threshold:m.threshold,
+                 recall_threshold:m.threshold_recall, policy:m.threshold_policy}];
+  for(const fm of (m.fusion_models||[]))
+    srcs.push({key:"s_"+fm.key, label:fm.label, threshold:fm.threshold,
+               recall_threshold:(fm.recall_threshold??null), policy:"f1"});
+  return srcs;
+}
+const activeSource = () => scoreSources().find(s=>s.key===S.scoreKey) || scoreSources()[0];
 
 /* ============================ load ============================ */
 async function jget(u){
@@ -166,9 +183,24 @@ async function loadRun(name){
   catch(e){ $("#body").innerHTML = notice("Failed to load: "+esc(e.message)); return; }
   S.run = name; S.data = d; history.replaceState(null,"","#"+name);
   const m = d.meta;
-  S.thr = m.threshold; S.thrMode = "primary";
+  S.scoreKey = "p"; S.thr = m.threshold; S.thrMode = "primary";
   S.openInc = null; S.flaggedFilter = "all"; S.sort = {key:"p", dir:-1}; S.view = null;
+  // populate the score-source selector (RGAT-only + any fused channels)
+  const ms = $("#modelSel"); ms.innerHTML = "";
+  for(const s of scoreSources()){
+    const o = document.createElement("option");
+    o.value = s.key; o.textContent = s.label; ms.appendChild(o);
+  }
+  ms.value = S.scoreKey;
+  ms.onchange = () => setScoreSource(ms.value);
   $("#runInfo").textContent = `${m.n_events.toLocaleString()} test events · ${m.n_pos} positives · exported ${m.generated_at}`;
+  render();
+}
+
+function setScoreSource(key){
+  S.scoreKey = key;
+  const s = activeSource();
+  S.thr = s.threshold; S.thrMode = "primary";
   render();
 }
 
@@ -180,28 +212,64 @@ function fmtTs(ts){ const day=Math.floor(ts/1440), h=Math.floor(ts%1440/60), mn=
 
 // outcome codes: 1=TP 2=FP 3=FN 0=TN
 function outcomes(thr){
-  const e = S.data.events, n = e.p.length, o = new Uint8Array(n);
-  for(let i=0;i<n;i++){ const fl = e.p[i]>=thr;
+  const e = S.data.events, p = P(), n = p.length, o = new Uint8Array(n);
+  for(let i=0;i<n;i++){ const fl = p[i]>=thr;
     o[i] = e.y[i] ? (fl?1:3) : (fl?2:0); }
   return o;
 }
 
 function incidentStats(thr){
-  const e = S.data.events; const map = {};
+  const e = S.data.events, p = P(); const map = {};
   for(const inc of S.data.incidents) map[inc.id] = {n:0, flagged:0};
-  for(let i=0;i<e.p.length;i++){ const id=e.inc[i];
-    if(id>=0 && map[id]){ map[id].n++; if(e.p[i]>=thr) map[id].flagged++; } }
+  for(let i=0;i<p.length;i++){ const id=e.inc[i];
+    if(id>=0 && map[id]){ map[id].n++; if(p[i]>=thr) map[id].flagged++; } }
   return map;
+}
+
+/* ranking metrics of the ACTIVE score, computed in-browser */
+function auprcArr(y, s){
+  const idx=[...s.keys()].sort((a,b)=>s[b]-s[a]);
+  let tp=0,fp=0,ap=0; const totpos=y.reduce((a,b)=>a+b,0);
+  if(!totpos) return 0;
+  for(const i of idx){ if(y[i]){ tp++; ap+=tp/(tp+fp); } else fp++; }
+  return ap/totpos;
+}
+function aurocArr(y, s){
+  const idx=[...s.keys()].sort((a,b)=>s[a]-s[b]);
+  let rankSum=0,npos=0,nneg=0,i=0;
+  while(i<idx.length){ let j=i;
+    while(j<idx.length && s[idx[j]]===s[idx[i]]) j++;
+    const avg=(i+j+1)/2;
+    for(let k=i;k<j;k++){ if(y[idx[k]]){ rankSum+=avg; npos++; } else nneg++; }
+    i=j; }
+  if(!npos||!nneg) return 0;
+  return (rankSum-npos*(npos+1)/2)/(npos*nneg);
+}
+const precOf=(tp,fp)=>tp+fp>0?tp/(tp+fp):0;
+const recOf =(tp,fn)=>tp+fn>0?tp/(tp+fn):0;
+const f1Of  =(tp,fp,fn)=>{const p=precOf(tp,fp),r=recOf(tp,fn);return p+r>0?2*p*r/(p+r):0;};
+function countOutcomes(o){let tp=0,fp=0,fn=0;
+  for(let i=0;i<o.length;i++){if(o[i]===1)tp++;else if(o[i]===2)fp++;else if(o[i]===3)fn++;}
+  return [tp,fp,fn];}
+function updateKpiCounts(o){
+  const [tp,fp,fn]=countOutcomes(o);
+  if($("#kpiF1"))$("#kpiF1").textContent=f1Of(tp,fp,fn).toFixed(3);
+  if($("#kpiPrec"))$("#kpiPrec").textContent=precOf(tp,fp).toFixed(3);
+  if($("#kpiRec"))$("#kpiRec").textContent=recOf(tp,fn).toFixed(3);
+  if($("#kpiFlagged"))$("#kpiFlagged").textContent=(tp+fp).toLocaleString();
+  if($("#kpiMissed"))$("#kpiMissed").textContent=fn.toLocaleString();
 }
 
 /* ============================ render ============================ */
 function render(){
   const m = S.data.meta;
-  $("#opPoint").textContent =
-    `operating point: ${m.threshold_policy} thr=${m.threshold.toFixed(3)}  ·  recall≥${m.min_recall} thr=${m.threshold_recall.toFixed(3)}`;
+  const as = activeSource();
+  $("#opPoint").textContent = as.recall_threshold
+    ? `${as.label} · ${as.policy} thr=${as.threshold.toFixed(3)} · recall≥${m.min_recall} thr=${as.recall_threshold.toFixed(3)}`
+    : `${as.label} · val-tuned thr=${as.threshold.toFixed(3)}`;
   const o = outcomes(S.thr);
   const inc = incidentStats(S.thr);
-  let tp=0,fp=0,fn=0; for(let i=0;i<o.length;i++){ if(o[i]===1)tp++; else if(o[i]===2)fp++; else if(o[i]===3)fn++; }
+  const [tp,fp,fn] = countOutcomes(o);
 
   $("#body").innerHTML = `
     ${kpiRow(m,tp,fp,fn)}
@@ -216,8 +284,8 @@ function render(){
           <input type="range" id="thrSlide" min="0" max="1" step="0.001" value="${S.thr}">
           <span class="mono" id="thrVal">${S.thr.toFixed(3)}</span>
         </div>
-        <button id="opPrimary">F1 operating point</button>
-        <button id="opRecall">recall operating point</button>
+        <button id="opPrimary">primary operating point</button>
+        <button id="opRecall">higher-recall operating point</button>
         <button id="zoomReset" title="or double-click the chart">reset zoom</button>
         <span class="muted small">drag on the chart to zoom a time range · click a dot to open its incident</span>
       </div>
@@ -229,6 +297,14 @@ function render(){
         <span><span class="sw" style="background:var(--tn)"></span>true negative</span>
         <span><span class="sw" style="background:#5c2b2b"></span>ground-truth incident window</span>
       </div>
+    </div>
+
+    <div class="panel">
+      <h2>Per-template catch <span class="muted" id="tplModelName" style="text-transform:none;font-weight:400"></span></h2>
+      <div class="sub">Fraction of each attack template's positive events flagged at the current threshold
+        using the <b>active score</b>. Beacon (T4) and valid-account (T3) are the historic blind spots —
+        switch the score source above to compare RGAT vs the fusions.</div>
+      <div id="tplCatch"></div>
     </div>
 
     <div class="row">
@@ -288,18 +364,21 @@ function render(){
 }
 
 function kpiRow(m,tp,fp,fn){
-  const t = m.test_metrics_at_export || (m.eval_report&&m.eval_report.test) || {};
-  const lift = t.auprc && t.baseline_ap ? (t.auprc/t.baseline_ap) : null;
-  const tile = (v,lab,cls="") => `<div class="kpi ${cls}"><div class="v">${v}</div><div class="k">${lab}</div></div>`;
+  const p = P(), y = S.data.events.y;
+  const ap = auprcArr(y,p), au = aurocArr(y,p);
+  const posRate = y.reduce((a,b)=>a+b,0)/y.length;
+  const lift = posRate>0 ? ap/posRate : null;
+  const k = (id,v,lab,cls="") =>
+    `<div class="kpi ${cls}"><div class="v" id="${id}">${v}</div><div class="k">${lab}</div></div>`;
   return `<div class="grid kpis">
-    ${tile(t.auprc!=null?t.auprc.toFixed(3):"—","test AUPRC","good")}
-    ${tile(t.auroc!=null?t.auroc.toFixed(3):"—","test AUROC","good")}
-    ${tile(lift?lift.toFixed(0)+"×":"—","AUPRC lift vs baseline")}
-    ${tile(t.f1!=null?t.f1.toFixed(3):"—","F1 @ thr","good")}
-    ${tile(t.precision!=null?t.precision.toFixed(3):"—","precision")}
-    ${tile(t.recall!=null?t.recall.toFixed(3):"—","recall")}
-    ${tile((tp+fp).toLocaleString(),"flagged now", (fp>tp?"bad":"good"))}
-    ${tile(fn.toLocaleString(),"missed now", fn>0?"bad":"good")}
+    ${k("kpiAuprc",ap.toFixed(3),"AUPRC · active score","good")}
+    ${k("kpiAuroc",au.toFixed(3),"AUROC","good")}
+    ${k("kpiLift",lift?lift.toFixed(0)+"×":"—","AUPRC lift vs baseline")}
+    ${k("kpiF1",f1Of(tp,fp,fn).toFixed(3),"F1 @ thr","good")}
+    ${k("kpiPrec",precOf(tp,fp).toFixed(3),"precision")}
+    ${k("kpiRec",recOf(tp,fn).toFixed(3),"recall")}
+    ${k("kpiFlagged",(tp+fp).toLocaleString(),"flagged now",(fp>tp?"bad":"good"))}
+    ${k("kpiMissed",fn.toLocaleString(),"missed now",fn>0?"bad":"good")}
   </div>`;
 }
 
@@ -320,12 +399,30 @@ function renderModelInfo(m){
 
 /* ============================ timeline canvas ============================ */
 function redraw(o, inc){
-  drawTimeline(o); renderIncList(inc); renderTables(o);
+  drawTimeline(o); renderTemplateCatch(o); renderIncList(inc); renderTables(o);
   if(S.openInc!=null) renderIncident(S.openInc);
 }
 
+function renderTemplateCatch(o){
+  const cont=$("#tplCatch"); if(!cont) return;
+  const e=S.data.events, TPL=S.data.vocab.templates;
+  const nm=$("#tplModelName"); if(nm) nm.textContent="— "+activeSource().label;
+  let html="";
+  for(let t=0;t<TPL.length;t++){
+    let tot=0,flag=0;
+    for(let i=0;i<o.length;i++){ if(e.tpl[i]===t && e.y[i]===1){ tot++; if(o[i]===1) flag++; } }
+    if(!tot) continue;
+    const pct=100*flag/tot;
+    const col= pct>=85? "var(--good)" : (pct>=70? "var(--fp)":"var(--bad)");
+    html+=`<div class="relbar"><span class="rl">${esc(TPL[t])}</span>
+      <span class="track"><i style="width:${pct.toFixed(0)}%;background:${col}"></i></span>
+      <span class="pc">${flag}/${tot} (${pct.toFixed(0)}%)</span></div>`;
+  }
+  cont.innerHTML=html||'<div class="muted small">no template labels for this run</div>';
+}
+
 function drawTimeline(o){
-  const cv = $("#tl"), e = S.data.events, n = e.p.length;
+  const cv = $("#tl"), e = S.data.events, p = P(), n = p.length;
   const dpr = window.devicePixelRatio||1;
   const W = cv.clientWidth || cv.parentElement.clientWidth;
   const H = 380;
@@ -368,7 +465,7 @@ function drawTimeline(o){
   // background mass first: true negatives as cheap 1px rects (~99% of events)
   ctx.fillStyle="rgba(57,64,76,0.5)";
   for(let i=0;i<n;i++){ if(o[i]!==0) continue;
-    ctx.fillRect(X(e.ts[i])-0.6, Y(e.p[i])-0.6, 1.3, 1.3); }
+    ctx.fillRect(X(e.ts[i])-0.6, Y(p[i])-0.6, 1.3, 1.3); }
 
   // then the interesting outcomes on top: FN -> FP -> TP
   const col={1:"255,92,92",2:"227,166,66",3:"176,124,247"};
@@ -377,7 +474,7 @@ function drawTimeline(o){
     ctx.fillStyle=`rgba(${col[code]},0.95)`;
     ctx.beginPath();
     for(let i=0;i<n;i++){ if(o[i]!==code) continue;
-      const x=X(e.ts[i]), y=Y(e.p[i]);
+      const x=X(e.ts[i]), y=Y(p[i]);
       ctx.moveTo(x,y); ctx.arc(x,y,rad[code],0,6.283); }
     ctx.fill();
   }
@@ -406,12 +503,12 @@ function incidentFrac(i,inc){ const st=inc[i.id]; return st&&st.n? st.flagged/st
 /* ============================ incident detail ============================ */
 function renderIncident(id){
   S.openInc=id;
-  const e=S.data.events; const idx=[];
-  for(let i=0;i<e.p.length;i++) if(e.inc[i]===id) idx.push(i);
+  const e=S.data.events, p=P(); const idx=[];
+  for(let i=0;i<p.length;i++) if(e.inc[i]===id) idx.push(i);
   idx.sort((a,b)=>e.ts[a]-e.ts[b]);
   const inc=S.data.incidents.find(x=>x.id===id);
   const thr=S.thr;
-  const flagged=idx.filter(i=>e.p[i]>=thr).length;
+  const flagged=idx.filter(i=>p[i]>=thr).length;
 
   $("#incDetail").style.display="";
   $("#incTitle").innerHTML=`Incident #${id} — ${esc(inc?inc.tname:"?")}
@@ -447,7 +544,7 @@ function renderIncident(id){
   }
   // nodes
   for(let k=0;k<idx.length;k++){ const i=idx[k];
-    const fl=e.p[i]>=thr; const c=fl? (e.y[i]? "#ff5c5c":"#e3a642") : (e.y[i]?"#b07cf7":"#39404c");
+    const fl=p[i]>=thr; const c=fl? (e.y[i]? "#ff5c5c":"#e3a642") : (e.y[i]?"#b07cf7":"#39404c");
     const r= fl?7:5.5;
     svg+=`<circle data-i="${i}" cx="${X(k)}" cy="${Y(i)}" r="${r}" fill="${c}" stroke="#0d1117" stroke-width="1.2" class="nd"/>`;
   }
@@ -464,7 +561,7 @@ function renderIncident(id){
 
 /* ============================ tables ============================ */
 function renderTables(o){
-  const e=S.data.events;
+  const e=S.data.events, p=P();
   // flagged
   const fl=[]; for(let i=0;i<o.length;i++) if(o[i]===1||o[i]===2) fl.push(i);
   const seg=$("#flagSeg"); [...seg.children].forEach(b=>b.classList.toggle("on",b.dataset.f===S.flaggedFilter));
@@ -472,12 +569,13 @@ function renderTables(o){
   const q=($("#q").value||"").toLowerCase();
   if(q) rows=rows.filter(i=> (e.d[i]+" "+S.data.vocab.etypes[e.et[i]]+" H"+e.h[i]).toLowerCase().includes(q));
   const k=S.sort.key, dir=S.sort.dir;
-  rows.sort((a,b)=> dir*( (e[k][a]<e[k][b])?-1:(e[k][a]>e[k][b])?1:0 ));
+  const colArr=(k==="p")?p:e[k];             // "score" column follows the active model
+  rows.sort((a,b)=> dir*( (colArr[a]<colArr[b])?-1:(colArr[a]>colArr[b])?1:0 ));
   const shown=rows.slice(0,800);
   $("#flagCount").textContent=`${rows.length} flagged (${tp_of(o)} TP, ${fp_of(o)} FP) — showing ${shown.length}`;
   $("#flagTable tbody").innerHTML = shown.map(i=>
     `<tr data-i="${i}">
-      <td class="num">${e.p[i].toFixed(3)}</td>
+      <td class="num">${p[i].toFixed(3)}</td>
       <td>${pill(o[i])}</td>
       <td class="mono">${fmtTs(e.ts[i])}</td>
       <td>${esc(e.d[i])}</td>
@@ -485,10 +583,10 @@ function renderTables(o){
     </tr>`).join("");
   // missed
   const ms=[]; for(let i=0;i<o.length;i++) if(o[i]===3) ms.push(i);
-  ms.sort((a,b)=>e.p[b]-e.p[a]);
+  ms.sort((a,b)=>p[b]-p[a]);
   $("#missTable tbody").innerHTML = ms.slice(0,400).map(i=>
     `<tr data-i="${i}">
-      <td class="num">${e.p[i].toFixed(3)}</td>
+      <td class="num">${p[i].toFixed(3)}</td>
       <td class="mono">${fmtTs(e.ts[i])}</td>
       <td>${esc(e.d[i])}</td>
       <td class="num">#${e.inc[i]}</td>
@@ -509,8 +607,10 @@ function pill(code){ return {1:'<span class="pill tp">TP</span>',2:'<span class=
 /* ============================ controls ============================ */
 function bindControls(){
   $("#thrSlide").oninput = ev=>{ S.thr=+ev.target.value; S.thrMode="custom"; refreshThr(); };
-  $("#opPrimary").onclick=()=>{ S.thr=S.data.meta.threshold; S.thrMode="primary"; syncSlider(); };
-  $("#opRecall").onclick=()=>{ S.thr=S.data.meta.threshold_recall; S.thrMode="recall"; syncSlider(); };
+  $("#opPrimary").onclick=()=>{ S.thr=activeSource().threshold; S.thrMode="primary"; syncSlider(); };
+  $("#opRecall").onclick=()=>{ const rt=activeSource().recall_threshold;
+    if(rt!=null){ S.thr=rt; S.thrMode="recall"; syncSlider(); } };
+  $("#opRecall").style.display = activeSource().recall_threshold!=null ? "" : "none";
   $("#zoomReset").onclick=()=>{ S.view=null; refreshThr(); };
   $("#flagSeg").querySelectorAll("button").forEach(b=> b.onclick=()=>{S.flaggedFilter=b.dataset.f; refreshThr();});
   $("#q").oninput=()=>refreshThr();
@@ -550,24 +650,24 @@ function bindControls(){
 }
 function syncSlider(){ $("#thrSlide").value=S.thr; refreshThr(); }
 function refreshThr(){ $("#thrVal").textContent=S.thr.toFixed(3);
-  const o=outcomes(S.thr), inc=incidentStats(S.thr); redraw(o,inc); }
+  const o=outcomes(S.thr), inc=incidentStats(S.thr); updateKpiCounts(o); redraw(o,inc); }
 
 function nearest(ev){
   const cv=$("#tl"), m=cv._map; if(!m) return -1;
   const r=cv.getBoundingClientRect(), mx=ev.clientX-r.left, my=ev.clientY-r.top;
-  const e=S.data.events; let best=-1,bd=12;
-  for(let i=0;i<e.p.length;i++){
-    const x=m.X(e.ts[i]), y=m.Y(e.p[i]);
+  const e=S.data.events, p=P(); let best=-1,bd=12;
+  for(let i=0;i<p.length;i++){
+    const x=m.X(e.ts[i]), y=m.Y(p[i]);
     const d=Math.hypot(x-mx,y-my); if(d<bd){bd=d;best=i;} }
   return best;
 }
 function tlHover(ev){ const i=nearest(ev); if(i<0){hideTip();return;} showTip(ev,i); }
 
 function showTip(ev,i){
-  const e=S.data.events, t=$("#tip");
-  const fl=e.p[i]>=S.thr;
+  const e=S.data.events, p=P(), t=$("#tip");
+  const fl=p[i]>=S.thr;
   const out=e.y[i]?(fl?"true positive":"MISSED incident event"):(fl?"false positive":"true negative");
-  t.innerHTML=`<div class="t">${esc(S.data.vocab.etypes[e.et[i]])} · score ${e.p[i].toFixed(3)} · ${out}</div>
+  t.innerHTML=`<div class="t">${esc(S.data.vocab.etypes[e.et[i]])} · score ${p[i].toFixed(3)} · ${out}</div>
     <div class="d">${esc(e.d[i])}</div>
     <div class="d mono">${fmtTs(e.ts[i])} · host H${e.h[i]} (${esc(S.data.vocab.host_roles[e.hr[i]])})
       ${e.u[i]>=0?` · U${e.u[i]} (${esc(S.data.vocab.user_roles[e.ur[i]])})`:""}</div>

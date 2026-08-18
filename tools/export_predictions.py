@@ -252,8 +252,6 @@ def main() -> int:
              "event×entity fusion · balanced (agg120+seq, GBM)"),
             ("maxeff", "fuse_maxeff",
              "event×entity fusion · max-efficiency (agg120+agg480+seq, GBM)"),
-            ("vapreserve", "fuse_vapreserve",
-             "event×entity fusion · valid-account-preserving (agg120+seq, logistic)"),
         ]
         for key, arr, label in recipes:
             if f"{arr}_te" not in sc.files:

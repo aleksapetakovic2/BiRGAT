@@ -324,44 +324,54 @@ budget on high-confidence events, and valid-account events score low on **both**
 channels. That is a deliberate, tunable trade — not a bug — as the sequence
 branch shows.
 
-### Sequence branch: ordering for valid-account
+### Sequence branch: ordering is what fixes valid-account
 
 The window-aggregate branch loses event ORDER, which is exactly what separates a
 remote-sign-in → encoded-process → discovery → exfil chain from ordinary admin
 work. `tools/sequence_probe.py` runs a **bidirectional GRU with attention
 pooling** over each entity's *ordered* event stream (same temporal-honest
-protocol), trained with focal loss. Attention lets it focus on the suspicious
-sub-sequence instead of averaging it away. It is a strong window classifier
-(host AUPRC ~0.91, stable across seeds) and — unlike the long-window aggregate —
-does not sacrifice valid-account. It is weaker on beacon than the long-window
-aggregate, so the two branches are complementary, not interchangeable.
+protocol), trained with focal loss. It is the single best channel at separating
+**valid-account** from benign — AUC **0.98**, better than the RGAT score itself
+(0.97) — and even the valid-account events the RGAT misses score high on it
+(median 0.90 vs benign's 0.09). So valid-account signal is *present*; the RGAT
+just can't use it per-event.
 
-Fusing the RGAT score with the aggregate + sequence channels
-(`tools/dump_scores.py` persists channel scores once; `tools/score_search.py`
-searches combiners) gives a Pareto frontier — pick where to sit (per-template
-recall at overall recall 0.93):
+### Valid-account is liftable — the earlier "floor" was a comparison artifact
 
-| operating point | combiner | AUPRC | flags @ R=0.93 | valid-account | beacon |
+Comparing methods at a *matched recall* (0.93) made valid-account look like an
+irreducible floor. That was misleading: at matched recall the fusion's flag
+budget is so tight that valid-account is sacrificed first. The honest comparison
+is at a **matched flag budget**, and there the fusion dominates:
+
+| flag budget | RGAT valid-acct | fusion valid-acct | fusion overall recall |
+|---|---:|---:|---:|
+| 1.5% | 25% | 73% | 91% |
+| 2.0% | 30% | **91%** | 96% |
+| 3.0% | 51% | **98%** | 98% |
+| 8.4% (RGAT's own) | 86.5% | ~99% | ~99% |
+
+The fusion lifts valid-account **above** the RGAT's own 86.5% level while
+flagging a quarter of what the RGAT flags. Ablation isolates the lever: remove
+the sequence channel and valid-account at 2% flags drops 91% → 67%.
+
+`tools/dump_scores.py` persists the channel scores and fits the two exposed
+operating points on **validation only** (thresholds chosen at a val recall floor,
+never on test); `tools/score_search.py` searches combiners:
+
+| operating point | combiner | test recall | flagged | valid-acct | beacon |
 |---|---|---:|---:|---:|---:|
-| RGAT-only | — | 0.76 | 8.4% | 86.5% | 80.6% |
-| max efficiency | agg120+agg480+seq, GBM | 0.95 | 1.5% | 77% (−10) | 83% (+3) |
-| **balanced (recommended)** | agg120+seq, GBM | 0.93 | 1.6% | 82% (−4) | 81% (≈RGAT) |
-| valid-account-preserving | agg120+seq, logistic | 0.92 | 2.1% | 86% (≈RGAT) | 75% (−6) |
+| RGAT-only | — | 93.1% | 8.4% | 86.5% | 80.6% |
+| **balanced (recommended)** | GBM(p, agg120, seq) | 94.6% | 1.7% | **86.5%** | 84.5% |
+| balanced · higher recall | GBM(p, agg120, seq) | 97.3% | 2.7% | **93.7%** | 90.3% |
+| max efficiency | GBM(p, agg120, agg480, seq) | 94.7% | 1.6% | 81.7% | **90.3%** |
 
-So: **90–95% recall at ~1.5–2% flagged** (vs the RGAT's 8.4%). The lever is
-clean and now well-characterised: the **agg480** (long-window) channel is what
-boosts beacon but costs valid-account; the **seq** channel is what preserves
-valid-account. The **balanced** `agg120+seq` GBM point is the sweet spot — ~5×
-more efficient than the RGAT while keeping *both* valid-account and beacon near
-their RGAT levels. If valid-account matters most, the logistic
-`agg120+seq` point holds it at its RGAT level (86%) at 2.1% flagged, at the cost
-of beacon dropping below RGAT. No single operating point beats RGAT on *both*
-valid-account and beacon simultaneously while staying this cheap — the
-beacon/valid-account trade-off is real, because the two templates lean on
-different entity signals. Valid-account never exceeds its RGAT level under tight
-flag budgets: it is the genuinely-ambiguous, engineered-to-overlap template, and
-lifting it further (e.g. richer sequence features or a template-aware combiner)
-is the open problem.
+The **balanced** point is the sweet spot — it *matches* the RGAT's valid-account
+recall exactly (109/126 = 86.5%) at ~5× less flagging, with better beacon and
+overall recall too. Its higher-recall sibling *exceeds* the RGAT's valid-account
+level (93.7% vs 86.5%) at 2.7% flagged. The **max-efficiency** point spends a
+little valid-account for more beacon. Adding the long-window `agg480` channel is
+the beacon lever; the **seq** channel is the valid-account lever; both ride on
+the RGAT event score.
 
 **Architecture this implies** (drop-in, no RGAT retraining): keep the RGAT event
 scorer; add entity behavioural branches (host + user, aggregate + sequence,

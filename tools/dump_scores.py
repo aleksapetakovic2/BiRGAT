@@ -122,7 +122,7 @@ def main() -> int:
     # ---------------- fitted fusion combiners (fit on VALIDATION only)
     from sklearn.linear_model import LogisticRegression
     from sklearn.ensemble import HistGradientBoostingClassifier
-    from sklearn.metrics import precision_recall_curve
+    from sklearn.metrics import average_precision_score, precision_recall_curve
     from eprgat.metrics import search_threshold
 
     y_va = y_all[va_idx]
@@ -135,6 +135,12 @@ def main() -> int:
 
     def _val_recall_thr(sv, min_recall=0.90):
         return float(search_threshold(y_va, sv, policy="recall", min_recall=min_recall))
+
+    # operating points for the fused scores. The interesting regime for the
+    # blind-spot templates (valid-account / beacon) is at HIGH recall, so the
+    # default threshold targets val recall>=0.99 and the "recall" button the
+    # highest achievable. (The RGAT's own F1 threshold stays in viz meta.)
+    RECALL_DEFAULT, RECALL_BUTTON = 0.99, 0.999
 
     def _feats(cols, split):
         return np.stack([channels[f"{c}_{split}"] for c in cols], 1)
@@ -152,22 +158,20 @@ def main() -> int:
 
     have = lambda c: (f"{c}_va" in channels)
     recipes = []
-    # balanced: preserves both valid-account and beacon near RGAT level
+    # balanced: preserves both valid-account and beacon near/above RGAT level
     if have("agg120") and have("seq240"):
         recipes.append(("fuse_balanced", "gbm", ["p", "agg120", "seq240"]))
-    # max-efficiency: adds the long-window agg to boost beacon, at valid-account cost
+    # max-efficiency: adds the long-window agg to boost beacon further
     if have("agg120") and have("agg480") and have("seq240"):
         recipes.append(("fuse_maxeff", "gbm", ["p", "agg120", "agg480", "seq240"]))
-    # valid-account-preserving: logistic keeps valid-account at its RGAT level
-    if have("agg120") and have("seq240"):
-        recipes.append(("fuse_vapreserve", "log", ["p", "agg120", "seq240"]))
     for name, kind, cols in recipes:
         sv, st = _fit_combo(kind, cols)
         channels[f"{name}_va"], channels[f"{name}_te"] = sv, st
-        channels[f"{name}_thr"] = np.array(_val_f1_thr(sv))
-        channels[f"{name}_rthr"] = np.array(_val_recall_thr(sv))
-        print(f"[dump] {name} ({kind},{'+'.join(cols)}) val-f1-thr="
-              f"{channels[f'{name}_thr']:.3f}  val-recall-thr="
+        channels[f"{name}_thr"] = np.array(_val_recall_thr(sv, RECALL_DEFAULT))
+        channels[f"{name}_rthr"] = np.array(_val_recall_thr(sv, RECALL_BUTTON))
+        print(f"[dump] {name} ({kind},{'+'.join(cols)}) valAUPRC="
+              f"{average_precision_score(y_va, sv):.4f} thr(rec>={RECALL_DEFAULT})="
+              f"{channels[f'{name}_thr']:.3f} thr(rec>={RECALL_BUTTON})="
               f"{channels[f'{name}_rthr']:.3f}")
 
     # ---------------- labels + template for the test events
