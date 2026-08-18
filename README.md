@@ -410,9 +410,9 @@ tests/                              focal loss, RGAT, sampler, generator, pipeli
 ```
 ### Next steps
 
-To make it easier to understand where the model is working correctly and where failing I will build a result explorer that allows users to select incidents and display events it correctly identified, misclassified, or missed. 
+To make it easier to understand where the model is working correctly and where failing I will build a result explorer that allows users to select incidents and display events it correctly identified, misclassified, or missed. The following images might be outdated:
 
-<img width="1841" height="934" alt="image" src="https://github.com/user-attachments/assets/b29346c7-0e60-4f4e-ae35-e9e953825488" />
+<img width="1840" height="784" alt="image" src="https://github.com/user-attachments/assets/86ced672-5431-44e9-af34-971a4a671af1" />
 
 <img width="1213" height="499" alt="image" src="https://github.com/user-attachments/assets/16815146-0fff-481f-a77b-03d9ca9572e8" />
 
