@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BiRGAT · test-result explorer</title>
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --panel2:#1c2330; --border:#2a3140;
+    --text:#e6edf3; --muted:#8b949e; --faint:#586069;
+    --tp:#ff5c5c; --fn:#b07cf7; --fp:#e3a642; --tn:#39404c;
+    --accent:#4da3ff; --good:#3fb950; --bad:#f85149;
+    --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);
+    font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+  .muted{color:var(--muted)} .mono{font-family:var(--mono)}
+  header{display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+    padding:12px 18px;border-bottom:1px solid var(--border);position:sticky;top:0;
+    background:rgba(13,17,23,.92);backdrop-filter:blur(4px);z-index:20}
+  header h1{font-size:15px;margin:0;font-weight:650;letter-spacing:.3px}
+  header h1 .dim{color:var(--muted);font-weight:400}
+  select,button,input[type=text]{background:var(--panel2);color:var(--text);
+    border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:13px}
+  select:focus,button:focus{outline:1px solid var(--accent)}
+  button{cursor:pointer} button:hover{border-color:var(--accent)}
+  main{padding:16px 18px;max-width:1500px;margin:0 auto}
+  .grid{display:grid;gap:14px}
+  .kpis{grid-template-columns:repeat(auto-fit,minmax(128px,1fr))}
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;
+    padding:14px 16px;margin-bottom:14px}
+  .panel h2{margin:0 0 4px;font-size:13px;font-weight:650;color:var(--text);
+    text-transform:uppercase;letter-spacing:.6px}
+  .panel .sub{color:var(--muted);font-size:12px;margin-bottom:10px}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;
+    padding:12px 14px}
+  .kpi .v{font-size:22px;font-weight:700;font-family:var(--mono)}
+  .kpi .k{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+  .kpi.good .v{color:var(--good)} .kpi.bad .v{color:var(--bad)}
+  .row{display:flex;flex-wrap:wrap;gap:14px}
+  .col{flex:1;min-width:320px}
+  canvas{display:block;width:100%}
+  .legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:8px;font-size:12px;color:var(--muted)}
+  .legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+  .controls{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:8px}
+  .controls label{font-size:12px;color:var(--muted)}
+  .thrbox{display:flex;align-items:center;gap:10px}
+  input[type=range]{width:240px;accent-color:var(--accent)}
+  .pill{display:inline-block;padding:1px 8px;border-radius:11px;font-size:11px;
+    font-family:var(--mono);border:1px solid var(--border)}
+  .pill.tp{color:var(--tp);border-color:var(--tp)} .pill.fp{color:var(--fp);border-color:var(--fp)}
+  .pill.fn{color:var(--fn);border-color:var(--fn)} .pill.tn{color:var(--muted)}
+  table{border-collapse:collapse;width:100%;font-size:12.5px}
+  th,td{text-align:left;padding:6px 9px;border-bottom:1px solid var(--border);vertical-align:top}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.4px;
+     position:sticky;top:0;background:var(--panel);cursor:pointer;user-select:none}
+  td.num,th.num{text-align:right;font-family:var(--mono)}
+  tbody tr{cursor:pointer} tbody tr:hover{background:var(--panel2)}
+  .scroll{max-height:420px;overflow:auto;border:1px solid var(--border);border-radius:8px}
+  .incbar{display:flex;align-items:center;gap:10px;padding:8px 10px;border:1px solid var(--border);
+    border-radius:8px;margin-bottom:8px;cursor:pointer;background:var(--panel2)}
+  .incbar:hover{border-color:var(--accent)}
+  .incbar .nm{font-weight:600;width:190px}
+  .incbar .meter{flex:1;height:9px;background:#21262d;border-radius:5px;overflow:hidden}
+  .incbar .meter i{display:block;height:100%;background:linear-gradient(90deg,var(--tp),#ff8a8a)}
+  .incbar .cnt{font-family:var(--mono);font-size:12px;color:var(--muted);width:120px;text-align:right}
+  .incbar.missed .nm{color:var(--fn)}
+  #tip{position:fixed;pointer-events:none;background:#10151c;border:1px solid var(--border);
+    border-radius:8px;padding:9px 11px;font-size:12px;max-width:340px;z-index:50;display:none;
+    box-shadow:0 6px 24px rgba(0,0,0,.5)}
+  #tip .t{font-weight:600;margin-bottom:3px}
+  #tip .d{color:var(--muted)}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+  .filters .seg{display:flex;border:1px solid var(--border);border-radius:6px;overflow:hidden}
+  .filters .seg button{border:none;border-radius:0;background:var(--panel2);padding:5px 12px;font-size:12px}
+  .filters .seg button.on{background:var(--accent);color:#04121f;font-weight:600}
+  .notice{padding:40px;text-align:center;color:var(--muted)}
+  .notice code{background:var(--panel2);padding:2px 6px;border-radius:5px;font-family:var(--mono)}
+  svg text{font-family:var(--mono)}
+  .small{font-size:11px;color:var(--muted)}
+  .relbar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:12px}
+  .relbar .rl{width:150px;color:var(--muted);font-family:var(--mono)}
+  .relbar .track{flex:1;height:12px;background:#21262d;border-radius:4px;overflow:hidden}
+  .relbar .track i{display:block;height:100%;background:var(--accent)}
+  .relbar .pc{width:52px;text-align:right;font-family:var(--mono);color:var(--muted)}
+  #incDetail{margin-top:6px}
+  .tag{font-family:var(--mono);font-size:11px;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <h1>BiRGAT <span class="dim">· test-result explorer</span></h1>
+  <label class="muted" for="runSel" style="font-size:12px">run</label>
+  <select id="runSel"></select>
+  <span id="runInfo" class="muted mono" style="font-size:12px"></span>
+  <span style="flex:1"></span>
+  <span class="muted" id="opPoint"></span>
+</header>
+
+<main>
+  <div id="body"></div>
+</main>
+<div id="tip"></div>
+
+<script>
+"use strict";
+/* ============================ state ============================ */
+const S = {
+  runs: [], run: null, data: null,
+  thr: 0.5,                 // active operating threshold
+  thrMode: "primary",       // primary | recall | custom
+  flaggedFilter: "all",     // all | tp | fp
+  sort: {key:"p", dir:-1},
+  hover: null,
+  view: null,               // {t0,t1} zoom window on the timeline, or null=full
+};
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ============================ load ============================ */
+async function jget(u){
+  const r = await fetch(u);
+  // read as text first: if body decoding/parsing fails we still get to say
+  // WHAT arrived instead of a bare "Decoding failed."
+  const text = await r.text();
+  let obj;
+  try { obj = JSON.parse(text); }
+  catch(_){
+    const head = text.slice(0,60).replace(/[\u0000-\u001f]/g,"·") || "<empty>";
+    const gz = text.charCodeAt(0)===0x1f && text.charCodeAt(1)===0x8b;
+    throw new Error(`${u} returned non-JSON (HTTP ${r.status}): "${head}"` +
+      (gz ? " — body is gzip-compressed but was not decompressed in transit" : ""));
+  }
+  if(!r.ok) throw new Error(obj.error || r.statusText);
+  return obj;
+}
+
+async function init(){
+  try { S.runs = (await jget("/api/runs")).runs; }
+  catch(e){ $("#body").innerHTML = notice("Cannot list runs: "+esc(e.message)); return; }
+  const sel = $("#runSel"); sel.innerHTML = "";
+  if(!S.runs.length){
+    $("#body").innerHTML = notice(
+      "No runs have exported predictions yet. Run<br><br>"+
+      "<code>python tools/export_predictions.py runs/&lt;your_run&gt;</code><br><br>"+
+      "then reload this page.");
+    return;
+  }
+  for(const r of S.runs){
+    const o = document.createElement("option");
+    o.value = r.name; o.textContent = r.name; sel.appendChild(o);
+  }
+  sel.onchange = () => loadRun(sel.value);
+  const hash = location.hash.replace("#","");
+  const want = S.runs.some(r=>r.name===hash) ? hash : S.runs[0].name;
+  sel.value = want; await loadRun(want);
+}
+
+async function loadRun(name){
+  $("#body").innerHTML = notice("Loading <code>"+esc(name)+"</code> …");
+  let d;
+  try { d = await jget("/api/data/"+encodeURIComponent(name)); }
+  catch(e){ $("#body").innerHTML = notice("Failed to load: "+esc(e.message)); return; }
+  S.run = name; S.data = d; history.replaceState(null,"","#"+name);
+  const m = d.meta;
+  S.thr = m.threshold; S.thrMode = "primary";
+  S.openInc = null; S.flaggedFilter = "all"; S.sort = {key:"p", dir:-1}; S.view = null;
+  $("#runInfo").textContent = `${m.n_events.toLocaleString()} test events · ${m.n_pos} positives · exported ${m.generated_at}`;
+  render();
+}
+
+function notice(html){ return `<div class="panel notice">${html}</div>`; }
+
+/* ============================ derived ============================ */
+function fmtTs(ts){ const day=Math.floor(ts/1440), h=Math.floor(ts%1440/60), mn=Math.floor(ts%60);
+  return `D${day} ${String(h).padStart(2,"0")}:${String(mn).padStart(2,"0")}`; }
+
+// outcome codes: 1=TP 2=FP 3=FN 0=TN
+function outcomes(thr){
+  const e = S.data.events, n = e.p.length, o = new Uint8Array(n);
+  for(let i=0;i<n;i++){ const fl = e.p[i]>=thr;
+    o[i] = e.y[i] ? (fl?1:3) : (fl?2:0); }
+  return o;
+}
+
+function incidentStats(thr){
+  const e = S.data.events; const map = {};
+  for(const inc of S.data.incidents) map[inc.id] = {n:0, flagged:0};
+  for(let i=0;i<e.p.length;i++){ const id=e.inc[i];
+    if(id>=0 && map[id]){ map[id].n++; if(e.p[i]>=thr) map[id].flagged++; } }
+  return map;
+}
+
+/* ============================ render ============================ */
+function render(){
+  const m = S.data.meta;
+  $("#opPoint").textContent =
+    `operating point: ${m.threshold_policy} thr=${m.threshold.toFixed(3)}  ·  recall≥${m.min_recall} thr=${m.threshold_recall.toFixed(3)}`;
+  const o = outcomes(S.thr);
+  const inc = incidentStats(S.thr);
+  let tp=0,fp=0,fn=0; for(let i=0;i<o.length;i++){ if(o[i]===1)tp++; else if(o[i]===2)fp++; else if(o[i]===3)fn++; }
+
+  $("#body").innerHTML = `
+    ${kpiRow(m,tp,fp,fn)}
+    <div class="panel">
+      <h2>Timeline — model score vs time</h2>
+      <div class="sub">Each dot is a held-out test event. Events that <b>flare above the threshold line</b>
+        are what the model would hand an analyst. Red = part of a real incident, amber = false alarm,
+        purple = real incident event the model missed. Shaded bands mark ground-truth incident windows.</div>
+      <div class="controls">
+        <div class="thrbox">
+          <label>threshold</label>
+          <input type="range" id="thrSlide" min="0" max="1" step="0.001" value="${S.thr}">
+          <span class="mono" id="thrVal">${S.thr.toFixed(3)}</span>
+        </div>
+        <button id="opPrimary">F1 operating point</button>
+        <button id="opRecall">recall operating point</button>
+        <button id="zoomReset" title="or double-click the chart">reset zoom</button>
+        <span class="muted small">drag on the chart to zoom a time range · click a dot to open its incident</span>
+      </div>
+      <canvas id="tl" height="380"></canvas>
+      <div class="legend">
+        <span><span class="sw" style="background:var(--tp)"></span>true positive (incident event flagged)</span>
+        <span><span class="sw" style="background:var(--fp)"></span>false positive (benign flagged)</span>
+        <span><span class="sw" style="background:var(--fn)"></span>false negative (incident event missed)</span>
+        <span><span class="sw" style="background:var(--tn)"></span>true negative</span>
+        <span><span class="sw" style="background:#5c2b2b"></span>ground-truth incident window</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="panel">
+          <h2>Incidents — how much of each chain was flagged</h2>
+          <div class="sub">${S.data.incidents.length} ground-truth incidents land in the test split.
+            Bar = fraction of the incident's events the model flagged at the current threshold.
+            Click one to inspect its event chain.</div>
+          <div id="incList"></div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="panel">
+          <h2>What the model leans on</h2>
+          <div class="sub">Share of total edge-attention mass per provenance relation (normalised for edge volume).</div>
+          <div id="relBars"></div>
+          <div style="margin-top:14px" class="small" id="modelInfo"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel" id="incDetail" style="display:none">
+      <h2 id="incTitle"></h2>
+      <div class="sub" id="incSub"></div>
+      <div id="incSvg"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Flagged events <span class="muted" style="text-transform:none;font-weight:400">— what an analyst is handed</span></h2>
+      <div class="filters">
+        <div class="seg" id="flagSeg">
+          <button data-f="all">all flagged</button>
+          <button data-f="tp">true positives</button>
+          <button data-f="fp">false positives</button>
+        </div>
+        <input type="text" id="q" placeholder="filter description / etype / host…" style="min-width:240px">
+        <span class="muted small" id="flagCount"></span>
+      </div>
+      <div class="scroll"><table id="flagTable">
+        <thead><tr>
+          <th data-k="p" class="num">score</th><th>outcome</th><th data-k="ts">time</th>
+          <th>event</th><th data-k="inc" class="num">incident</th>
+        </tr></thead><tbody></tbody></table></div>
+    </div>
+
+    <div class="panel">
+      <h2>Missed incident events <span class="muted" style="text-transform:none;font-weight:400">— false negatives</span></h2>
+      <div class="sub">Real incident events the model did <b>not</b> flag at the current threshold, highest score first.</div>
+      <div class="scroll"><table id="missTable">
+        <thead><tr><th class="num">score</th><th>time</th><th>event</th><th class="num">incident</th><th class="num">chain pos</th></tr></thead>
+        <tbody></tbody></table></div>
+    </div>
+  `;
+  bindControls(); renderRelBars(m); renderModelInfo(m);
+  redraw(o, inc);
+}
+
+function kpiRow(m,tp,fp,fn){
+  const t = m.test_metrics_at_export || (m.eval_report&&m.eval_report.test) || {};
+  const lift = t.auprc && t.baseline_ap ? (t.auprc/t.baseline_ap) : null;
+  const tile = (v,lab,cls="") => `<div class="kpi ${cls}"><div class="v">${v}</div><div class="k">${lab}</div></div>`;
+  return `<div class="grid kpis">
+    ${tile(t.auprc!=null?t.auprc.toFixed(3):"—","test AUPRC","good")}
+    ${tile(t.auroc!=null?t.auroc.toFixed(3):"—","test AUROC","good")}
+    ${tile(lift?lift.toFixed(0)+"×":"—","AUPRC lift vs baseline")}
+    ${tile(t.f1!=null?t.f1.toFixed(3):"—","F1 @ thr","good")}
+    ${tile(t.precision!=null?t.precision.toFixed(3):"—","precision")}
+    ${tile(t.recall!=null?t.recall.toFixed(3):"—","recall")}
+    ${tile((tp+fp).toLocaleString(),"flagged now", (fp>tp?"bad":"good"))}
+    ${tile(fn.toLocaleString(),"missed now", fn>0?"bad":"good")}
+  </div>`;
+}
+
+function renderRelBars(m){
+  const ra = m.relation_attention||{};
+  const rows = Object.entries(ra).sort((a,b)=>b[1]-a[1]);
+  const max = rows.length?rows[0][1]:1;
+  $("#relBars").innerHTML = rows.map(([r,w]) =>
+    `<div class="relbar"><span class="rl">${esc(r)}</span>
+     <span class="track"><i style="width:${(100*w/max).toFixed(1)}%"></i></span>
+     <span class="pc">${(100*w).toFixed(1)}%</span></div>`).join("");
+}
+function renderModelInfo(m){
+  $("#modelInfo").innerHTML =
+    `model: <span class="mono">RGAT ${m.model.layers}L × ${m.model.hidden}h, readout=${m.model.readout}</span><br>`+
+    `split: temporal ${m.split} · ${m.timeline_days}-day timeline · threshold policy <b>${m.threshold_policy}</b>`;
+}
+
+/* ============================ timeline canvas ============================ */
+function redraw(o, inc){
+  drawTimeline(o); renderIncList(inc); renderTables(o);
+  if(S.openInc!=null) renderIncident(S.openInc);
+}
+
+function drawTimeline(o){
+  const cv = $("#tl"), e = S.data.events, n = e.p.length;
+  const dpr = window.devicePixelRatio||1;
+  const W = cv.clientWidth || cv.parentElement.clientWidth;
+  const H = 380;
+  cv.width = W*dpr; cv.height = H*dpr; cv.style.height = H+"px";
+  const ctx = cv.getContext("2d"); ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,W,H);
+
+  let t0=Infinity,t1=-Infinity;
+  if(S.view){ t0=S.view.t0; t1=S.view.t1; }
+  else { for(let i=0;i<n;i++){ if(e.ts[i]<t0)t0=e.ts[i]; if(e.ts[i]>t1)t1=e.ts[i]; }
+         const pad=(t1-t0)*0.01; t0-=pad; t1+=pad; }
+  const mL=46,mR=12,mT=12,mB=30;
+  const X = ts => mL + ( (ts-t0)/(t1-t0) )*(W-mL-mR);
+  const Y = p  => mT + (1-p)*(H-mT-mB);
+
+  // axes
+  ctx.strokeStyle="#242b36"; ctx.fillStyle="#586069"; ctx.font="10px "+getComputedStyle(document.body).getPropertyValue('--mono');
+  ctx.lineWidth=1;
+  for(let p=0;p<=1.0001;p+=0.2){ const y=Y(p);
+    ctx.beginPath();ctx.moveTo(mL,y);ctx.lineTo(W-mR,y);ctx.stroke();
+    ctx.fillText(p.toFixed(1), 8, y+3); }
+  const span=t1-t0, step=span/8;
+  for(let i=0;i<=8;i++){ const ts=t0+i*step, x=X(ts);
+    ctx.fillText(fmtTs(ts), x-18, H-8); }
+
+  // ground-truth incident windows
+  ctx.fillStyle="rgba(158,60,60,0.16)";
+  for(const inc of S.data.incidents){
+    const x0=X(inc.t0), x1=X(inc.t1);
+    ctx.fillRect(x0, mT, Math.max(1.5,x1-x0), H-mT-mB);
+  }
+
+  // threshold line
+  const yT=Y(S.thr);
+  ctx.strokeStyle="#4da3ff";
+  ctx.setLineDash([6,4]); ctx.beginPath();ctx.moveTo(mL,yT);ctx.lineTo(W-mR,yT);ctx.stroke();
+  ctx.setLineDash([]); ctx.fillStyle="#4da3ff";
+  ctx.fillText("thr "+S.thr.toFixed(3), W-mR-64, yT-4);
+
+  // background mass first: true negatives as cheap 1px rects (~99% of events)
+  ctx.fillStyle="rgba(57,64,76,0.5)";
+  for(let i=0;i<n;i++){ if(o[i]!==0) continue;
+    ctx.fillRect(X(e.ts[i])-0.6, Y(e.p[i])-0.6, 1.3, 1.3); }
+
+  // then the interesting outcomes on top: FN -> FP -> TP
+  const col={1:"255,92,92",2:"227,166,66",3:"176,124,247"};
+  const rad={1:2.6,2:2.4,3:2.2};
+  for(const code of [3,2,1]){
+    ctx.fillStyle=`rgba(${col[code]},0.95)`;
+    ctx.beginPath();
+    for(let i=0;i<n;i++){ if(o[i]!==code) continue;
+      const x=X(e.ts[i]), y=Y(e.p[i]);
+      ctx.moveTo(x,y); ctx.arc(x,y,rad[code],0,6.283); }
+    ctx.fill();
+  }
+  cv._map = {t0,t1,mL,mR,mT,mB,W,H,X,Y};
+}
+
+/* ============================ incident list ============================ */
+function renderIncList(inc){
+  const el=$("#incList"); const list=[...S.data.incidents];
+  list.sort((a,b)=> (incidentFrac(b,inc)-incidentFrac(a,inc)));
+  el.innerHTML = list.map(i=>{
+    const st=inc[i.id]||{n:i.n,flagged:0};
+    const f = st.n? st.flagged/st.n : 0;
+    const missed = st.n-st.flagged;
+    return `<div class="incbar ${f<0.5?"missed":""}" data-inc="${i.id}">
+      <span class="nm">${esc(i.tname)} <span class="tag">#${i.id}</span></span>
+      <span class="meter"><i style="width:${(100*f).toFixed(0)}%"></i></span>
+      <span class="cnt">${st.flagged}/${st.n} flagged${missed?` · ${missed} missed`:""}</span>
+    </div>`;}).join("");
+  el.querySelectorAll(".incbar").forEach(b=> b.onclick=()=>{
+    renderIncident(+b.dataset.inc);
+    $("#incDetail").scrollIntoView({behavior:"smooth",block:"start"}); });
+}
+function incidentFrac(i,inc){ const st=inc[i.id]; return st&&st.n? st.flagged/st.n : 0; }
+
+/* ============================ incident detail ============================ */
+function renderIncident(id){
+  S.openInc=id;
+  const e=S.data.events; const idx=[];
+  for(let i=0;i<e.p.length;i++) if(e.inc[i]===id) idx.push(i);
+  idx.sort((a,b)=>e.ts[a]-e.ts[b]);
+  const inc=S.data.incidents.find(x=>x.id===id);
+  const thr=S.thr;
+  const flagged=idx.filter(i=>e.p[i]>=thr).length;
+
+  $("#incDetail").style.display="";
+  $("#incTitle").innerHTML=`Incident #${id} — ${esc(inc?inc.tname:"?")}
+     <span class="tag">${idx.length} events · ${inc?inc.hosts:0} hosts · ${fmtTs(e.ts[idx[0]])} → ${fmtTs(e.ts[idx[idx.length-1]])}</span>`;
+  $("#incSub").innerHTML=`The model flagged <b>${flagged}/${idx.length}</b> of this chain's events at thr=${thr.toFixed(3)}.
+     Nodes are events laid out by chain position; colour = flagged at the current threshold;
+     lines are the provenance edges that connect them. Hover a node for details.`;
+
+  // map global id -> local position
+  const pos={}; idx.forEach((gi,k)=>pos[e.id[gi]]=k);
+  // lanes by host
+  const hosts=[...new Set(idx.map(i=>e.h[i]))];
+  const lane={}; hosts.forEach((h,k)=>lane[h]=k);
+
+  const W=900, laneH=54, mT=16, mB=26, mL=30, mR=30;
+  const Hh=mT+mB+laneH*Math.max(1,hosts.length);
+  const X=k=> mL + (idx.length<=1?0.5:k/(idx.length-1))*(W-mL-mR);
+  const Y=i=> mT + lane[e.h[i]]*laneH + laneH/2;
+
+  let svg=`<svg viewBox="0 0 ${W} ${Hh}" width="100%">`;
+  // host lane labels
+  hosts.forEach((h,k)=>{ svg+=`<text x="4" y="${mT+k*laneH+laneH/2+3}" font-size="10" fill="#586069">H${h}</text>`; });
+  // edges (each entry is [src_global_id, dst_global_id, relation_id])
+  const RELCOL=["#f778ba","#79c0ff","#56d364","#d2a8ff","#ffa657","#ff7b72"];
+  const relSeen=new Set();
+  for(const ed of S.data.edges){ const a=ed[0],b=ed[1],r=ed[2];
+    if(pos[a]===undefined||pos[b]===undefined) continue;
+    relSeen.add(r);
+    const ia=idx[pos[a]], ib=idx[pos[b]];
+    const x1=X(pos[a]),y1=Y(ia),x2=X(pos[b]),y2=Y(ib);
+    const mx=(x1+x2)/2;
+    svg+=`<path d="M${x1},${y1} C${mx},${y1} ${mx},${y2} ${x2},${y2}" stroke="${RELCOL[r]||"#3a4556"}" stroke-width="1.2" fill="none" opacity="0.55"/>`;
+  }
+  // nodes
+  for(let k=0;k<idx.length;k++){ const i=idx[k];
+    const fl=e.p[i]>=thr; const c=fl? (e.y[i]? "#ff5c5c":"#e3a642") : (e.y[i]?"#b07cf7":"#39404c");
+    const r= fl?7:5.5;
+    svg+=`<circle data-i="${i}" cx="${X(k)}" cy="${Y(i)}" r="${r}" fill="${c}" stroke="#0d1117" stroke-width="1.2" class="nd"/>`;
+  }
+  svg+=`</svg>`;
+  const rels=(S.data.vocab.relations||[]);
+  const legend=[...relSeen].sort((a,b)=>a-b)
+    .map(r=>`<span style="margin-right:12px"><span class="sw" style="background:${RELCOL[r]||"#3a4556"}"></span>${esc(rels[r]||r)}</span>`).join("");
+  $("#incSvg").innerHTML=svg+`<div class="legend" style="margin-top:2px">${legend}</div>`;
+  $("#incSvg").querySelectorAll(".nd").forEach(c=>{
+    c.addEventListener("mousemove",ev=>showTip(ev,+c.dataset.i));
+    c.addEventListener("mouseleave",hideTip);
+  });
+}
+
+/* ============================ tables ============================ */
+function renderTables(o){
+  const e=S.data.events;
+  // flagged
+  const fl=[]; for(let i=0;i<o.length;i++) if(o[i]===1||o[i]===2) fl.push(i);
+  const seg=$("#flagSeg"); [...seg.children].forEach(b=>b.classList.toggle("on",b.dataset.f===S.flaggedFilter));
+  let rows=fl.filter(i=> S.flaggedFilter==="all" || (S.flaggedFilter==="tp"?o[i]===1:o[i]===2));
+  const q=($("#q").value||"").toLowerCase();
+  if(q) rows=rows.filter(i=> (e.d[i]+" "+S.data.vocab.etypes[e.et[i]]+" H"+e.h[i]).toLowerCase().includes(q));
+  const k=S.sort.key, dir=S.sort.dir;
+  rows.sort((a,b)=> dir*( (e[k][a]<e[k][b])?-1:(e[k][a]>e[k][b])?1:0 ));
+  const shown=rows.slice(0,800);
+  $("#flagCount").textContent=`${rows.length} flagged (${tp_of(o)} TP, ${fp_of(o)} FP) — showing ${shown.length}`;
+  $("#flagTable tbody").innerHTML = shown.map(i=>
+    `<tr data-i="${i}">
+      <td class="num">${e.p[i].toFixed(3)}</td>
+      <td>${pill(o[i])}</td>
+      <td class="mono">${fmtTs(e.ts[i])}</td>
+      <td>${esc(e.d[i])}</td>
+      <td class="num">${e.inc[i]>=0?"#"+e.inc[i]:""}</td>
+    </tr>`).join("");
+  // missed
+  const ms=[]; for(let i=0;i<o.length;i++) if(o[i]===3) ms.push(i);
+  ms.sort((a,b)=>e.p[b]-e.p[a]);
+  $("#missTable tbody").innerHTML = ms.slice(0,400).map(i=>
+    `<tr data-i="${i}">
+      <td class="num">${e.p[i].toFixed(3)}</td>
+      <td class="mono">${fmtTs(e.ts[i])}</td>
+      <td>${esc(e.d[i])}</td>
+      <td class="num">#${e.inc[i]}</td>
+      <td class="num">${e.pos[i]>=0?(e.pos[i]*100).toFixed(0)+"%":""}</td>
+    </tr>`).join("") || `<tr><td colspan="5" class="muted">no missed incident events at this threshold 🎉</td></tr>`;
+  // row click -> incident
+  document.querySelectorAll("#flagTable tbody tr, #missTable tbody tr").forEach(tr=>{
+    tr.onclick=()=>{ const i=+tr.dataset.i; if(i>=0 && e.inc[i]>=0){
+      renderIncident(e.inc[i]);
+      $("#incDetail").scrollIntoView({behavior:"smooth",block:"start"}); } };
+  });
+}
+function tp_of(o){let c=0;for(let i=0;i<o.length;i++)if(o[i]===1)c++;return c;}
+function fp_of(o){let c=0;for(let i=0;i<o.length;i++)if(o[i]===2)c++;return c;}
+function pill(code){ return {1:'<span class="pill tp">TP</span>',2:'<span class="pill fp">FP</span>',
+  3:'<span class="pill fn">FN</span>',0:'<span class="pill tn">TN</span>'}[code]; }
+
+/* ============================ controls ============================ */
+function bindControls(){
+  $("#thrSlide").oninput = ev=>{ S.thr=+ev.target.value; S.thrMode="custom"; refreshThr(); };
+  $("#opPrimary").onclick=()=>{ S.thr=S.data.meta.threshold; S.thrMode="primary"; syncSlider(); };
+  $("#opRecall").onclick=()=>{ S.thr=S.data.meta.threshold_recall; S.thrMode="recall"; syncSlider(); };
+  $("#zoomReset").onclick=()=>{ S.view=null; refreshThr(); };
+  $("#flagSeg").querySelectorAll("button").forEach(b=> b.onclick=()=>{S.flaggedFilter=b.dataset.f; refreshThr();});
+  $("#q").oninput=()=>refreshThr();
+  $("#flagTable thead").querySelectorAll("th[data-k]").forEach(th=> th.onclick=()=>{
+    const k=th.dataset.k; if(S.sort.key===k)S.sort.dir*=-1; else {S.sort.key=k;S.sort.dir=-1;} refreshThr();});
+  // timeline: hover tooltips, click-to-open-incident, drag-to-zoom
+  const cv=$("#tl"); let drag=null;
+  cv.addEventListener("mousedown",ev=>{ const r=cv.getBoundingClientRect();
+    drag={x0:ev.clientX-r.left, x1:null}; hideTip(); });
+  cv.addEventListener("mousemove",ev=>{
+    if(drag){ const r=cv.getBoundingClientRect(); drag.x1=ev.clientX-r.left;
+      if(Math.abs(drag.x1-drag.x0)>4){ drawTimeline(outcomes(S.thr));
+        const m=cv._map, x0=Math.min(drag.x0,drag.x1), x1=Math.max(drag.x0,drag.x1);
+        const c=cv.getContext("2d");
+        c.fillStyle="rgba(77,163,255,0.12)"; c.fillRect(x0,m.mT,x1-x0,m.H-m.mT-m.mB);
+        c.strokeStyle="#4da3ff"; c.strokeRect(x0,m.mT,x1-x0,m.H-m.mT-m.mB); }
+      return; }
+    tlHover(ev); });
+  cv.addEventListener("mouseleave",()=>{ hideTip(); });
+  if(window._tlMouseUp) window.removeEventListener("mouseup", window._tlMouseUp);
+  window._tlMouseUp = ev=>{
+    if(!drag) return; const d=drag; drag=null;
+    const m=cv._map; if(!m) return;
+    const dragged = d.x1!=null && Math.abs(d.x1-d.x0)>4;
+    if(dragged){
+      const inv=x=> m.t0 + (x-m.mL)/(m.W-m.mL-m.mR)*(m.t1-m.t0);
+      const ta=inv(Math.min(d.x0,d.x1)), tb=inv(Math.max(d.x0,d.x1));
+      if(tb>ta){ S.view={t0:ta,t1:tb}; refreshThr(); }
+      else drawTimeline(outcomes(S.thr));
+    } else {
+      const i=nearest(ev);
+      if(i>=0 && S.data.events.inc[i]>=0){ renderIncident(S.data.events.inc[i]);
+        $("#incDetail").scrollIntoView({behavior:"smooth",block:"start"}); }
+    } };
+  window.addEventListener("mouseup", window._tlMouseUp);
+  cv.addEventListener("dblclick",()=>{ S.view=null; refreshThr(); });
+}
+function syncSlider(){ $("#thrSlide").value=S.thr; refreshThr(); }
+function refreshThr(){ $("#thrVal").textContent=S.thr.toFixed(3);
+  const o=outcomes(S.thr), inc=incidentStats(S.thr); redraw(o,inc); }
+
+function nearest(ev){
+  const cv=$("#tl"), m=cv._map; if(!m) return -1;
+  const r=cv.getBoundingClientRect(), mx=ev.clientX-r.left, my=ev.clientY-r.top;
+  const e=S.data.events; let best=-1,bd=12;
+  for(let i=0;i<e.p.length;i++){
+    const x=m.X(e.ts[i]), y=m.Y(e.p[i]);
+    const d=Math.hypot(x-mx,y-my); if(d<bd){bd=d;best=i;} }
+  return best;
+}
+function tlHover(ev){ const i=nearest(ev); if(i<0){hideTip();return;} showTip(ev,i); }
+
+function showTip(ev,i){
+  const e=S.data.events, t=$("#tip");
+  const fl=e.p[i]>=S.thr;
+  const out=e.y[i]?(fl?"true positive":"MISSED incident event"):(fl?"false positive":"true negative");
+  t.innerHTML=`<div class="t">${esc(S.data.vocab.etypes[e.et[i]])} · score ${e.p[i].toFixed(3)} · ${out}</div>
+    <div class="d">${esc(e.d[i])}</div>
+    <div class="d mono">${fmtTs(e.ts[i])} · host H${e.h[i]} (${esc(S.data.vocab.host_roles[e.hr[i]])})
+      ${e.u[i]>=0?` · U${e.u[i]} (${esc(S.data.vocab.user_roles[e.ur[i]])})`:""}</div>
+    ${e.inc[i]>=0?`<div class="d">incident <b>#${e.inc[i]}</b> · template ${esc(S.data.vocab.templates[e.tpl[i]]||"?")} · chain ${(e.pos[i]*100).toFixed(0)}%</div>`:""}`;
+  t.style.display="block";
+  const w=t.offsetWidth,h=t.offsetHeight;
+  let x=ev.clientX+14,y=ev.clientY+14;
+  if(x+w>innerWidth-8)x=ev.clientX-w-10;
+  if(y+h>innerHeight-8)y=ev.clientY-h-10;
+  t.style.left=x+"px"; t.style.top=y+"px";
+}
+function hideTip(){ $("#tip").style.display="none"; }
+
+window.addEventListener("resize",()=>{ if(S.data){ const o=outcomes(S.thr); drawTimeline(o);} });
+init();
+</script>
+</body>
+</html>

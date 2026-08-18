@@ -73,6 +73,10 @@ python train.py --config configs/full.yaml
 
 # re-evaluate / ablations only
 python evaluate.py --run runs/<your_run>
+
+# visualize the test results on localhost (which events flared up)
+python tools/export_predictions.py runs/<your_run>
+python tools/serve_viz.py                # -> http://localhost:8123
 ```
 
 The neighbourhood sampler is self-contained (`sampling.py`, NumPy CSR +
@@ -90,6 +94,33 @@ boxes with val AUROC/AUPRC/F1/P/R/MCC, early-stopping patience and best-model
 tracking. Everything also lands in `runs/<...>/train.log` and
 `metrics.jsonl`; `curves.png` and `test_pr_curves.png` are written at the
 end, plus `eval_report.json`.
+
+## Visualizing test results on localhost
+
+To see *which events flared up* — per-event scores, flagged vs missed
+incident chains, false alarms — export a run's test predictions and serve
+them locally:
+
+```powershell
+python tools/export_predictions.py runs/<your_run>   # writes runs/<your_run>/viz_data.json
+python tools/serve_viz.py                            # http://localhost:8123
+```
+
+The export re-runs the exact training-time evaluation (val-tuned threshold,
+never fitted on test) and joins each held-out test event with the incident
+metadata of the run's regenerated world. The dashboard (stdlib-only server,
+no external JS) shows:
+
+* **score-vs-time timeline** of all test events: flares above the threshold
+  line, ground-truth incident windows shaded; drag to zoom, click a dot to
+  open its incident;
+* **threshold slider** between the val-tuned F1 and recall operating points —
+  every panel recomputes live (flagged/missed counts, per-incident catch);
+* **per-incident catch bars** and a **chain drill-down**: each incident's
+  events as nodes (swimlanes per host) with the provenance edges that connect
+  them, coloured by flagged/missed;
+* **flagged-event table** (what an analyst would be handed, TP/FP split,
+  filterable) and the **missed positives** table.
 
 ## 8 GB VRAM: OOM knobs (in priority order)
 
@@ -207,6 +238,134 @@ selected by validation AUPRC and is the canonical artifact.
   change ranking quality; K-pass neighbourhood averaging at eval time made no
   difference (sampling noise was already negligible at these fanouts).
 
+## Known blind spots, and the event×entity hybrid (prototype)
+
+The bidirectional RGAT works, but error analysis pins its residual misses to two
+deliberately-hard templates. On the canonical full run, per-template **miss rate
+at the F1 operating point** is:
+
+| template | miss @ F1 pt | miss @ recall pt (R≈0.93) |
+|---|---:|---:|
+| T2_exploit_web | 15% | 0.7% |
+| T5_service_lateral | 10% | 1.6% |
+| T1_phishing | 32% | 8.6% |
+| **T4_beacon_persist** | **76%** | **19.4%** |
+| **T3_valid_account** | **93%** | **12.7%** |
+
+At a precision-focused threshold the model is functionally blind to beaconing
+and valid-account abuse. That is structural, not noise: those templates overlap
+benign traffic by design (service accounts *do* beacon; admins *do* use valid
+accounts laterally), and the anti-cheat rules withhold exactly the temporal /
+entity-level statistics that would separate them. Misses also pile up at chain
+**ends** (positions 0–0.25 and 0.75–1.0), where an event has evidence on only
+one side.
+
+### The question the hybrid must answer
+
+The per-event model scores each event from its local provenance neighbourhood.
+The blind templates are distinguishable by **entity-level behaviour over time**
+(an account behaving against its own baseline, a host beaconing on a clock),
+which no single event can see. So: does entity behaviour carry compromise signal,
+and does it generalise — or is an entity-as-nodes model just the memorisation
+trap this repo was built to avoid?
+
+### Go/no-go: entity behaviour generalises to unseen entities
+
+`tools/entity_probe.py` builds **behavioural** entity windows (host and user:
+cadence, fan-out, event mix, burstiness, payload regularity, coarse role context
+— no identity features) and scores every window with a model that **never saw
+that entity** (entity-holdout, out-of-fold). Result on the full world:
+
+| window | host AUPRC (unseen) | user AUPRC (unseen) | lift vs baseline |
+|---|---:|---:|---:|
+| 1h | 0.50 | 0.56 | ×19–25 |
+| 2h | 0.63 | 0.66 | ×25–29 |
+| 4h | 0.70 | 0.70 | ×27–30 |
+| 8h | **0.78** | **0.86** | **×27–37** |
+
+AUPRC 0.78–0.86 on entities never trained on, 25–37× the positive-rate baseline,
+stable across window sizes. **This is behaviour, not identity** — the
+memorisation objection does not apply to a behavioural entity branch. One caveat
+surfaced immediately: windows the RGAT *catches* score ~0.98 on the entity
+channel while windows it *misses* score ~0.52, so the entity channel is best at
+*confirming*; a naive OR-gate flags ~99% of events and is worse than the RGAT.
+The signal must be applied **selectively** via fusion.
+
+### Gated fusion: recall-vs-investigation-cost
+
+`tools/fusion_probe.py` joins the RGAT's per-event score with the entity score
+(multi-scale windows, ~2h + ~8h) and measures, on the **test** split, how many
+events an analyst must review to reach a given recall. The combiner is fit only
+on **validation**, and a strictly **temporal** variant (entity branch trained on
+the train period alone) performs as well or better — no future data anywhere.
+Flagged % below is the optimal-ranking operating point (top-k events):
+
+| method | test AUPRC | @ R=0.90 | @ R=0.93 | @ R=0.95 | @ R=0.97 |
+|---|---:|---:|---:|---:|---:|
+| RGAT-only | 0.762 | 5.7% | 8.4% | 11.3% | 15.0% |
+| **fusion — logistic combiner** | **~0.93** | **~1.4%** | **~1.5%** | **~1.7%** | **~3.5%** |
+| **fusion — GBM combiner** | **~0.95** | **~1.3%** | **~1.5%** | **~1.7%** | **~2.0%** |
+
+The logistic row is the honest floor (no GBM, no model selection). The gain is
+genuine complementarity, not an artifact of the fitted combiner: even the
+**fit-free noisy-OR** variant beats the RGAT at every recall level (AUPRC ≈0.81),
+the fusion is stable across seeds, the winning combiner is identical under
+validation- and test-selection (zero selection bias), and the result reproduces
+on a second, weaker checkpoint. It reaches **95% recall at ~1.7% flagged** where
+the current model needs ~11%. The whole pipeline was adversarially audited for
+temporal / entity-identity / label leakage — clean.
+
+Per-template, at matched recall the max-efficiency fusion **fixes beacon**
+(≈+6–7 recall points at R=0.93–0.95 — the entity periodicity signal landing
+exactly as predicted) but **valid-account is the residual floor**: the
+max-efficiency combiner drops it ~10–13 recall points *below* the RGAT, because
+the fusion reaches the same overall recall with ~6× fewer flags and spends that
+budget on high-confidence events, and valid-account events score low on **both**
+channels. That is a deliberate, tunable trade — not a bug — as the sequence
+branch shows.
+
+### Sequence branch: ordering for valid-account, without the trade
+
+The window-aggregate branch loses event ORDER, which is exactly what separates a
+remote-sign-in → encoded-process → discovery → exfil chain from ordinary admin
+work. `tools/sequence_probe.py` runs a small GRU over each entity's *ordered*
+event stream (same temporal-honest protocol). It is a better window classifier
+than aggregates (host AUPRC 0.87 vs ~0.70) and — uniquely — does **not**
+sacrifice valid-account. It is weaker on beacon than the long-window aggregate,
+so the two branches are complementary, not interchangeable.
+
+Fusing the RGAT score with the aggregate + sequence channels
+(`tools/dump_scores.py` persists channel scores once; `tools/score_search.py`
+searches combiners) gives a Pareto frontier — pick where to sit (per-template
+recall at overall recall 0.93):
+
+| operating point | combiner | AUPRC | flags @ R=0.93 | valid-account | beacon |
+|---|---|---:|---:|---:|---:|
+| RGAT-only | — | 0.76 | 8.4% | 86.5% | 80.6% |
+| max efficiency | agg120+agg480+seq, GBM | 0.95 | 1.5% | 75% (−11) | 87% (+7) |
+| **balanced (recommended)** | agg480+seq, GBM | 0.94 | 1.5% | 82% (−5) | 85% (+4) |
+| valid-account-preserving | seq-only, logistic | 0.84 | 3.9% | 86% (≈RGAT) | 82% (+1) |
+
+So: **90–95% recall at ~1.5% flagged** (vs the RGAT's 8.4%), beacon fixed, and
+valid-account either mostly preserved (balanced point, −5 points) or traded for
+maximum efficiency (−11 points). The lever is clean: the **agg480** (long-window)
+channel is what fixes beacon but costs valid-account; the **seq** channel is what
+preserves valid-account. Drop agg480 and you keep valid-account at its RGAT level
+at the price of a higher flag budget (3.9%); keep it and you get max efficiency.
+The `agg480+seq` GBM point is the sweet spot — nearly max efficiency with far
+less valid-account regression. (A plain logistic combiner avoids the GBM's mild
+overfit/selection but does not by itself preserve valid-account — that is set by
+the channel mix, not the combiner family.) Valid-account never exceeds its RGAT
+level under tight flag budgets — it is the genuinely-ambiguous,
+engineered-to-overlap template, and lifting it further is the open problem.
+
+**Architecture this implies** (drop-in, no RGAT retraining): keep the RGAT event
+scorer; add entity behavioural branches (host + user, aggregate + sequence,
+multi-scale windows, train-period→forward, no identity); fuse with a thin
+combiner into one operating score. All probes are analysis-only tools; re-fit
+the combiner and re-run the entity-holdout ablation on real data before trusting
+it in deployment.
+
 ## Layout
 
 ```
@@ -231,7 +390,23 @@ tools/ensemble_eval.py              averaged scores of N same-dataset RGAT runs
 tools/ensemble_recall_table.py      recall-floor vs investigation-cost table
 tools/train_rewired.py              retraining control: train from scratch on the
                                     within-split rewired graph (ablation done right)
-tests/                              focal loss, RGAT, sampler, generator, pipeline
+tools/export_predictions.py         per-event test predictions + incident metadata
+                                    -> runs/<run>/viz_data.json (analysis-only)
+tools/serve_viz.py + tools/viz/     localhost dashboard: which events flared up,
+                                    per-incident catch, provenance chain drill-down
+tools/entity_probe.py               entity-holdout go/no-go: does entity BEHAVIOUR
+                                    (not identity) classify compromise on unseen
+                                    entities? (multi-feature windows)
+tools/fusion_probe.py               event×entity gated fusion: recall-vs-flagged
+                                    curve vs RGAT-only, temporal-honest, per-template
+tools/sequence_probe.py             GRU over each entity's ORDERED event stream —
+                                    the valid-account-preserving branch
+tools/dump_scores.py                persist RGAT + aggregate + sequence channel
+                                    scores (val/test) once, for fast combiner search
+tools/score_search.py               combiner search (logistic/GBM, channel subsets):
+                                    recall-vs-flagged + per-template frontier
+tests/                              focal loss, RGAT, sampler, generator, pipeline,
+                                    viz export/server
 ```
 ### Next steps
 
